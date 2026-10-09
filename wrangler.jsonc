@@ -5,4 +5,5 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/server.ts",
   "routes": [{ "pattern": "transition-kit.space", "custom_domain": true }],
+  "previews": {}
 }
