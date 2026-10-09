@@ -1,0 +1,134 @@
+---
+title: "Accordion"
+description: "Opening a panel grows its item and the items below glide down, with no height measured in JavaScript."
+---
+
+import { AccordionDemo } from "@/examples/ui/accordion-demo";
+
+<ComponentPreview name="ui/accordion" src="examples/ui/accordion-demo.tsx">
+  <AccordionDemo />
+</ComponentPreview>
+
+An accordion whose items glide: the opened item grows, the closed one shrinks, and everything below moves to its new place. Heights come from real CSS layout; nothing is measured in JavaScript.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/accordion" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/accordion.tsx"
+  title="components/transitions/accordion.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/transitions/accordion";
+```
+
+```tsx
+<Accordion type="single" collapsible defaultValue="shipping">
+  <AccordionItem value="shipping">
+    <AccordionTrigger>How long does shipping take?</AccordionTrigger>
+    <AccordionContent>Orders ship within two business days.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="returns">
+    <AccordionTrigger>Can I return an order?</AccordionTrigger>
+    <AccordionContent>Yes, within 30 days of delivery.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+Use `type="multiple"` to let several items stay open at once. Its `value`, `defaultValue` and `onValueChange` use `string[]` instead of `string`.
+
+## How it works
+
+- A click toggles the item inside `startTransition`. Clicking the open item of a non-collapsible accordion does nothing and starts no transition.
+- Each `AccordionItem` is wrapped in a `<ViewTransition>` with `update={tk("tk-morph", "tk-clip", "tk-text")}`. The item whose panel opens or closes changes, so React animates its box from the old height to the new one; the items below don't change but move, so React glides them to their new positions too. Items that neither change nor move are left alone.
+- `tk-clip` and `tk-text` keep the old and new snapshots at their natural size, pinned to the top of the growing box, so the box reveals the answer from the top instead of stretching it. The answer fades in as it is uncovered and fades out as the box closes over it.
+- The chevron is its own `<ViewTransition>` inside the item and carries the item's `data-state`, so React captures it separately and morphs it from the old rotation to the new one above the item, with no ghosted copy.
+- The dividers are top borders, so each one travels with the item below it rather than being left behind by the item that grows.
+- The next value is computed from the latest requested state, so clicking quickly never loses or doubles a toggle.
+- Content after the accordion isn't animated; give the accordion room to grow (a fixed or minimum height, or put it last in its container).
+
+## API Reference
+
+### Accordion
+
+| Prop            | Type                                                    | Default |
+| --------------- | ------------------------------------------------------- | ------- |
+| `type`          | `"single" \| "multiple"`                                | -       |
+| `value`         | `string` (single) / `string[]` (multiple)               | -       |
+| `defaultValue`  | `string` (single) / `string[]` (multiple)               | -       |
+| `onValueChange` | `(value: string) => void` / `(value: string[]) => void` | -       |
+| `collapsible`   | `boolean` (single only)                                 | `false` |
+
+### AccordionItem
+
+| Prop       | Type      | Default |
+| ---------- | --------- | ------- |
+| `value`    | `string`  | -       |
+| `disabled` | `boolean` | `false` |
+
+`AccordionTrigger` renders a `<button>` inside an `<h3>`, and `AccordionContent` renders a `<div>`; both accept the props of those elements. On `AccordionContent`, `className` styles the inner padding wrapper, as in shadcn/ui.
+
+## Accessibility
+
+- Implements the WAI-ARIA accordion pattern: each trigger is a `<button>` inside a heading with `aria-expanded` and `aria-controls`, and each panel is a `region` labelled by its trigger.
+- <kbd>Enter</kbd> / <kbd>Space</kbd> toggle the focused item. <kbd>↑</kbd> /
+  <kbd>↓</kbd> move between triggers and wrap, <kbd>Home</kbd> / <kbd>End</kbd>
+  jump to the first and last. Disabled items are skipped.
+- Focus stays on the trigger when a panel opens or closes, as the pattern expects; the panel's links and controls follow it in the tab order.
+- Closed panels stay in the DOM with `hidden="until-found"` where the browser supports it. Find-in-page can match text inside them, and the matching item opens on its own. Elsewhere they are plain `hidden`, so their text is not searchable until opened.
+- With `prefers-reduced-motion`, nothing travels; the items and the chevron crossfade briefly.

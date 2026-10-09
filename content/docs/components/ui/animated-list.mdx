@@ -1,0 +1,163 @@
+---
+title: "Animated List"
+description: "A list whose items pop in, fade out and glide into place as they change."
+---
+
+import { AnimatedListDemo } from "@/examples/ui/animated-list-demo";
+
+<ComponentPreview
+  name="ui/animated-list"
+  src="examples/ui/animated-list-demo.tsx"
+>
+  <AnimatedListDemo />
+</ComponentPreview>
+
+A list for notifications, inboxes and queues. New items pop in, removed items pop out, and everything else glides to its new place, whether the list grows, shrinks, is sorted or shuffled.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/animated-list" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/animated-list.tsx"
+  title="components/transitions/animated-list.tsx"
+/>
+
+<Step>Add the animated list styles to your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/animated-list.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  AnimatedList,
+  AnimatedListItem,
+  useAnimatedList,
+} from "@/components/transitions/animated-list";
+```
+
+```tsx
+const { items, add, remove, move, sort, set } = useAnimatedList([
+  { id: 1, title: "Deploy finished" },
+  { id: 2, title: "Payment received" },
+]);
+
+<AnimatedList aria-label="Notifications">
+  {items.map((item) => (
+    <AnimatedListItem key={item.id} id={item.id}>
+      {item.title}
+      <button type="button" onClick={() => remove(item.id)}>
+        Dismiss
+      </button>
+    </AnimatedListItem>
+  ))}
+</AnimatedList>;
+```
+
+`useAnimatedList` holds the items and runs every change in a transition:
+
+```tsx
+add({ id: 3, title: "New comment" }, 0); // insert at index 0 (default: end)
+remove(2); // by id
+move(1, 0); // move id 1 to index 0
+sort((a, b) => a.title.localeCompare(b.title));
+set((items) => items.filter((item) => !item.read)); // any update
+```
+
+Items need an `id` (string or number), or pass `getId`: `useAnimatedList(items, { getId: (item) => item.key })`.
+
+You can keep the state yourself instead: any update you make inside `startTransition` animates the list the same way.
+
+```tsx
+startTransition(() => setItems((items) => items.slice(1)));
+```
+
+## How it works
+
+- `useAnimatedList` applies each change inside `startTransition` with a functional update, so rapid clicks queue up instead of overwriting each other. An update that leaves the list unchanged returns the same array, so React skips it and no transition starts.
+- Each `AnimatedListItem` is a `<ViewTransition>` named after its `id` with `useTransitionNames()`. A row that stays glides to its new place (`update`, `tk-morph`), a new row pops in (`enter`, `tk-pop`) and a removed row pops out where it was (`exit`, `tk-pop`).
+- React only animates rows that are on screen, so long lists stay cheap: rows outside the viewport just move without a snapshot.
+- A list that scrolls itself (`overflow-y: auto`) gets `view-transition-group: contain`, so the rows' snapshots nest inside the list's own group. `animated-list.css` clips that group, so rows sliding past the edge stay inside the scroll area instead of painting over the page. Browsers without nested view transition groups still animate, unclipped.
+- When the focused row is removed, focus moves to the same control in the row that took its place (or the last row), so keyboard users can keep dismissing.
+
+## API Reference
+
+### AnimatedList
+
+A `ul`; accepts every `ul` prop. Give it an `aria-label`.
+
+### AnimatedListItem
+
+| Prop | Type               | Default |
+| ---- | ------------------ | ------- |
+| `id` | `string \| number` | -       |
+
+An `li`; accepts every other `li` prop. `id` must be unique within the list and stay the same between renders. Render it with the same `key`.
+
+### useAnimatedList
+
+```ts
+const { items, add, remove, move, sort, set } = useAnimatedList(initial, {
+  getId,
+});
+```
+
+| Return   | Type                                            |
+| -------- | ----------------------------------------------- |
+| `items`  | `T[]`                                           |
+| `add`    | `(item: T, index?: number) => void`             |
+| `remove` | `(id: string \| number) => void`                |
+| `move`   | `(id: string \| number, index: number) => void` |
+| `sort`   | `(compare: (a: T, b: T) => number) => void`     |
+| `set`    | `(items: T[] \| ((items: T[]) => T[])) => void` |
+
+## Accessibility
+
+- A real list (`ul` / `li`); name it with `aria-label` or `aria-labelledby`.
+- Removing the focused row moves focus to the matching control in the next row instead of dropping it to the page.
+- The list doesn't announce changes by itself, so pair it with a polite live region for changes the user didn't make (the demo announces new notifications with `role="status"`).
+- With `prefers-reduced-motion`, rows don't travel or scale; they crossfade briefly.

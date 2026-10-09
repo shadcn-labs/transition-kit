@@ -1,0 +1,179 @@
+---
+title: "Morphing Popover"
+description: "A trigger that morphs into its popover surface and back."
+---
+
+import { MorphingPopoverDemo } from "@/examples/ui/morphing-popover-demo";
+
+<ComponentPreview
+  name="ui/morphing-popover"
+  src="examples/ui/morphing-popover-demo.tsx"
+>
+  <MorphingPopoverDemo />
+</ComponentPreview>
+
+A popover that doesn't pop: the trigger itself grows into the panel, its label glides into the panel's title, and closing folds the panel back into the button.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/morphing-popover" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/morphing-popover.tsx"
+  title="components/transitions/morphing-popover.tsx"
+/>
+
+<Step>Add the morphing popover styles to your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/morphing-popover.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  MorphingPopover,
+  MorphingPopoverClose,
+  MorphingPopoverContent,
+  MorphingPopoverTitle,
+  MorphingPopoverTrigger,
+} from "@/components/transitions/morphing-popover";
+```
+
+```tsx
+<MorphingPopover>
+  <MorphingPopoverTrigger>
+    <MessageSquareIcon />
+    Feedback
+  </MorphingPopoverTrigger>
+  <MorphingPopoverContent>
+    <MorphingPopoverTitle>
+      <MessageSquareIcon />
+      Feedback
+    </MorphingPopoverTitle>
+    <textarea aria-label="Your feedback" />
+    <MorphingPopoverClose>Cancel</MorphingPopoverClose>
+  </MorphingPopoverContent>
+</MorphingPopover>
+```
+
+Give the title the same content as the trigger: the trigger's label morphs into it. The panel opens over the trigger, anchored to its top-left corner by default. Use `side="top"` to grow upward from the trigger's bottom edge, and `align="center"` or `align="end"` to line it up with the trigger's centre or right edge:
+
+```tsx
+<MorphingPopoverContent side="top" align="end">
+  …
+</MorphingPopoverContent>
+```
+
+Control it with `open` and `onOpenChange`, or close it from inside the panel with `useMorphingPopover()`:
+
+```tsx
+const SendButton = () => {
+  const { setOpen } = useMorphingPopover();
+  return (
+    <button type="submit" onClick={() => setOpen(false)}>
+      Send
+    </button>
+  );
+};
+```
+
+The panel is absolutely positioned inside the popover root, so leave room for it (or let it overlap content below) and keep ancestors from clipping it with `overflow: hidden`.
+
+## How it works
+
+- Opening and closing run in `startTransition` with a transition type for the direction, so the surface's classes (`tk-morph tk-morphing-popover-surface` plus `tk-up` while opening, `tk-down` while closing) are correct on whichever end of the morph is mounted.
+- While closed, the trigger is wrapped in a `<ViewTransition name>` for the surface. The panel's `<ViewTransition>` has the same name and sits in a hidden `<Activity>`, which keeps its state (typed text, scroll position) and takes its boundary out of the page. Opening unmounts the trigger's boundary and reveals the panel's, so React pairs them through `share` and the trigger grows into the panel. Closing does the reverse. The trigger stays in the layout, invisible, while the panel is open.
+- The trigger's label and the panel's title share a second name in the same way. Both are nested in their surface, so they paint above it, and `tk-text` keeps the text at its real size while it glides.
+- `morphing-popover.css` paints the moving box itself with the popover background and radius, clips both snapshots to it, pins them to the corner the panel grows from (`side` and `align` choose it) and lifts the shadow as it opens. Closing, the panel's contents leave quickly so the box reads as folding up.
+- Names come from `useTransitionNames()`, so several popovers on one page never pair with each other.
+
+The corner radius matches `rounded-xl`. If you change it on the trigger and panel, set `--tk-ui-morphing-popover-radius` on `:root` to match.
+
+## API Reference
+
+### MorphingPopover
+
+| Prop           | Type                      | Default |
+| -------------- | ------------------------- | ------- |
+| `open`         | `boolean`                 | -       |
+| `defaultOpen`  | `boolean`                 | `false` |
+| `onOpenChange` | `(open: boolean) => void` | -       |
+
+Renders a relatively positioned `div` with `data-state="open" | "closed"`; other props are spread onto it.
+
+### MorphingPopoverTrigger
+
+A `<button type="button">` with `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls`. Calling `event.preventDefault()` in `onClick` keeps it closed.
+
+### MorphingPopoverContent
+
+| Prop    | Type                           | Default    |
+| ------- | ------------------------------ | ---------- |
+| `side`  | `"bottom" \| "top"`            | `"bottom"` |
+| `align` | `"start" \| "center" \| "end"` | `"start"`  |
+
+A `div` with `role="dialog"`. Other props are spread onto it.
+
+### MorphingPopoverTitle
+
+Labels the dialog. Its content morphs from the trigger's label.
+
+### MorphingPopoverClose
+
+A `<button type="button">` that closes the popover. Calling `event.preventDefault()` in `onClick` keeps it open.
+
+### useMorphingPopover
+
+Returns `{ open, setOpen }` for the closest popover. `setOpen` animates like the trigger and close button do.
+
+## Accessibility
+
+- The trigger announces a dialog popup and its expanded state, and points at the panel with `aria-controls`. The panel is a `dialog` labelled by its title.
+- Opening moves focus to the element with `data-autofocus`, else the first form field, else the panel itself.
+- <kbd>Escape</kbd> closes it and returns focus to the trigger. Tabbing out of
+  the panel or pressing outside it closes it too, leaving focus where you put
+  it; if focus would be lost, it goes back to the trigger.
+- With `prefers-reduced-motion`, nothing grows or travels; the trigger and panel crossfade briefly.

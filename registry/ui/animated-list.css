@@ -1,0 +1,10 @@
+/*
+ * Animated list: a list that scrolls itself clips its rows mid-animation.
+ *
+ * The list gets `view-transition-group: contain`, so the rows' groups nest
+ * inside its group. Clipping that group keeps rows that slide past the edge
+ * inside the scroll area instead of painting over the page.
+ */
+::view-transition-group(.tk-animated-list-viewport) {
+  overflow: clip;
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/scale",
+  "title": "Scale",
+  "description": "The new page scales up while the old one fades out.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-image-pair(.tk-page-scale.tk-page-exit)": {
+      "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+      "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+    },
+    "::view-transition-image-pair(.tk-page-scale.tk-page-enter)": {
+      "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+      "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+    },
+    "::view-transition-old(.tk-page-scale), ::view-transition-new(.tk-page-scale)": {
+      "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+    },
+    "::view-transition-old(.tk-page-scale)": {
+      "animation": "tk-page-scale-out var(--tk-page-duration, 500ms) var(--tk-page-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+    },
+    "::view-transition-new(.tk-page-scale)": {
+      "animation": "tk-page-scale-in var(--tk-page-duration, 500ms) var(--tk-page-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+    },
+    "@keyframes tk-page-scale-out": {
+      "from": {
+        "transform": "scale(1)",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "scale(0.8)",
+        "opacity": "0"
+      }
+    },
+    "@keyframes tk-page-scale-in": {
+      "from": {
+        "transform": "scale(1.2)",
+        "opacity": "0"
+      },
+      "to": {
+        "transform": "scale(1)",
+        "opacity": "1"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

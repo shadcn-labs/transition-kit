@@ -1,0 +1,85 @@
+---
+title: "Book Flip"
+description: "The new page turns over the old one around a central spine."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/book-flip">
+  <PageTransitionDemo transition="book-flip" />
+</ComponentPreview>
+
+The pages turn around a horizontal spine through the middle of the screen: the old page tips away as the new one turns over it. Backward navigations turn the other way.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/book-flip" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/book-flip.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="book-flip">
+  {children}
+</PageTransition>
+```
+
+Mark backward navigations with `direction: "back"` and the style runs the other way:
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## Customization
+
+The style runs for `700ms` with `ease-in-out` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="book-flip"
+  duration={1400}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 700ms)` and `var(--tk-page-easing, ease-in-out)`.
+
+It pivots around the centre of the page's visible part, so long scrolled pages and pages inside a smaller frame both animate around what the user sees.
+
+The 3D depth comes from `perspective: 1600px` on `::view-transition-image-pair(.tk-page-book-flip)`; lower it for a stronger effect.

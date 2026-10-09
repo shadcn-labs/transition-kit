@@ -1,0 +1,64 @@
+/*
+ * Morphing Popover: the trigger's surface grows into the panel and folds back.
+ * The corner radius matches `rounded-xl`; if you change it on the trigger and
+ * panel, set `:root { --tk-ui-morphing-popover-radius: 1rem; }` to match.
+ */
+
+/* The box paints the surface itself, so corners and edges never stretch. */
+::view-transition-group(.tk-morphing-popover-surface) {
+  border-radius: var(
+    --tk-ui-morphing-popover-radius,
+    calc(var(--radius) + 4px)
+  );
+  background: var(--popover);
+}
+
+/* Snapshots are clipped to the box; its ring stays put while the shadow lifts. */
+::view-transition-image-pair(.tk-morphing-popover-surface) {
+  overflow: clip;
+  border-radius: inherit;
+  animation: var(--tk-ui-move) var(--tk-ui-ease) both tk-morphing-popover-lift;
+}
+::view-transition-image-pair(.tk-morphing-popover-surface.tk-down) {
+  animation-direction: reverse;
+}
+
+/* Contents keep their size, pinned to the corner the panel grows from. */
+::view-transition-old(.tk-morphing-popover-surface),
+::view-transition-new(.tk-morphing-popover-surface) {
+  inline-size: auto;
+  block-size: auto;
+}
+::view-transition-old(.tk-morphing-popover-center),
+::view-transition-new(.tk-morphing-popover-center) {
+  inset-inline: 0;
+  margin-inline: auto;
+}
+::view-transition-old(.tk-morphing-popover-end),
+::view-transition-new(.tk-morphing-popover-end) {
+  inset-inline: auto 0;
+}
+::view-transition-old(.tk-morphing-popover-top),
+::view-transition-new(.tk-morphing-popover-top) {
+  inset-block: auto 0;
+}
+
+/* Folding back, the panel's contents leave quickly so the box reads as closing. */
+::view-transition-old(.tk-morphing-popover-surface.tk-down) {
+  animation-duration: var(--tk-ui-exit);
+}
+
+@keyframes tk-morphing-popover-lift {
+  from {
+    box-shadow:
+      0 0 0 1px var(--border),
+      0 1px 2px 0 rgb(0 0 0 / 0.05),
+      0 0 0 0 transparent;
+  }
+  to {
+    box-shadow:
+      0 0 0 1px var(--border),
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+}

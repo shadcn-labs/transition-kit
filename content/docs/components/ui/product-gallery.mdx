@@ -1,0 +1,170 @@
+---
+title: "Product Gallery"
+description: "A hero image with a thumbnail strip. The chosen thumbnail grows into the hero while the old hero shrinks back into its slot."
+---
+
+import { ProductGalleryDemo } from "@/examples/ui/product-gallery-demo";
+
+<ComponentPreview
+  name="ui/product-gallery"
+  src="examples/ui/product-gallery-demo.tsx"
+>
+  <ProductGalleryDemo />
+</ComponentPreview>
+
+A product image viewer. Picking a thumbnail grows it into the hero while the previous hero image shrinks back into its own slot in the strip.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/product-gallery" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/product-gallery.tsx"
+  title="components/transitions/product-gallery.tsx"
+/>
+
+<Step>Add the product gallery styles to your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/product-gallery.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  ProductGallery,
+  ProductGalleryMain,
+  ProductGalleryThumbnails,
+} from "@/components/transitions/product-gallery";
+```
+
+```tsx
+const images = [
+  { id: "front", src: "/shoe-front.jpg", alt: "Front view" },
+  { id: "side", src: "/shoe-side.jpg", alt: "Side view" },
+  { id: "sole", src: "/shoe-sole.jpg", alt: "Sole detail" },
+];
+
+<ProductGallery images={images} className="max-w-sm">
+  <ProductGalleryMain />
+  <ProductGalleryThumbnails />
+</ProductGallery>;
+```
+
+Pass `node` instead of `src` to render your own content, such as a `<picture>` or a drawn placeholder. It should fill its box.
+
+To control the selection, pass `index` and `onIndexChange`:
+
+```tsx
+const [index, setIndex] = useState(0);
+
+<ProductGallery images={images} index={index} onIndexChange={setIndex}>
+  <ProductGalleryMain />
+  <ProductGalleryThumbnails />
+</ProductGallery>;
+```
+
+## How it works
+
+- Each image has one `<ViewTransition name>`, built from its `id`, mounted in exactly one place: the hero for the selected image, its thumbnail slot for every other one. Selecting an image runs in `startTransition`; its thumbnail boundary unmounts as the hero's mounts, and the old hero's boundary unmounts as its thumbnail's mounts, so React pairs both through `share` and morphs them at once.
+- The selected slot keeps a faint copy of its image, outside any boundary, and an outline, so the strip never collapses and you can see which image is up top.
+- Images use `object-fit: cover`, and `product-gallery.css` gives the snapshots the same fit, so a square thumbnail growing into a wider hero crops instead of stretching. The clip radius travels from the thumbnail radius to the hero radius (`tk-product-gallery-hero`) and back (`tk-product-gallery-leaving`).
+- The incoming image gets `tk-top`, so it always passes over the outgoing one. The previous and next buttons are their own `<ViewTransition>`s after the hero and sit above both images during the swap (`tk-product-gallery-control`).
+- An image with `src` is decoded before the swap starts, so the hero never captures a blank frame. A newer click cancels a swap that is still waiting.
+- Names come from `useTransitionNames()`, so several galleries on one page never pair with each other.
+
+To change the corner radii, set the variables the component and its snapshots share:
+
+```css
+:root {
+  --tk-ui-product-gallery-radius: 1rem;
+  --tk-ui-product-gallery-thumb-radius: 0.5rem;
+}
+```
+
+## API Reference
+
+### ProductGallery
+
+| Prop            | Type                      | Default |
+| --------------- | ------------------------- | ------- |
+| `images`        | `ProductGalleryImage[]`   | -       |
+| `index`         | `number`                  | -       |
+| `defaultIndex`  | `number`                  | `0`     |
+| `onIndexChange` | `(index: number) => void` | -       |
+
+### ProductGalleryImage
+
+| Field  | Type              | Default |
+| ------ | ----------------- | ------- |
+| `id`   | `string`          | -       |
+| `alt`  | `string`          | -       |
+| `src`  | `string`          | -       |
+| `node` | `React.ReactNode` | -       |
+
+### ProductGalleryMain
+
+| Prop       | Type      | Default |
+| ---------- | --------- | ------- |
+| `controls` | `boolean` | `true`  |
+
+The hero is square by default; pass a class such as `aspect-[4/3]` to change it.
+
+### ProductGalleryThumbnails
+
+Accepts `div` props. Thumbnails are `size-14`; resize them from the strip, e.g. `className="*:size-16"`.
+
+## Accessibility
+
+- The thumbnails follow the WAI-ARIA radio group pattern: a `radiogroup` of `radio` buttons with `aria-checked`, labelled by each image's `alt`. Only the selected thumbnail is in the tab order.
+- In the strip, <kbd>←</kbd> / <kbd>↑</kbd> and <kbd>→</kbd> / <kbd>↓</kbd> select the previous and next image and move focus with it; <kbd>Home</kbd> / <kbd>End</kbd> jump to the first and last. Selection wraps around.
+- The previous and next buttons have labels and respond to <kbd>←</kbd> / <kbd>→</kbd> while focused. A polite live region announces the new image and its position.
+- With `prefers-reduced-motion`, nothing travels; the images crossfade briefly.

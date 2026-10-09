@@ -1,418 +1,248 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
-import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+/**
+ * Generates registry.json from registry/items.ts; `shadcn build` then turns it
+ * into public/r/<group>/<slug>.json.
+ *
+ * - Cores and components ship their .ts/.tsx to components/transitions/. Their
+ *   `@/registry/<group>/<file>` imports are rewritten to
+ *   `@/components/transitions/<file>` in copies under .registry-build/, which
+ *   is what `shadcn build` reads.
+ * - CSS lives in real .css files and is converted to the shadcn `css` object,
+ *   which the CLI merges into the user's global stylesheet.
+ * - Styles and components depend on their group's core, and on every other
+ *   item they import, through absolute URLs, so `shadcn add` pulls them in
+ *   from any registry setup. `@/components/ui/<name>` imports depend on the
+ *   shadcn primitive `<name>`.
+ */
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import path from "node:path";
 
-const ROOT = resolve(import.meta.dirname, "..");
-const SRC = resolve(ROOT, "src");
-const TEMPLATES = resolve(ROOT, "scripts/templates");
-const PUBLIC_R = resolve(ROOT, "public", "r");
+import { parse } from "postcss";
+import type { ChildNode, Container } from "postcss";
+import type { Registry, RegistryItem } from "shadcn/schema";
 
-// Import TRANSITION_CSS directly from the single source of truth
-const { TRANSITION_CSS } = await import(
-	pathToFileURL(resolve(SRC, "data/transitions.ts")).href
+import { FALLBACK_SITE_ORIGIN } from "../constants/site.ts";
+import { items } from "../registry/items.ts";
+import type { ItemGroup, ItemSource } from "../registry/items.ts";
+
+const root = path.resolve(import.meta.dirname, "..");
+const BUILD_DIR = ".registry-build";
+const OUTPUT_DIR = "public/r";
+const TARGET_DIR = "components/transitions";
+/** Provided by the user's React 19.3 app, never installed by the CLI. */
+const PEER_PACKAGES: Record<string, true> = { react: true, "react-dom": true };
+
+interface CssObject {
+  [key: string]: string | CssObject;
+}
+
+const readSource = (file: string) => {
+  const absolute = path.join(root, file);
+  if (!existsSync(absolute)) {
+    throw new Error(`build-registry: missing file ${file}`);
+  }
+  return readFileSync(absolute, "utf-8");
+};
+
+/** Collapses the newlines and indentation postcss keeps in selectors, params and values. */
+const oneLine = (value: string) => value.replaceAll(/\s*\n\s*/g, " ").trim();
+
+const toCssObject = (
+  container: Container<ChildNode>,
+  file: string
+): CssObject => {
+  const result: CssObject = {};
+  // Repeated selectors/at-rules merge like the cascade: later declarations win.
+  const merge = (target: CssObject, key: string, value: CssObject) => {
+    const existing = target[key];
+    if (typeof existing !== "object") {
+      target[key] = value;
+      return;
+    }
+    for (const [innerKey, innerValue] of Object.entries(value)) {
+      if (typeof innerValue === "object") {
+        merge(existing, innerKey, innerValue);
+      } else {
+        existing[innerKey] = innerValue;
+      }
+    }
+  };
+  container.each((node) => {
+    if (node.type === "decl") {
+      if (node.prop in result) {
+        console.warn(
+          `build-registry: ${file}: duplicate "${node.prop}" in one rule; the css object keeps the last value`
+        );
+      }
+      const value = oneLine(node.value);
+      result[node.prop] = node.important ? `${value} !important` : value;
+    } else if (node.type === "rule") {
+      merge(result, oneLine(node.selector), toCssObject(node, file));
+    } else if (node.type === "atrule") {
+      const key = node.params
+        ? `@${node.name} ${oneLine(node.params)}`
+        : `@${node.name}`;
+      merge(result, key, node.nodes ? toCssObject(node, file) : {});
+    }
+  });
+  return result;
+};
+
+/** Every shipped source file → the item shipping it and its install target, e.g. registry/theme/x.tsx → components/transitions/x.tsx. */
+const shipped = new Map<string, { item: ItemSource; target: string }>(
+  items.flatMap((item) =>
+    item.files.map((file): [string, { item: ItemSource; target: string }] => [
+      file,
+      { item, target: `${TARGET_DIR}/${path.basename(file)}` },
+    ])
+  )
 );
 
-// ── Generate TRANSITION_CSS entries (no wrapper) ───────────────────
+const itemUrl = (item: ItemSource) =>
+  `${FALLBACK_SITE_ORIGIN}/r/${item.name}.json`;
 
-function buildTransitionCSSEntries(cssMap: Record<string, string>): string {
-	return Object.entries(cssMap)
-		.map(([slug, css]) => {
-			const escaped = css.replace(/`/g, "\\`");
-			return `\t"${slug}": \`\n${escaped}\n\t\``;
-		})
-		.join(",\n");
-}
-
-// ── Build: read source, inline shared, produce standalone ──────────
-
-type Framework = "react" | "vue" | "svelte" | "vanilla";
-
-const SHARED_EXPORTS = `export {
-	getCurrentTheme,
-	getThemeOption,
-	resolveTheme,
-	setTheme,
-	setThemeOption,
-	switchTheme,
-	TRANSITION_CSS,
-	triggerLiveTransition,
-	triggerThemeTransition,
+const resolveImport = (specifier: string, from: string) => {
+  const source = specifier.slice("@/".length);
+  for (const candidate of [source, `${source}.ts`, `${source}.tsx`]) {
+    const entry = shipped.get(candidate);
+    if (entry) {
+      return entry;
+    }
+  }
+  throw new Error(
+    `build-registry: ${from} imports ${specifier}, which no registry item ships`
+  );
 };
-export type { ThemeOption };`;
 
-interface ComponentConfig {
-	name: string;
-	pascalName: string;
-	frameworks: Framework[];
-	title: string;
-	description: string;
+const IMPORT_SPECIFIER = /(\bfrom\s*|\bimport\s*\(?\s*)(["'])([^"']+)\2/g;
+
+/** shadcn/ui primitives, installed from shadcn's registry by name (`button`). */
+const SHADCN_UI_IMPORT = "@/components/ui/";
+
+/** Bare package imports (minus React) become the item's npm dependencies. */
+const packageName = (specifier: string) => {
+  if (specifier.startsWith(".") || specifier.startsWith("@/")) {
+    return;
+  }
+  const parts = specifier.split("/");
+  const name = specifier.startsWith("@")
+    ? parts.slice(0, 2).join("/")
+    : parts[0];
+  return PEER_PACKAGES[name] ? undefined : name;
+};
+
+interface ItemDependencies {
+  /** npm packages. */
+  packages: Set<string>;
+  /** shadcn primitive names and transition-kit item URLs. */
+  registry: Set<string>;
 }
 
-const COMPONENTS: ComponentConfig[] = [
-	{
-		name: "animated-theme-toggler",
-		pascalName: "AnimatedThemeToggler",
-		frameworks: ["react", "vue", "svelte", "vanilla"],
-		title: "Animated Theme Toggler",
-		description:
-			"A shape-based theme toggler using clip-path transitions (circle, square, triangle, diamond, hexagon, rectangle, star) with the View Transitions API.",
-	},
-	{
-		name: "theme-toggle-button",
-		pascalName: "ThemeToggleButton",
-		frameworks: ["react", "vue", "svelte", "vanilla"],
-		title: "Theme Toggle Button",
-		description:
-			"A button with text cycling (Light/Dark) that supports multiple transition animations (fade, slide, scale, blur, flip) via the View Transitions API.",
-	},
-	{
-		name: "theme-toggle-switch",
-		pascalName: "ThemeToggleSwitch",
-		frameworks: ["react", "vue", "svelte", "vanilla"],
-		title: "Theme Toggle Switch",
-		description:
-			"An iOS-style toggle switch for theme switching with multiple transition animations (fade, slide, scale, blur, flip) via the View Transitions API.",
-	},
-	{
-		name: "theme-switcher",
-		pascalName: "ThemeSwitcher",
-		frameworks: ["react", "vue", "svelte", "vanilla"],
-		title: "Theme Switcher",
-		description:
-			"A segmented System/Light/Dark theme switcher with a sliding indicator and multiple transition animations via the View Transitions API.",
-	},
-];
+/**
+ * Copies `file` into BUILD_DIR with `@/registry/...` imports pointing at their
+ * install targets, collecting what the imports need installed alongside.
+ */
+const buildFile = (
+  owner: ItemSource,
+  file: string,
+  dependencies: ItemDependencies
+) => {
+  const content = readSource(file).replace(
+    IMPORT_SPECIFIER,
+    (match, prefix: string, quote: string, specifier: string) => {
+      const name = packageName(specifier);
+      if (name) {
+        dependencies.packages.add(name);
+      }
+      if (specifier.startsWith(SHADCN_UI_IMPORT)) {
+        dependencies.registry.add(specifier.slice(SHADCN_UI_IMPORT.length));
+      }
+      if (!specifier.startsWith("@/registry/")) {
+        return match;
+      }
+      const { item, target } = resolveImport(specifier, file);
+      if (item !== owner) {
+        dependencies.registry.add(itemUrl(item));
+      }
+      return `${prefix}${quote}@/${target.replace(/\.tsx?$/, "")}${quote}`;
+    }
+  );
+  const built = path.join(BUILD_DIR, file);
+  mkdirSync(path.dirname(path.join(root, built)), { recursive: true });
+  writeFileSync(path.join(root, built), content);
+  return {
+    path: built,
+    target: shipped.get(file)?.target ?? `${TARGET_DIR}/${path.basename(file)}`,
+    type: "registry:component" as const,
+  };
+};
 
-function getTemplateExtension(f: Framework): string {
-	switch (f) {
-		case "react": return ".tsx";
-		case "vue": return ".vue";
-		case "svelte": return ".svelte";
-		case "vanilla": return ".ts";
-	}
+const coreOf = (group: ItemGroup) => {
+  const core = items.find(
+    (item) => item.group === group && item.kind === "core"
+  );
+  if (!core) {
+    throw new Error(`build-registry: no core item for group "${group}"`);
+  }
+  return core;
+};
+
+const toRegistryItem = (item: ItemSource): RegistryItem => {
+  // Every style and component needs its group's core, even CSS-only styles.
+  const dependencies: ItemDependencies = {
+    packages: new Set(),
+    registry: new Set(
+      item.kind === "core" ? [] : [itemUrl(coreOf(item.group))]
+    ),
+  };
+  const files = item.files.map((file) => buildFile(item, file, dependencies));
+  // oxlint-disable-next-line sort-keys -- keep shadcn's documented field order
+  return {
+    name: item.name,
+    // Styles ship only `css`: registry:item merges it without the base-style
+    // overwrite prompt that registry:style triggers.
+    type: item.kind === "style" ? "registry:item" : "registry:component",
+    title: item.title,
+    description: item.description,
+    ...(dependencies.packages.size > 0 && {
+      dependencies: [...dependencies.packages].toSorted(),
+    }),
+    ...(dependencies.registry.size > 0 && {
+      registryDependencies: [...dependencies.registry],
+    }),
+    ...(files.length > 0 && { files }),
+    ...(item.css && {
+      css: toCssObject(parse(readSource(item.css)), item.css),
+    }),
+    categories: [item.group],
+  };
+};
+
+rmSync(path.join(root, BUILD_DIR), { force: true, recursive: true });
+const registry: Registry & { $schema: string } = {
+  $schema: "https://ui.shadcn.com/schema/registry.json",
+  homepage: FALLBACK_SITE_ORIGIN,
+  items: items.map(toRegistryItem),
+  name: "transition-kit",
+};
+
+// `shadcn build` writes public/r/<name>.json but only creates the output dir
+// itself; names are `<group>/<slug>`, so create (and clear) the group dirs.
+for (const group of new Set(items.map((item) => item.group))) {
+  const dir = path.join(root, OUTPUT_DIR, group);
+  rmSync(dir, { force: true, recursive: true });
+  mkdirSync(dir, { recursive: true });
 }
 
-function getOutputExtension(f: Framework): string {
-	return getTemplateExtension(f);
-}
-
-function makeStandalone(
-	vanillaContent: string,
-	frameworkContent: string,
-	framework: Framework,
-): string {
-	const sharedCode = readFileSync(resolve(TEMPLATES, "shared.ts"), "utf-8");
-	const inlinedShared = sharedCode.replace(/^export /gm, "").trim();
-
-	// Remove shared import from vanilla code
-	const vanillaBody = vanillaContent
-		.replace(/import \{[^}]+\} from "\.\.\/shared";\n?/, "")
-		.trim();
-
-	if (framework === "vanilla") {
-		return inlinedShared + "\n\n" + vanillaBody;
-	}
-
-	// For framework wrappers: replace the vanilla engine import with inlined shared + vanilla body
-	const frameworkBody = frameworkContent
-		.replace(/^"use client";\s*\n/, "")
-		.replace(/import \{[^}]+\} from "\.\/[^"]+";\n?/, "")
-		.trim();
-
-	if (framework === "react") {
-		return [
-			'"use client";',
-			"",
-			inlinedShared,
-			"",
-			frameworkBody,
-			"",
-			SHARED_EXPORTS,
-		].join("\n\n");
-	}
-
-	// Vue: replace vanilla import inside <script setup> with inlined shared + vanilla
-	if (framework === "vue") {
-		return frameworkContent.replace(
-			/import \{[^}]+\} from "\.\/[^"]+";/,
-			`// --- inlined shared + vanilla engine ---\n${inlinedShared}\n\n${vanillaBody}\n// --- end inlined ---`,
-		);
-	}
-
-	// Svelte: replace vanilla import inside <script> with inlined shared + vanilla
-	if (framework === "svelte") {
-		return frameworkContent.replace(
-			/import \{[^}]+\} from "\.\/[^"]+";/,
-			`// --- inlined shared + vanilla engine ---\n${inlinedShared}\n\n${vanillaBody}\n// --- end inlined ---`,
-		);
-	}
-
-	return frameworkContent;
-}
-
-function buildStandalone(
-	component: ComponentConfig,
-	framework: Framework,
-	transitionCSSEntries: string,
-): string {
-	const componentDir = resolve(TEMPLATES, component.name);
-	const ext = getTemplateExtension(framework);
-	const vanillaExt = getTemplateExtension("vanilla");
-
-	// Read vanilla engine
-	const vanillaPath = resolve(componentDir, `${component.pascalName}Vanilla${vanillaExt}`);
-	const vanillaContent = readFileSync(vanillaPath, "utf-8");
-
-	// Read framework wrapper (or use vanilla content for vanilla framework)
-	let frameworkContent: string;
-	if (framework === "vanilla") {
-		frameworkContent = vanillaContent;
-	} else {
-		const frameworkPath = resolve(componentDir, `${component.pascalName}${ext}`);
-		frameworkContent = readFileSync(frameworkPath, "utf-8");
-	}
-
-	// Build standalone output and replace placeholder in vanilla engine
-	const standalone = makeStandalone(vanillaContent, frameworkContent, framework);
-	return standalone.replace(/\{\{TRANSITION_CSS_ENTRIES\}\}/g, transitionCSSEntries);
-}
-
-function buildRegistryFiles(transitionCSSEntries: string) {
-	for (const component of COMPONENTS) {
-		for (const framework of component.frameworks) {
-			const output = buildStandalone(component, framework, transitionCSSEntries);
-
-			// Write output
-			const outputName = `${component.name}${getOutputExtension(framework)}`;
-			const outputDir =
-				framework === "react"
-					? resolve(SRC, "registry")
-					: resolve(SRC, "registry", framework);
-			mkdirSync(outputDir, { recursive: true });
-			writeFileSync(resolve(outputDir, outputName), output);
-
-			// Publish standalone files under public/r/ (served at https://transition-kit.space/r/<path>)
-			const publishDir =
-				framework === "react"
-					? PUBLIC_R
-					: resolve(PUBLIC_R, framework);
-			mkdirSync(publishDir, { recursive: true });
-			writeFileSync(resolve(publishDir, outputName), output);
-			console.log(`  ✓ src/registry/${framework === "react" ? "" : `${framework}/`}${outputName}`);
-			console.log(`  ✓ public/r/${framework === "react" ? "" : `${framework}/`}${outputName}`);
-		}
-	}
-}
-
-// ── Update MDX manual install code blocks ──────────────────────────
-
-interface MDXConfig {
-	mdxPath: string;
-	componentName: string;
-	pascalName: string;
-	frameworks: {
-		framework: Framework;
-		codeBlockTitle: string;
-	}[];
-}
-
-function updateMDXManualCode(
-	transitionCSSEntries: string,
-	configs: MDXConfig[],
-) {
-	const START_MARKER = "{/* @build-registry:start */}";
-	const END_MARKER = "{/* @build-registry:end */}";
-
-	for (const config of configs) {
-		const mdxFull = resolve(ROOT, config.mdxPath);
-		let mdxContent = readFileSync(mdxFull, "utf-8");
-		const componentDir = resolve(TEMPLATES, config.componentName);
-
-		// Process each marker pair sequentially
-		let searchFrom = 0;
-		for (const fw of config.frameworks) {
-			const startIdx = mdxContent.indexOf(START_MARKER, searchFrom);
-			const endIdx = mdxContent.indexOf(END_MARKER, searchFrom);
-
-			if (startIdx === -1 || endIdx === -1) {
-				console.warn(`  ⚠ No more marker pairs in ${config.mdxPath} (processed up to ${fw.framework})`);
-				break;
-			}
-
-			try {
-				const ext = getTemplateExtension(fw.framework);
-				const vanillaExt = getTemplateExtension("vanilla");
-
-				// Read vanilla engine
-				const vanillaPath = resolve(componentDir, `${config.pascalName}Vanilla${vanillaExt}`);
-				const vanillaContent = readFileSync(vanillaPath, "utf-8");
-
-				// Read framework wrapper
-				let frameworkContent: string;
-				if (fw.framework === "vanilla") {
-					frameworkContent = vanillaContent;
-				} else {
-					const frameworkPath = resolve(componentDir, `${config.pascalName}${ext}`);
-					frameworkContent = readFileSync(frameworkPath, "utf-8");
-				}
-
-				// Build standalone + replace placeholder
-				const standalone = makeStandalone(vanillaContent, frameworkContent, fw.framework);
-				const componentCode = standalone.replace(/\{\{TRANSITION_CSS_ENTRIES\}\}/g, transitionCSSEntries);
-
-				const codeBlock = [
-					`\`\`\`${ext.slice(1)} title="${fw.codeBlockTitle}"`,
-					componentCode,
-					"```",
-				].join("\n");
-
-				const replacement =
-					START_MARKER +
-					"\n" +
-					codeBlock +
-					"\n" +
-					END_MARKER;
-				mdxContent =
-					mdxContent.slice(0, startIdx) +
-					replacement +
-					mdxContent.slice(endIdx + END_MARKER.length);
-				searchFrom = startIdx + replacement.length;
-			} catch (error) {
-				console.warn(`  ⚠ Could not process ${config.componentName} ${fw.framework}: ${error}`);
-			}
-		}
-
-		writeFileSync(mdxFull, mdxContent);
-		console.log(`  ✓ ${config.mdxPath}`);
-	}
-}
-
-// ── Generate public/r/registry.json + public/r/{name}.json (shadcn schema) ──
-
-function buildRegistryItems(transitionCSSEntries: string) {
-	for (const component of COMPONENTS) {
-		const reactCode = buildStandalone(component, "react", transitionCSSEntries);
-
-		const item = {
-			$schema: "https://ui.shadcn.com/schema/registry-item.json",
-			name: component.name,
-			type: "registry:component",
-			title: component.title,
-			description: component.description,
-			files: [
-				{
-					path: `${component.name}.tsx`,
-					type: "registry:component",
-					target: `@ui/${component.name}.tsx`,
-					content: reactCode,
-				},
-			],
-		};
-
-		writeFileSync(
-			resolve(PUBLIC_R, `${component.name}.json`),
-			`${JSON.stringify(item, null, 2)}\n`,
-		);
-		console.log(`  ✓ public/r/${component.name}.json`);
-	}
-}
-
-function buildRegistryJson() {
-	const items = COMPONENTS.map((component) => ({
-		name: component.name,
-		type: "registry:component",
-		title: component.title,
-		description: component.description,
-		dependencies: [],
-		files: [
-			{
-				path: `${component.name}.tsx`,
-				type: "registry:component",
-				target: `@ui/${component.name}.tsx`,
-			},
-		],
-	}));
-
-	const registry = {
-		$schema: "https://ui.shadcn.com/schema/registry.json",
-		name: "transition-kit",
-		homepage: "https://transition-kit.space",
-		items,
-	};
-
-	writeFileSync(
-		resolve(PUBLIC_R, "registry.json"),
-		`${JSON.stringify(registry, null, 2)}\n`,
-	);
-	console.log("  ✓ public/r/registry.json");
-}
-
-// ── Main ───────────────────────────────────────────────────────────
-
-console.log("Building registry components...\n");
-console.log(`Found ${Object.keys(TRANSITION_CSS).length} transitions\n`);
-
-const transitionCSSEntries = buildTransitionCSSEntries(TRANSITION_CSS);
-
-console.log("Cleaning public/r/...");
-rmSync(PUBLIC_R, { recursive: true, force: true });
-mkdirSync(PUBLIC_R, { recursive: true });
-
-console.log("Generating registry files:");
-buildRegistryFiles(transitionCSSEntries);
-
-console.log("\nGenerating registry items (public/r/{name}.json):");
-buildRegistryItems(transitionCSSEntries);
-
-console.log("\nGenerating registry catalog (public/r/registry.json):");
-buildRegistryJson();
-
-console.log("\nUpdating MDX manual install code:");
-updateMDXManualCode(transitionCSSEntries, [
-	{
-		mdxPath: "content/docs/theme/animated-theme-toggler.mdx",
-		componentName: "animated-theme-toggler",
-		pascalName: "AnimatedThemeToggler",
-		frameworks: [
-			{ framework: "react", codeBlockTitle: "src/components/AnimatedThemeToggler.tsx" },
-			{ framework: "vue", codeBlockTitle: "src/components/AnimatedThemeToggler.vue" },
-			{ framework: "svelte", codeBlockTitle: "src/components/AnimatedThemeToggler.svelte" },
-			{ framework: "vanilla", codeBlockTitle: "src/components/AnimatedThemeToggler.ts" },
-		],
-	},
-	{
-		mdxPath: "content/docs/theme/theme-toggle-button.mdx",
-		componentName: "theme-toggle-button",
-		pascalName: "ThemeToggleButton",
-		frameworks: [
-			{ framework: "react", codeBlockTitle: "src/components/ThemeToggleButton.tsx" },
-			{ framework: "vue", codeBlockTitle: "src/components/ThemeToggleButton.vue" },
-			{ framework: "svelte", codeBlockTitle: "src/components/ThemeToggleButton.svelte" },
-			{ framework: "vanilla", codeBlockTitle: "src/components/ThemeToggleButton.ts" },
-		],
-	},
-	{
-		mdxPath: "content/docs/theme/theme-toggle-switch.mdx",
-		componentName: "theme-toggle-switch",
-		pascalName: "ThemeToggleSwitch",
-		frameworks: [
-			{ framework: "react", codeBlockTitle: "src/components/ThemeToggleSwitch.tsx" },
-			{ framework: "vue", codeBlockTitle: "src/components/ThemeToggleSwitch.vue" },
-			{ framework: "svelte", codeBlockTitle: "src/components/ThemeToggleSwitch.svelte" },
-			{ framework: "vanilla", codeBlockTitle: "src/components/ThemeToggleSwitch.ts" },
-		],
-	},
-	{
-		mdxPath: "content/docs/theme/theme-switcher.mdx",
-		componentName: "theme-switcher",
-		pascalName: "ThemeSwitcher",
-		frameworks: [
-			{ framework: "react", codeBlockTitle: "src/components/ThemeSwitcher.tsx" },
-			{ framework: "vue", codeBlockTitle: "src/components/ThemeSwitcher.vue" },
-			{ framework: "svelte", codeBlockTitle: "src/components/ThemeSwitcher.svelte" },
-			{ framework: "vanilla", codeBlockTitle: "src/components/ThemeSwitcher.ts" },
-		],
-	},
-]);
-
-console.log("\nDone! All registry components and MDX docs are in sync.");
+writeFileSync(
+  path.join(root, "registry.json"),
+  `${JSON.stringify(registry, null, 2)}\n`
+);
+console.log(
+  `registry.json: ${registry.items.length} items for ${FALLBACK_SITE_ORIGIN}`
+);

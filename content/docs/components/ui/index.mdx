@@ -1,0 +1,43 @@
+---
+title: "UI"
+description: "Interactive components animated by React's <ViewTransition>: tabs, carousels, lists, boards and more."
+---
+
+UI components animate their own state changes. A tab's pill glides to the selected tab, a list reflows as items come and go, a card glides across a kanban board. Every animation is a view transition coordinated by React: the component updates its state inside `startTransition`, and `<ViewTransition>` boundaries around its parts decide what moves, morphs, slides or fades. There is no animation library and no layout measuring.
+
+UI components have two parts:
+
+- **The core** — [UI Transition](/docs/components/ui/ui-transition) ships `tk()`, `useTransitionNames` and the `FORWARD`/`BACK` transition types, plus a stylesheet of composable `tk-*` classes (`tk-morph`, `tk-slide`, `tk-pop`, ...) and `--tk-ui-*` settings.
+- **Components** — ready-made, accessible controls built on the core. Some ship a few extra classes of their own, merged into your global CSS on install.
+
+Installing any component pulls in the core automatically. No provider is needed.
+
+## Usage
+
+```bash
+npx shadcn@latest add @transition-kit/ui/tabs
+```
+
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/transitions/tabs";
+
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings.</TabsContent>
+  <TabsContent value="password">Change your password.</TabsContent>
+</Tabs>;
+```
+
+Tune every component at once with the core's settings, for example `:root { --tk-ui-move: 300ms; }`. With `prefers-reduced-motion: reduce`, nothing travels: content crossfades briefly instead.
+
+## Components
+
+<ItemGrid group="ui" kind="component" />

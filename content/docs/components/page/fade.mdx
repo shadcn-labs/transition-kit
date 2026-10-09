@@ -1,0 +1,77 @@
+---
+title: "Fade"
+description: "The old page fades out as the new one fades in."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/fade">
+  <PageTransitionDemo transition="fade" />
+</ComponentPreview>
+
+A plain crossfade: the old page's opacity goes to zero while the new one's comes up. The safest choice when pages share most of their layout.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/fade" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/fade.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="fade">
+  {children}
+</PageTransition>
+```
+
+Navigations that run in a React Transition animate: router links, or any update wrapped in `navigateWithTransition`. The style looks the same in both directions.
+
+## Customization
+
+The style runs for `300ms` with `ease-in-out` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="fade"
+  duration={600}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 300ms)` and `var(--tk-page-easing, ease-in-out)`.

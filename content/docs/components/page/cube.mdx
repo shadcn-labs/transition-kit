@@ -1,0 +1,85 @@
+---
+title: "Cube"
+description: "Pages turn around the faces of a 3D cube."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/cube">
+  <PageTransitionDemo transition="cube" />
+</ComponentPreview>
+
+The pages are two faces of a cube: the old one turns away around its right edge as the new one turns in around its left. Backward navigations turn the cube the other way.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/cube" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/cube.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="cube">
+  {children}
+</PageTransition>
+```
+
+Mark backward navigations with `direction: "back"` and the style runs the other way:
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## Customization
+
+The style runs for `700ms` with `ease-in-out` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="cube"
+  duration={1400}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 700ms)` and `var(--tk-page-easing, ease-in-out)`.
+
+The hinges sit on the edges of the page's visible part, vertically centred on it, so long scrolled pages turn around what the user sees.
+
+The 3D depth comes from `perspective: 1500px` on `::view-transition-image-pair(.tk-page-cube)`; lower it for a stronger effect.

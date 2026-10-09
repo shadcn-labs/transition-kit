@@ -1,0 +1,30 @@
+{
+  "title": "Theme",
+  "pages": [
+    "index",
+    "theme-transition",
+    "theme-toggle-button",
+    "theme-toggle-switch",
+    "theme-switcher",
+    "animated-theme-toggler",
+    "circle-reveal",
+    "circle-blur",
+    "polygon-reveal",
+    "star-reveal",
+    "heart-reveal",
+    "diagonal-wipe",
+    "checkerboard-reveal",
+    "ripple-reveal",
+    "venetian-blinds",
+    "spiral-reveal",
+    "wave-reveal",
+    "clock-wipe",
+    "gif-frog",
+    "gif-penguin",
+    "gif-cat",
+    "gif-michael-jackson",
+    "gif-deadpool",
+    "gif-chika",
+    "gif-hakari-dance"
+  ]
+}

@@ -1,0 +1,28 @@
+/* Fade: the old page fades out as the new one fades in. */
+::view-transition-old(.tk-page-fade) {
+  animation: tk-page-fade-out var(--tk-page-duration, 300ms)
+    var(--tk-page-easing, ease-in-out) both;
+}
+
+::view-transition-new(.tk-page-fade) {
+  animation: tk-page-fade-in var(--tk-page-duration, 300ms)
+    var(--tk-page-easing, ease-in-out) both;
+}
+
+@keyframes tk-page-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes tk-page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

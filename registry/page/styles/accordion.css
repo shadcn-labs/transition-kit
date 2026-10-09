@@ -1,0 +1,64 @@
+/* Accordion: the old page folds shut towards one edge as the new one unfolds from it; backward navigations use the other edge. */
+/* Geometry of the page's visible part, in each snapshot's coordinates. */
+::view-transition-image-pair(.tk-page-accordion.tk-page-exit) {
+  --tk-page-y: calc(
+    (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) /
+      2
+  );
+  --tk-page-left: max(0px, var(--tk-exit-cx) - 50vw);
+  --tk-page-right: min(100%, var(--tk-exit-cx) + 50vw);
+}
+
+::view-transition-image-pair(.tk-page-accordion.tk-page-enter) {
+  --tk-page-y: calc(
+    (
+        max(0px, var(--tk-enter-cy) - 50vh) +
+          min(100%, var(--tk-enter-cy) + 50vh)
+      ) /
+      2
+  );
+  --tk-page-left: max(0px, var(--tk-enter-cx) - 50vw);
+  --tk-page-right: min(100%, var(--tk-enter-cx) + 50vw);
+}
+
+::view-transition-old(.tk-page-accordion),
+::view-transition-new(.tk-page-accordion) {
+  transform-origin: var(--tk-page-left) var(--tk-page-y);
+}
+
+::view-transition-old(.tk-page-accordion.tk-page-back),
+::view-transition-new(.tk-page-accordion.tk-page-back) {
+  transform-origin: var(--tk-page-right) var(--tk-page-y);
+}
+
+::view-transition-old(.tk-page-accordion) {
+  animation: tk-page-accordion-out var(--tk-page-duration, 550ms)
+    var(--tk-page-easing, ease-in-out) both;
+}
+
+::view-transition-new(.tk-page-accordion) {
+  animation: tk-page-accordion-in var(--tk-page-duration, 550ms)
+    var(--tk-page-easing, ease-in-out) both;
+}
+
+@keyframes tk-page-accordion-out {
+  from {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+}
+
+@keyframes tk-page-accordion-in {
+  from {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,96 @@
+---
+title: "Circle Blur"
+description: "A soft, blurred circle expands from the click point."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/circle-blur">
+  <ThemeTransitionDemo transition="circle-blur" />
+</ComponentPreview>
+
+The circle's edge is feathered with an SVG Gaussian blur, and the expo-out easing makes it burst open, then settle. It starts at the transition origin: the pointer when you pass the click event, the centre of a control activated from the keyboard, or the centre of the viewport when you pass no `origin`.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/circle-blur" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/circle-blur.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="circle-blur">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) => toggleTheme({ transition: "circle-blur", origin: event })}
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `1000ms` with `cubic-bezier(0.16, 1, 0.3, 1)` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="circle-blur"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 1000ms)` and `var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1))`.
+
+Pass the click event as `origin` to start at the pointer, or an element to start at its centre:
+
+```tsx
+toggleTheme({ origin: event });
+setTheme("dark", { origin: buttonElement });
+```

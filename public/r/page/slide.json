@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/slide",
+  "title": "Slide",
+  "description": "Pages slide past each other; backward navigations reverse.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-page-slide), ::view-transition-new(.tk-page-slide)": {
+      "--tk-page-dir": "1"
+    },
+    "::view-transition-old(.tk-page-slide.tk-page-back), ::view-transition-new(.tk-page-slide.tk-page-back)": {
+      "--tk-page-dir": "-1"
+    },
+    "::view-transition-old(.tk-page-slide)": {
+      "animation": "tk-page-slide-out var(--tk-page-duration, 400ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+    },
+    "::view-transition-new(.tk-page-slide)": {
+      "animation": "tk-page-slide-in var(--tk-page-duration, 400ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+    },
+    "@keyframes tk-page-slide-out": {
+      "from": {
+        "transform": "translateX(0)"
+      },
+      "to": {
+        "transform": "translateX(calc(-100% * var(--tk-page-dir)))"
+      }
+    },
+    "@keyframes tk-page-slide-in": {
+      "from": {
+        "transform": "translateX(calc(100% * var(--tk-page-dir)))"
+      },
+      "to": {
+        "transform": "translateX(0)"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

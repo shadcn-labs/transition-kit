@@ -1,9 +1,4 @@
 {
-  "title": "Components",
-  "pages": [
-    "index",
-    "edge-cases",
-    "---Theme---",
-    "theme"
-  ]
+  "title": "Documentation",
+  "pages": ["(root)", "components"]
 }

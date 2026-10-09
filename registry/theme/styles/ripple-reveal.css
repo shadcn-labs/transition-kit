@@ -1,0 +1,41 @@
+/* Ripple Reveal: concentric rings ripple outward from the origin. */
+::view-transition-old(.tk-theme-ripple-reveal) {
+  animation: none;
+}
+
+::view-transition-new(.tk-theme-ripple-reveal) {
+  mask-image:
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="white" stroke-width="4"/><circle cx="20" cy="20" r="10" fill="none" stroke="white" stroke-width="4"/><circle cx="20" cy="20" r="2" fill="white"/></svg>'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="white"/></svg>');
+  mask-repeat: no-repeat;
+  mask-position:
+    var(--tk-x) var(--tk-y),
+    var(--tk-x) var(--tk-y);
+  mask-size: 0, 0;
+  animation: tk-theme-ripple-reveal var(--tk-theme-duration, 1100ms)
+    var(--tk-theme-easing, ease-in-out) both;
+}
+
+/* The second layer is a solid circle that trails the shape and fills its gaps. */
+@keyframes tk-theme-ripple-reveal {
+  0% {
+    mask-size: 0, 0;
+    mask-position:
+      var(--tk-x) var(--tk-y),
+      var(--tk-x) var(--tk-y);
+  }
+  40% {
+    mask-size: calc(var(--tk-r) * 1.52), 0;
+    mask-position:
+      calc(var(--tk-x) - var(--tk-r) * 0.76)
+        calc(var(--tk-y) - var(--tk-r) * 0.76),
+      var(--tk-x) var(--tk-y);
+  }
+  100% {
+    mask-size: calc(var(--tk-r) * 3.8), calc(var(--tk-r) * 2);
+    mask-position:
+      calc(var(--tk-x) - var(--tk-r) * 1.9)
+        calc(var(--tk-y) - var(--tk-r) * 1.9),
+      calc(var(--tk-x) - var(--tk-r) * 1) calc(var(--tk-y) - var(--tk-r) * 1);
+  }
+}

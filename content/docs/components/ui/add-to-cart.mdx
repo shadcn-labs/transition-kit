@@ -1,0 +1,169 @@
+---
+title: "Add to Cart"
+description: 'The product image flies into the cart button, the badge count rolls up and the button label morphs to "Added".'
+---
+
+import { AddToCartDemo } from "@/examples/ui/add-to-cart-demo";
+
+<ComponentPreview name="ui/add-to-cart" src="examples/ui/add-to-cart-demo.tsx">
+  <AddToCartDemo />
+</ComponentPreview>
+
+A cart provider, a cart button and an add button. Adding a product flies its image into the cart, bumps the cart icon when it lands, rolls the badge count and switches the button label to "Added", all in one transition.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/add-to-cart" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/add-to-cart.tsx"
+  title="components/transitions/add-to-cart.tsx"
+/>
+
+<Step>Add the add to cart styles to your global stylesheet.</Step>
+
+<ComponentSource src="registry/ui/add-to-cart.css" title="styles/globals.css" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  AddToCartButton,
+  CartButton,
+  CartProvider,
+  useCart,
+} from "@/components/transitions/add-to-cart";
+```
+
+```tsx
+const ProductCard = ({ product }) => {
+  const imageRef = React.useRef<HTMLImageElement>(null);
+  return (
+    <div>
+      <img ref={imageRef} src={product.image} alt={product.name} />
+      <AddToCartButton
+        productId={product.id}
+        src={product.image}
+        source={imageRef}
+      />
+    </div>
+  );
+};
+
+<CartProvider>
+  <CartButton />
+  <ProductCard product={product} />
+</CartProvider>;
+```
+
+Pass `items` and `onItemsChange` to keep the cart in your own state, and read or change it anywhere inside the provider with `useCart()`:
+
+```tsx
+const { items, count, add, remove, clear } = useCart();
+```
+
+## How it works
+
+- On click, an urgent update renders a copy of the product image exactly over the `source` element, in a `<ViewTransition>` with a name unique to that add. The card itself never changes.
+- The cart change then runs in `startTransition`. In that update the copy unmounts and an invisible twin with the same name mounts inside the cart icon, so React pairs them through `share` (`tk-morph tk-slow tk-top tk-add-to-cart-flight`): the image travels and shrinks into the cart, arcing upward on the way and fading only in the last part of the trip. The copy's `onShare` returns a cleanup that removes the twin once the transition finishes.
+- The same transition adds a type for the flight, which switches the cart icon's `update` to `tk-add-to-cart-bump`, and an up or down type for the count. Every type is scoped to the provider, so other components' transitions never bump or roll the cart.
+- The badge digits are `<ViewTransition>`s keyed by place value, nested in the badge so they paint above it. Only digits that change roll (`tk-roll tk-clip` with `tk-up`, or `tk-down` when the count drops), so `9 → 10` rolls both places while `11 → 12` rolls only the last one. The badge itself pops in for the first item and out when the cart empties.
+- The button label switches to "Added" in the same transition (`tk-morph tk-text tk-blur`) and back after `resetAfter`. React holds that reset until a running flight has landed, so it never cuts one short. Both labels share one grid cell, so the button keeps its width.
+- `add-to-cart.css` adds the arc, the late fade and the bump. Tune the arc with `--tk-ui-add-to-cart-lift`.
+
+## API Reference
+
+### CartProvider
+
+| Prop            | Type                          | Default |
+| --------------- | ----------------------------- | ------- |
+| `items`         | `CartItem[]`                  | -       |
+| `defaultItems`  | `CartItem[]`                  | `[]`    |
+| `onItemsChange` | `(items: CartItem[]) => void` | -       |
+
+`CartItem` is `{ id: string; quantity: number }`.
+
+### CartButton
+
+A `<button>` with the cart icon and a count badge. All button props are forwarded; `children` render after the icon.
+
+### AddToCartButton
+
+| Prop         | Type                             | Default         |
+| ------------ | -------------------------------- | --------------- |
+| `productId`  | `string`                         | -               |
+| `quantity`   | `number`                         | `1`             |
+| `image`      | `ReactNode`                      | -               |
+| `src`        | `string`                         | -               |
+| `source`     | `RefObject<HTMLElement \| null>` | the button      |
+| `children`   | `ReactNode`                      | `"Add to cart"` |
+| `addedLabel` | `ReactNode`                      | `"Added"`       |
+| `resetAfter` | `number`                         | `1500`          |
+
+`image` (or an `<img>` built from `src`) is what flies; it should fill its box like the product image does. Without either, the item is added with no flight.
+
+### useCart
+
+| Field    | Type                                      |
+| -------- | ----------------------------------------- |
+| `items`  | `CartItem[]`                              |
+| `count`  | `number`                                  |
+| `add`    | `(id: string, quantity?: number) => void` |
+| `remove` | `(id: string) => void`                    |
+| `clear`  | `() => void`                              |
+
+Changes made through `useCart()` roll the badge too, without a flight.
+
+## Accessibility
+
+- Both parts are real `<button type="button">` elements; focus stays on the add button after a click.
+- `CartButton` is labelled with its count ("Cart, 3 items"); the badge itself is hidden from assistive technology.
+- A polite live region announces each add ("Added to cart. 3 items in cart.").
+- The flying image and its twin are `aria-hidden` and ignore the pointer, and the page stays interactive during the animation.
+- With `prefers-reduced-motion`, nothing flies; the badge and label crossfade briefly.

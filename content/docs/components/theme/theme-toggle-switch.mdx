@@ -1,0 +1,89 @@
+---
+title: "Theme Toggle Switch"
+description: "A switch that flips between light and dark with any transition style."
+---
+
+import { ThemeToggleSwitchDemo } from "@/examples/theme/theme-toggle-switch-demo";
+
+<ComponentPreview name="theme/theme-toggle-switch">
+  <ThemeToggleSwitchDemo />
+</ComponentPreview>
+
+A switch whose thumb carries a sun or a moon. On means dark.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/theme-toggle-switch" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core and
+  at least one style.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-toggle-switch.tsx"
+  title="components/transitions/theme-toggle-switch.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Render it anywhere inside `ThemeTransitionProvider`.
+
+```tsx
+import { ThemeToggleSwitch } from "@/components/transitions/theme-toggle-switch";
+```
+
+```tsx
+<ThemeToggleSwitch />
+<ThemeToggleSwitch transition="star-reveal" />
+```
+
+## API Reference
+
+### ThemeToggleSwitch
+
+| Prop         | Type                       | Default                     |
+| ------------ | -------------------------- | --------------------------- |
+| `transition` | `string`                   | The provider's `transition` |
+| `...props`   | `ComponentProps<"button">` | -                           |
+
+`transition` is a style slug such as `"circle-reveal"`; install the style first. Any other prop is spread onto the `<button>`; calling `event.preventDefault()` in your `onClick` skips the theme change.
+
+## Accessibility
+
+- A `<button role="switch">` labelled "Dark mode", with `aria-checked` set when the dark theme is active. Pass `aria-label` to change the label.
+- Toggles with <kbd>Space</kbd> or <kbd>Enter</kbd>; keyboard changes start the transition at the switch.
+- The thumb follows the `dark` class on `<html>`, so it is in the right place before hydration. `aria-checked` stays `false` until the theme is known.

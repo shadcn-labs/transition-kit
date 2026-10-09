@@ -1,0 +1,186 @@
+---
+title: "Carousel"
+description: "Slides push in like a track from the side you moved toward, with arrows, dots, swipe, keyboard and optional autoplay."
+---
+
+import { CarouselDemo } from "@/examples/ui/carousel-demo";
+
+<ComponentPreview name="ui/carousel" src="examples/ui/carousel-demo.tsx">
+  <CarouselDemo />
+</ComponentPreview>
+
+A carousel whose slides push in like a track from the side you moved toward. Move with the arrows, the dots, a swipe or the arrow keys, and optionally let it play on its own.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/carousel" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/carousel.tsx"
+  title="components/transitions/carousel.tsx"
+/>
+
+<Step>Add the carousel styles to your global stylesheet.</Step>
+
+<ComponentSource src="registry/ui/carousel.css" title="styles/globals.css" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/transitions/carousel";
+```
+
+```tsx
+<Carousel loop aria-label="Featured places">
+  <CarouselContent>
+    <CarouselItem className="border bg-card p-6">Aurora Ridge</CarouselItem>
+    <CarouselItem className="border bg-card p-6">Copper Dunes</CarouselItem>
+    <CarouselItem className="border bg-card p-6">Tide Pools</CarouselItem>
+  </CarouselContent>
+  <div className="flex items-center justify-between">
+    <CarouselPrevious />
+    <CarouselDots />
+    <CarouselNext />
+  </div>
+</Carousel>
+```
+
+### Autoplay
+
+`autoplay` takes the delay in milliseconds. The timer restarts after every move, so a click never gets followed by an instant second slide.
+
+```tsx
+<Carousel loop autoplay={5000} aria-label="Featured places">
+  ...
+</Carousel>
+```
+
+### Controlled
+
+```tsx
+const [index, setIndex] = React.useState(0);
+
+<Carousel index={index} onIndexChange={setIndex} aria-label="Screenshots">
+  ...
+</Carousel>;
+```
+
+### Custom controls
+
+`useCarousel()` reads the state of the surrounding carousel, for a counter or your own buttons.
+
+```tsx
+const Counter = () => {
+  const { count, index } = useCarousel();
+  return (
+    <span className="text-sm text-muted-foreground tabular-nums">
+      {index + 1} / {count}
+    </span>
+  );
+};
+```
+
+## How it works
+
+- Every move sets the index inside `startTransition` and tags it with the `FORWARD` or `BACK` transition type from the core. Moving to the current slide does nothing.
+- Every slide sits in the same grid cell of `CarouselContent`, and the inactive ones are hidden with `visibility`, so the carousel is as tall as its tallest slide and never changes height. `CarouselContent` is one `<ViewTransition>` whose `update` class depends on the type: `tk-push` with `tk-forward` or `tk-back`. A move is an update of that one boundary, so its old snapshot (the outgoing slide) pushes out while the new one (the incoming slide) pushes in from the side you moved toward.
+- With `loop`, the arrows, swipe and keys always travel in their own direction, so the last slide pushes forward into the first. The dots take the shortest way round: on five slides, going from 5 to 1 moves forward one step instead of back four.
+- `tk-clip` clips the pushing snapshots to the slide box. `carousel.css` sets `--tk-ui-radius` on that group to match the item's `rounded-xl`; change both together.
+- The dot indicator is rendered only inside the active dot with one name from `useTransitionNames()`, so React pairs the leaving and appearing indicator (`share`) and it glides between dots.
+- Snapshots paint above the page. The arrows and the dots are their own `<ViewTransition>`s with `tk-top`, captured on every move, so they stay visible if you lay them over the slides.
+- React finishes a running transition before it commits the next one. Clicks that land in the meantime continue from the slide on its way in, so fast repeated clicks move one slide each.
+- Names are unique per carousel, so several carousels on one page never pair with each other.
+
+## API Reference
+
+### Carousel
+
+| Prop            | Type                      | Default |
+| --------------- | ------------------------- | ------- |
+| `index`         | `number`                  | -       |
+| `defaultIndex`  | `number`                  | `0`     |
+| `onIndexChange` | `(index: number) => void` | -       |
+| `loop`          | `boolean`                 | `false` |
+| `autoplay`      | `number` (ms)             | -       |
+
+Autoplay pauses while the pointer is over the carousel, while it has keyboard focus, while the tab is hidden and when the user prefers reduced motion. Without `loop` it rewinds to the first slide after the last. The root gets `data-autoplay="playing"` or `"paused"`.
+
+### CarouselContent / CarouselItem
+
+Plain `div`s. `CarouselItem` gets `data-state="active"` or `"inactive"`. Pass `aria-label` to an item to replace the default "n of m" label.
+
+### CarouselPrevious / CarouselNext
+
+`button`s that move one slide. Children replace the default chevron. Without `loop` they become `aria-disabled` at either end.
+
+### CarouselDots
+
+A `div` with one button per slide. The active dot gets `aria-current="true"` and `data-state="active"`.
+
+### useCarousel
+
+Returns `index`, `count`, `loop`, `playing`, `canPrevious`, `canNext`, `goTo(index)`, `previous()` and `next()`.
+
+## Accessibility
+
+- Follows the WAI-ARIA carousel pattern: the root is a `region` with `aria-roledescription="carousel"` (give it an `aria-label`), and each slide is a `group` with `aria-roledescription="slide"` labelled "2 of 5".
+- The slide container is an `aria-live="polite"` region, so moving announces the new slide. While autoplay is running it switches to `off`, so screen readers aren't interrupted every few seconds.
+- <kbd>←</kbd> / <kbd>→</kbd> move between slides while focus is anywhere inside
+  the carousel, except in text fields.
+- The arrows use `aria-disabled` instead of `disabled` at the ends, so keyboard focus stays on them. Arrows and dots point at the slides with `aria-controls`.
+- Hidden slides are removed from the accessibility tree and the tab order.
+- A swipe that ends on a link or button inside a slide doesn't also click it.
+- With `prefers-reduced-motion`, slides crossfade instead of pushing and autoplay stays off.
