@@ -1,0 +1,119 @@
+---
+title: "Number Flip"
+description: "Changed digits roll up when the number grows and down when it shrinks. Separators and unchanged digits stay put."
+---
+
+import { NumberFlipDemo } from "@/examples/ui/number-flip-demo";
+
+<ComponentPreview name="ui/number-flip" src="examples/ui/number-flip-demo.tsx">
+  <NumberFlipDemo />
+</ComponentPreview>
+
+A formatted number whose changed digits roll in their own box: up when the value grows, down when it shrinks. Separators and digits that didn't change stay where they are.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/number-flip" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/number-flip.tsx"
+  title="components/transitions/number-flip.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { NumberFlip } from "@/components/transitions/number-flip";
+```
+
+```tsx
+const [price, setPrice] = useState(1299);
+
+<NumberFlip value={price} format={{ style: "currency", currency: "EUR" }} />
+<button type="button" onClick={() => setPrice((p) => p + 100)}>
+  Add seat
+</button>
+```
+
+Set `value` like any other state. The component notices the change and starts the transition itself; you don't need to wrap the update in `startTransition`.
+
+```tsx
+<NumberFlip
+  value={2_480_000}
+  format={{ notation: "compact", maximumFractionDigits: 1 }}
+  stagger
+/>
+```
+
+## How it works
+
+- The value is formatted with `Intl.NumberFormat#formatToParts`, so currency symbols, grouping, decimals, percentages and compact suffixes come from the locale. Every character is a `<span>` in its own `<ViewTransition>`.
+- Integer digits are keyed by their position counted from the decimal point (ones, tens, hundreds…), fraction digits from the decimal point to the right, and symbols by their position from the right. Going from `999` to `1,000` adds a new thousands digit without re-keying the others.
+- The component keeps the number on screen in state. When `value` changes, it swaps in the new number inside `startTransition` and adds a transition type scoped to this instance for the direction: one for up, one for down. Counters that change in the same transition each roll their own way.
+- A digit that changed has `update={{ [up]: tk("tk-morph", "tk-roll", "tk-clip", "tk-up"), [down]: … "tk-down" }}`, so the old digit slides out of its own box and the new one slides in. Digits that appear or disappear (`999` to `1,000`) roll the same way through `enter` and `exit`.
+- Separators and unchanged digits only get `tk-morph tk-text`: they hold still, or glide to their new spot when the number gets wider. React leaves a character out of the transition when nothing about it changed.
+- Every class map falls back to `"none"`, so the characters only animate in this counter's own transitions and stay part of their parent's snapshot in any other.
+- With `stagger`, changed digits get `tk-delay-1…8` counted from the right, so the ones roll first and the higher places follow.
+- `tabular-nums` gives every digit the same width, so rolling `1` to `8` never shifts its neighbours.
+- If `value` changes again mid-roll, React finishes the running roll and then rolls on from what's on screen.
+
+## API Reference
+
+### NumberFlip
+
+| Prop        | Type                       | Default   |
+| ----------- | -------------------------- | --------- |
+| `value`     | `number`                   | -         |
+| `format`    | `Intl.NumberFormatOptions` | -         |
+| `locales`   | `Intl.LocalesArgument`     | `"en-US"` |
+| `stagger`   | `boolean`                  | `false`   |
+| `className` | `string`                   | -         |
+
+Other props are spread onto the root `<span>`. The default locale is fixed so server and client render the same string; pass the user's locale to change it.
+
+## Accessibility
+
+- The full formatted number (for example `$48,219.50`) is rendered as visually hidden text, so screen readers read one number instead of single characters. The rolling characters are `aria-hidden`.
+- The hidden text updates immediately; it doesn't wait for the animation.
+- The number isn't a live region. If changes should be announced, wrap it in an element with `aria-live="polite"`.
+- With `prefers-reduced-motion`, digits don't travel; the old and new digits crossfade briefly.

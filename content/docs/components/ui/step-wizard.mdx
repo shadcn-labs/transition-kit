@@ -1,0 +1,166 @@
+---
+title: "Step Wizard"
+description: "A multi-step form whose panels slide in the direction you move and whose progress indicator glides between steps."
+---
+
+import { StepWizardDemo } from "@/examples/ui/step-wizard-demo";
+
+<ComponentPreview name="ui/step-wizard" src="examples/ui/step-wizard-demo.tsx">
+  <StepWizardDemo />
+</ComponentPreview>
+
+A multi-step form. Moving forward slides the next step in from the right, moving back slides the previous one in from the left, and the marker in the progress indicator glides to the current step while the bar fills behind it. Every step stays mounted, so form fields keep their values.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/step-wizard" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/step-wizard.tsx"
+  title="components/transitions/step-wizard.tsx"
+/>
+
+<Step>Add the step wizard styles to your global stylesheet.</Step>
+
+<ComponentSource src="registry/ui/step-wizard.css" title="styles/globals.css" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  StepWizard,
+  StepWizardContent,
+  StepWizardDescription,
+  StepWizardIndicator,
+  StepWizardNext,
+  StepWizardPrevious,
+  StepWizardStep,
+  StepWizardTitle,
+} from "@/components/transitions/step-wizard";
+```
+
+```tsx
+<StepWizard>
+  <StepWizardIndicator />
+  <StepWizardContent>
+    <StepWizardStep label="Account" canAdvance={email !== ""}>
+      <StepWizardTitle>Create your account</StepWizardTitle>
+      <StepWizardDescription>
+        We'll send a confirmation link.
+      </StepWizardDescription>
+      <Input value={email} onChange={(event) => setEmail(event.target.value)} />
+    </StepWizardStep>
+    <StepWizardStep label="Plan">…</StepWizardStep>
+    <StepWizardStep label="Review">…</StepWizardStep>
+  </StepWizardContent>
+  <div className="flex justify-between">
+    <StepWizardPrevious />
+    <StepWizardNext />
+  </div>
+</StepWizard>
+```
+
+`label` names the step in the indicator. `canAdvance={false}` blocks Continue (it stays focusable and announced, with `aria-disabled`); pass a function instead to validate when Continue is pressed and return `false` to stay on the step. Completed steps in the indicator are buttons that jump back to them.
+
+Control the step with `step` / `onStepChange`, or build your own controls with `useStepWizard()` inside `<StepWizard>`:
+
+```tsx
+const { step, count, next, previous, goTo, isFirst, isLast } = useStepWizard();
+```
+
+## How it works
+
+- `goTo`, `next` and `previous` change the step inside `startTransition` and tag it with the `FORWARD` or `BACK` transition type from the core. Going to the current step does nothing.
+- `StepWizardContent` is one `<ViewTransition>` whose `update` class depends on the type: `tk-slide` with `tk-forward` or `tk-back`. All steps stay mounted and only the active one is visible, so a step change is an update of that one boundary: the old step slides out and the new one slides in. A `step` you change from outside slides by comparing the old and new index.
+- `step-wizard.css` clips the sliding content above and below, so steps never spill over the buttons, while the slide can still travel past the sides. The panel's height morphs between steps, and so does the card around it.
+- The current-step marker is rendered only inside the current step's dot and has one name from `useTransitionNames()`. React pairs the marker leaving one step with the marker appearing in the next (`share`), so it glides there with `tk-spring`. The step numbers keep `tk-step-wizard-dot`, which raises them above the marker in either direction.
+- The progress bar is its own `<ViewTransition>`; its width morphs from one step to the next. Back and Continue morph too, so a button that becomes disabled crossfades instead of blinking.
+- Focus moves to the new step's title, so keyboard and screen reader users land at the top of the step.
+
+## API Reference
+
+### StepWizard
+
+| Prop           | Type                     | Default |
+| -------------- | ------------------------ | ------- |
+| `step`         | `number`                 | -       |
+| `defaultStep`  | `number`                 | `0`     |
+| `onStepChange` | `(step: number) => void` | -       |
+
+Renders the card `div`; other props are spread onto it.
+
+### StepWizardStep
+
+| Prop         | Type                         | Default              |
+| ------------ | ---------------------------- | -------------------- |
+| `label`      | `string`                     | `"Step <n>"`         |
+| `canAdvance` | `boolean \| (() => boolean)` | `true`               |
+| `aria-label` | `string`                     | `"<label> (n of N)"` |
+
+Steps must be direct children of `StepWizardContent`.
+
+### StepWizardIndicator
+
+A `nav` labelled "Progress" (override with `aria-label`) with one item per step.
+
+### StepWizardPrevious / StepWizardNext
+
+`<button>`s that default to "Back" and "Continue" with arrow icons; pass children to replace the content. Calling `event.preventDefault()` in `onClick` skips the step change.
+
+### useStepWizard
+
+Returns `{ step, count, goTo, next, previous, isFirst, isLast }`. `next` respects `canAdvance`.
+
+## Accessibility
+
+- The indicator is a `nav` with an ordered list. The current step has `aria-current="step"`, completed steps read "(completed)", and upcoming steps are disabled buttons.
+- Each step is a `role="group"` named after its label and position, for example "Plan (2 of 4)". Inactive steps are `hidden`, so they are skipped by the keyboard and screen readers.
+- After a step change, focus moves to the new step's `StepWizardTitle` (or the step itself), so the next <kbd>Tab</kbd> continues inside it.
+- A blocked Continue uses `aria-disabled` instead of `disabled`, so it stays in the tab order and screen readers can say why nothing happened.
+- With `prefers-reduced-motion`, nothing slides or glides; steps crossfade briefly.

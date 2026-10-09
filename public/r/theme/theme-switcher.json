@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/theme-switcher",
+  "title": "Theme Switcher",
+  "description": "A light, dark and system segmented control with any transition style.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/theme/theme-switcher.tsx",
+      "content": "\"use client\";\n\nimport { MonitorIcon, MoonIcon, SunIcon } from \"lucide-react\";\nimport { useRef } from \"react\";\nimport type { ComponentProps, KeyboardEvent } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { useThemeTransition } from \"@/components/transitions/theme-transition\";\nimport type { Theme } from \"@/components/transitions/theme-transition\";\n\nconst OPTIONS = [\n  { icon: MonitorIcon, label: \"System\", value: \"system\" },\n  { icon: SunIcon, label: \"Light\", value: \"light\" },\n  { icon: MoonIcon, label: \"Dark\", value: \"dark\" },\n] as const satisfies { icon: typeof SunIcon; label: string; value: Theme }[];\n\nexport interface ThemeSwitcherProps extends ComponentProps<\"div\"> {\n  /** Style slug, e.g. `\"circle-reveal\"`. Defaults to the provider's `transition`. */\n  transition?: string;\n}\n\nexport const ThemeSwitcher = ({\n  transition,\n  className,\n  onKeyDown,\n  ...props\n}: ThemeSwitcherProps) => {\n  const { mounted, theme, setTheme } = useThemeTransition();\n  // The stored theme is unknown on the server: select nothing until hydrated.\n  const selected = mounted ? theme : undefined;\n  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {\n    onKeyDown?.(event);\n    if (event.defaultPrevented) {\n      return;\n    }\n    const current = OPTIONS.findIndex((option) => option.value === selected);\n    const last = OPTIONS.length - 1;\n    let next: number;\n    switch (event.key) {\n      case \"ArrowRight\":\n      case \"ArrowDown\": {\n        next = current >= last ? 0 : current + 1;\n        break;\n      }\n      case \"ArrowLeft\":\n      case \"ArrowUp\": {\n        next = current <= 0 ? last : current - 1;\n        break;\n      }\n      case \"Home\": {\n        next = 0;\n        break;\n      }\n      case \"End\": {\n        next = last;\n        break;\n      }\n      default: {\n        return;\n      }\n    }\n    event.preventDefault();\n    const target = optionRefs.current[next];\n    target?.focus();\n    setTheme(OPTIONS[next].value, { origin: target ?? undefined, transition });\n  };\n\n  return (\n    <div\n      role=\"radiogroup\"\n      aria-label=\"Theme\"\n      data-slot=\"theme-switcher\"\n      className={cn(\n        \"border-border bg-background inline-flex items-center gap-0.5 rounded-full border p-0.5\",\n        className\n      )}\n      onKeyDown={handleKeyDown}\n      {...props}\n    >\n      {OPTIONS.map(({ icon: Icon, label, value }, index) => {\n        const checked = selected === value;\n        // Roving tabindex: the checked option, or the first one when none is.\n        const focusable = selected === undefined ? index === 0 : checked;\n        return (\n          <button\n            key={value}\n            ref={(node) => {\n              optionRefs.current[index] = node;\n            }}\n            type=\"button\"\n            role=\"radio\"\n            aria-checked={checked}\n            aria-label={label}\n            title={label}\n            tabIndex={focusable ? 0 : -1}\n            data-slot=\"theme-switcher-option\"\n            data-state={checked ? \"checked\" : \"unchecked\"}\n            className=\"text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 data-[state=checked]:bg-muted data-[state=checked]:text-foreground inline-flex size-7 cursor-pointer items-center justify-center rounded-full transition-[color,background-color,box-shadow] outline-none focus-visible:ring-[3px] [&_svg]:pointer-events-none [&_svg]:size-4\"\n            onClick={(event) => setTheme(value, { origin: event, transition })}\n          >\n            <Icon aria-hidden=\"true\" />\n          </button>\n        );\n      })}\n    </div>\n  );\n};\n",
+      "type": "registry:component",
+      "target": "components/transitions/theme-switcher.tsx"
+    }
+  ],
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:component"
+}

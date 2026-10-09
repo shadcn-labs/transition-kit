@@ -1,0 +1,68 @@
+---
+title: "Introduction"
+description: "Theme, page and UI transitions for React, built on React's <ViewTransition>. Works with the shadcn CLI."
+---
+
+**transition-kit** provides theme transitions, page transitions and animated UI components for React. Built on React 19.3's [`<ViewTransition>`](https://react.dev/reference/react/ViewTransition), `startTransition` and `addTransitionType`, and designed to work seamlessly with the [shadcn CLI](https://ui.shadcn.com).
+
+## Philosophy
+
+transition-kit follows the shadcn model for motion: copy-paste code you own, with zero lock-in and defaults that work immediately.
+
+View transitions are often wired up by hand — `document.startViewTransition` calls scattered across event handlers, racing the framework's own rendering. transition-kit takes a different approach. **React owns the transition**: every theme change and navigation runs inside `startTransition`, tagged with `addTransitionType`, and React decides what to snapshot and when. There is no animation library and no runtime beyond React itself.
+
+Each style is a few lines of plain CSS. The shadcn CLI merges it into your `globals.css`, where you can tweak timing, easing and keyframes like any other stylesheet.
+
+## Three groups
+
+- **[Theme](/docs/components/theme):** `ThemeTransitionProvider` and `useThemeTransition` own the light/dark theme and animate every change. Pick a style such as circle reveal or wipe, or drop in one of the ready-made toggles.
+- **[Page](/docs/components/page):** `<PageTransition>` animates between routes whenever its `id` changes, and `navigateWithTransition` runs any router's navigation as a React Transition, forward or back.
+- **[UI](/docs/components/ui):** interactive components (tabs, carousel, kanban board and more) whose state changes glide, morph and slide with `<ViewTransition>`. They share the `ui/ui-transition` core: composable `tk-*` classes you can use in your own components.
+
+Installing a style or component pulls in its core automatically.
+
+## Features
+
+<div className="not-prose grid gap-4 sm:grid-cols-2 mt-4">
+  <FeatureCard
+    icon={ZapIcon}
+    title="Native"
+    description="Runs on the browser's View Transitions API, coordinated by React. No animation library."
+  />
+  <FeatureCard
+    icon={SunMoonIcon}
+    title="Theme Aware"
+    description="Light, dark and system themes with a flash-free script for server rendering."
+  />
+  <FeatureCard
+    icon={LayoutGridIcon}
+    title="Any Router"
+    description="Works with any router whose navigation is a React state update."
+  />
+  <FeatureCard
+    icon={Code2Icon}
+    title="TypeScript"
+    description="Small, fully typed cores: a provider, a hook and a page boundary."
+  />
+  <FeatureCard
+    icon={ClipboardCopyIcon}
+    title="Plain CSS"
+    description="Every style is a stylesheet you own. Change timing and keyframes freely."
+  />
+  <FeatureCard
+    icon={BlocksIcon}
+    title="shadcn Compatible"
+    description="Uses the shadcn registry format — add any transition with one command."
+  />
+</div>
+
+## Credits
+
+transition-kit was originally created by [Abdullah Mukadam](https://github.com/AbdullahMukadam) and is maintained by [Shadcn Labs](https://github.com/shadcn-labs/transition-kit).
+
+import { ZapIcon } from "lucide-react";
+import { SunMoonIcon } from "lucide-react";
+import { LayoutGridIcon } from "lucide-react";
+import { Code2Icon } from "lucide-react";
+import { ClipboardCopyIcon } from "lucide-react";
+import { BlocksIcon } from "lucide-react";

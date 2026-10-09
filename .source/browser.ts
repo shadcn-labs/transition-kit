@@ -15,12 +15,5 @@ const browserCollections = {
     },
     "eager": false
   })),
-  templates: create.doc("templates", import.meta.glob(["./**/*.{mdx,md}"], {
-    "base": "./../content/templates",
-    "query": {
-      "collection": "templates"
-    },
-    "eager": false
-  })),
 };
 export default browserCollections;

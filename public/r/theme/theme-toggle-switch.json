@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/theme-toggle-switch",
+  "title": "Theme Toggle Switch",
+  "description": "A switch that flips between light and dark with any transition style.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/theme/theme-toggle-switch.tsx",
+      "content": "\"use client\";\n\nimport { MoonIcon, SunIcon } from \"lucide-react\";\nimport type { ComponentProps } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { useThemeTransition } from \"@/components/transitions/theme-transition\";\n\nexport interface ThemeToggleSwitchProps extends ComponentProps<\"button\"> {\n  /** Style slug, e.g. `\"circle-reveal\"`. Defaults to the provider's `transition`. */\n  transition?: string;\n}\n\nexport const ThemeToggleSwitch = ({\n  transition,\n  className,\n  onClick,\n  ...props\n}: ThemeToggleSwitchProps) => {\n  const { mounted, resolvedTheme, toggleTheme } = useThemeTransition();\n\n  return (\n    <button\n      type=\"button\"\n      role=\"switch\"\n      aria-checked={mounted && resolvedTheme === \"dark\"}\n      aria-label=\"Dark mode\"\n      data-slot=\"theme-toggle-switch\"\n      className={cn(\n        \"bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-primary inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-transparent p-0.5 shadow-xs transition-[background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50\",\n        className\n      )}\n      onClick={(event) => {\n        onClick?.(event);\n        if (!event.defaultPrevented) {\n          toggleTheme({ origin: event, transition });\n        }\n      }}\n      {...props}\n    >\n      {/* The thumb follows the `dark` class on <html>, so it is right before hydration. */}\n      <span\n        data-slot=\"theme-toggle-switch-thumb\"\n        className=\"bg-background text-foreground pointer-events-none flex size-5 items-center justify-center rounded-full shadow-sm transition-transform duration-200 motion-reduce:transition-none dark:translate-x-5 [&_svg]:size-3\"\n      >\n        <SunIcon aria-hidden=\"true\" className=\"dark:hidden\" />\n        <MoonIcon aria-hidden=\"true\" className=\"hidden dark:block\" />\n      </span>\n    </button>\n  );\n};\n",
+      "type": "registry:component",
+      "target": "components/transitions/theme-toggle-switch.tsx"
+    }
+  ],
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:component"
+}

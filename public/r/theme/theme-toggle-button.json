@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/theme-toggle-button",
+  "title": "Theme Toggle Button",
+  "description": "A sun and moon icon button that toggles the theme with any transition style.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/theme/theme-toggle-button.tsx",
+      "content": "\"use client\";\n\nimport { MoonIcon, SunIcon } from \"lucide-react\";\nimport type { ComponentProps } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { useThemeTransition } from \"@/components/transitions/theme-transition\";\n\nexport interface ThemeToggleButtonProps extends ComponentProps<\"button\"> {\n  /** Style slug, e.g. `\"circle-reveal\"`. Defaults to the provider's `transition`. */\n  transition?: string;\n}\n\nexport const ThemeToggleButton = ({\n  transition,\n  className,\n  onClick,\n  ...props\n}: ThemeToggleButtonProps) => {\n  const { mounted, resolvedTheme, toggleTheme } = useThemeTransition();\n\n  let label = \"Toggle theme\";\n  if (mounted) {\n    label =\n      resolvedTheme === \"dark\"\n        ? \"Switch to light theme\"\n        : \"Switch to dark theme\";\n  }\n\n  return (\n    <button\n      type=\"button\"\n      data-slot=\"theme-toggle-button\"\n      aria-label={label}\n      className={cn(\n        \"border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md border shadow-xs transition-[color,background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0\",\n        className\n      )}\n      onClick={(event) => {\n        onClick?.(event);\n        if (!event.defaultPrevented) {\n          toggleTheme({ origin: event, transition });\n        }\n      }}\n      {...props}\n    >\n      {/* The icons follow the `dark` class on <html>, so they are right before hydration. */}\n      <SunIcon\n        aria-hidden=\"true\"\n        data-slot=\"theme-toggle-button-sun\"\n        className=\"dark:hidden\"\n      />\n      <MoonIcon\n        aria-hidden=\"true\"\n        data-slot=\"theme-toggle-button-moon\"\n        className=\"hidden dark:block\"\n      />\n    </button>\n  );\n};\n",
+      "type": "registry:component",
+      "target": "components/transitions/theme-toggle-button.tsx"
+    }
+  ],
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:component"
+}

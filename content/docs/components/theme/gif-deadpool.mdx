@@ -1,0 +1,118 @@
+---
+title: "GIF Deadpool"
+description: "Deadpool breaks in through an expanding mask."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/gif-deadpool">
+  <ThemeTransitionDemo transition="gif-deadpool" />
+</ComponentPreview>
+
+The GIF dances at the origin for most of the transition, then grows until it covers the page. It starts at the transition origin: the pointer when you pass the click event, the centre of a control activated from the keyboard, or the centre of the viewport when you pass no `origin`.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/gif-deadpool" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/gif-deadpool.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="gif-deadpool">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "gif-deadpool", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `1900ms` with `cubic-bezier(0.16, 1, 0.3, 1)` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="gif-deadpool"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 1900ms)` and `var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1))`.
+
+Pass the click event as `origin` to start at the pointer, or an element to start at its centre:
+
+```tsx
+toggleTheme({ origin: event });
+setTheme("dark", { origin: buttonElement });
+```
+
+## Notes
+
+The mask is a GIF loaded from Tenor:
+
+```txt
+https://media.tenor.com/VJlZzo7UdagAAAAi/deadpool-marvel.gif
+```
+
+Until the browser has downloaded it, the mask is empty and the theme switches when the transition ends. Preload it so the first transition plays, or download it and serve it from your own domain:
+
+```tsx
+<link
+  rel="preload"
+  as="image"
+  href="https://media.tenor.com/VJlZzo7UdagAAAAi/deadpool-marvel.gif"
+/>
+```
+
+If you swap in another image, keep the reveal centred by updating the aspect ratio (height ÷ width) used in the `mask-position` calculations.

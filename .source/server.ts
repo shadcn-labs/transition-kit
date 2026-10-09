@@ -6,7 +6,7 @@ import type * as Config from '../source.config';
 const create = server<typeof Config, import("fumadocs-mdx/runtime/types").InternalTypeConfig & {
   DocData: {
   }
-}>();
+}>({"doc":{"passthroughs":["extractedReferences"]}});
 
 export const docs = await create.docs("docs", "content/docs", import.meta.glob(["./**/*.{json,yaml}"], {
   "base": "./../content/docs",
@@ -19,21 +19,6 @@ export const docs = await create.docs("docs", "content/docs", import.meta.glob([
   "base": "./../content/docs",
   "query": {
     "collection": "docs"
-  },
-  "eager": true
-}));
-
-export const templates = await create.docs("templates", "content/templates", import.meta.glob(["./**/*.{json,yaml}"], {
-  "base": "./../content/templates",
-  "query": {
-    "collection": "templates"
-  },
-  "import": "default",
-  "eager": true
-}), import.meta.glob(["./**/*.{mdx,md}"], {
-  "base": "./../content/templates",
-  "query": {
-    "collection": "templates"
   },
   "eager": true
 }));

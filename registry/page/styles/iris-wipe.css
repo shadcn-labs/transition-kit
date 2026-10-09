@@ -1,0 +1,65 @@
+/* Iris Wipe: an iris closes on the old page, then opens on the new one. */
+/* Centre of the page's visible part, in each snapshot's coordinates. */
+::view-transition-image-pair(.tk-page-iris-wipe.tk-page-exit) {
+  --tk-page-x: calc(
+    (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) /
+      2
+  );
+  --tk-page-y: calc(
+    (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) /
+      2
+  );
+}
+
+::view-transition-image-pair(.tk-page-iris-wipe.tk-page-enter) {
+  --tk-page-x: calc(
+    (
+        max(0px, var(--tk-enter-cx) - 50vw) +
+          min(100%, var(--tk-enter-cx) + 50vw)
+      ) /
+      2
+  );
+  --tk-page-y: calc(
+    (
+        max(0px, var(--tk-enter-cy) - 50vh) +
+          min(100%, var(--tk-enter-cy) + 50vh)
+      ) /
+      2
+  );
+}
+
+::view-transition-old(.tk-page-iris-wipe),
+::view-transition-new(.tk-page-iris-wipe) {
+  /* Covers the visible part: the page's half diagonal, at most the viewport's. */
+  --tk-page-r: min(71%, hypot(50vw, 50vh));
+}
+
+/* The iris closes in the first half of the duration and opens in the second. */
+::view-transition-old(.tk-page-iris-wipe) {
+  animation: tk-page-iris-wipe-close calc(var(--tk-page-duration, 700ms) / 2)
+    var(--tk-page-easing, ease-in) both;
+}
+
+::view-transition-new(.tk-page-iris-wipe) {
+  animation: tk-page-iris-wipe-open calc(var(--tk-page-duration, 700ms) / 2)
+    var(--tk-page-easing, ease-out) calc(var(--tk-page-duration, 700ms) / 2)
+    both;
+}
+
+@keyframes tk-page-iris-wipe-close {
+  from {
+    clip-path: circle(var(--tk-page-r) at var(--tk-page-x) var(--tk-page-y));
+  }
+  to {
+    clip-path: circle(0 at var(--tk-page-x) var(--tk-page-y));
+  }
+}
+
+@keyframes tk-page-iris-wipe-open {
+  from {
+    clip-path: circle(0 at var(--tk-page-x) var(--tk-page-y));
+  }
+  to {
+    clip-path: circle(var(--tk-page-r) at var(--tk-page-x) var(--tk-page-y));
+  }
+}

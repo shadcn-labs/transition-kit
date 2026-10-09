@@ -1,0 +1,85 @@
+---
+title: "Flip"
+description: "A 3D card flip around the vertical axis."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/flip">
+  <PageTransitionDemo transition="flip" />
+</ComponentPreview>
+
+The old page turns away around its left edge and the new one turns in around its right edge, like flipping a card. Backward navigations mirror the hinges.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/flip" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/flip.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="flip">
+  {children}
+</PageTransition>
+```
+
+Mark backward navigations with `direction: "back"` and the style runs the other way:
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## Customization
+
+The style runs for `600ms` with `ease-in-out` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="flip"
+  duration={1200}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 600ms)` and `var(--tk-page-easing, ease-in-out)`.
+
+The hinges sit on the edges of the page's visible part, vertically centred on it, so long scrolled pages turn around what the user sees.
+
+The 3D depth comes from `perspective: 1200px` on `::view-transition-image-pair(.tk-page-flip)`; lower it for a stronger effect.

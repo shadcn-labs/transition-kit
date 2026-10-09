@@ -1,14 +1,48 @@
-import { defineDocs } from "fumadocs-mdx/config";
+import {
+  defineConfig,
+  defineDocs,
+  frontmatterSchema,
+  metaSchema,
+} from "fumadocs-mdx/config";
+import { rehypePrettyCode } from "rehype-pretty-code";
+import { z } from "zod";
 
-export const docs = defineDocs({
-	dir: "content/docs",
-	docs: {
-		postprocess: {
-			includeProcessedMarkdown: true,
-		},
-	},
+import { DOCS_DIR } from "./lib/docs";
+import { transformers } from "./lib/highlight-code";
+
+export default defineConfig({
+  mdxOptions: {
+    rehypePlugins: (plugins) => {
+      plugins.shift();
+      plugins.push([
+        rehypePrettyCode,
+        {
+          theme: {
+            dark: "github-dark",
+            light: "github-light-default",
+          },
+          transformers,
+        },
+      ]);
+
+      return plugins;
+    },
+  },
 });
 
-export const templates = defineDocs({
-	dir: "content/templates",
+export const docs = defineDocs({
+  dir: DOCS_DIR,
+  docs: {
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+    schema: frontmatterSchema.extend({
+      links: z
+        .object({ api: z.string().optional(), doc: z.string().optional() })
+        .optional(),
+    }),
+  },
+  meta: {
+    schema: metaSchema,
+  },
 });

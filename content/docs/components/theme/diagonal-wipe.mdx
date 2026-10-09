@@ -1,0 +1,91 @@
+---
+title: "Diagonal Wipe"
+description: "A diagonal band sweeps across the viewport."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/diagonal-wipe">
+  <ThemeTransitionDemo transition="diagonal-wipe" />
+</ComponentPreview>
+
+A slanted edge wipes across the viewport: left to right when switching to dark, right to left when switching to light. The direction comes from the `dark` class on `<html>`, which the core sets before the new theme is captured. It is anchored to the viewport, so it ignores `origin` and always covers exactly what is on screen, even when the page is scrolled.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/diagonal-wipe" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/diagonal-wipe.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="diagonal-wipe">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "diagonal-wipe", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `600ms` with `cubic-bezier(0.65, 0, 0.35, 1)` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="diagonal-wipe"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 600ms)` and `var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1))`.

@@ -9,25 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as SiteRouteImport } from './routes/_site'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as ApiSearchRouteImport } from './routes/api/search'
-import { Route as ComponentsSplatRouteImport } from './routes/components/$'
-import { Route as ComponentsChar123Char125DotmdRouteImport } from './routes/components/{$}[.]md'
-import { Route as TemplatesIndexRouteImport } from './routes/templates/index'
-import { Route as TemplatesSplatRouteImport } from './routes/templates/$'
-import { Route as TransitionSlugRouteImport } from './routes/transition/$slug'
+import { Route as ManifestDotwebmanifestRouteImport } from './routes/manifest[.]webmanifest'
+import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as DotwellKnownApiCatalogRouteImport } from './routes/[.]well-known.api-catalog'
+import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteSponsorRouteImport } from './routes/_site.sponsor'
+import { Route as ApiStatusRouteImport } from './routes/api.status'
+import { Route as LlmsDotmdContentDotmdRouteImport } from './routes/llms[.]md.content[.]md'
+import { Route as DotwellKnownAgentSkillsIndexDotjsonRouteImport } from './routes/[.]well-known.agent-skills.index[.]json'
+import { Route as DotwellKnownAgentSkillsSiteSkillDotmdRouteImport } from './routes/[.]well-known.agent-skills.site-skill[.]md'
+import { Route as SiteDocsSplatRouteImport } from './routes/_site.docs.$'
+import { Route as LlmsDotmdDocsSplatRouteImport } from './routes/llms[.]md.docs.$'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const SiteRoute = SiteRouteImport.update({
+  id: '/_site',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
@@ -40,141 +41,217 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSearchRoute = ApiSearchRouteImport.update({
-  id: '/api/search',
-  path: '/api/search',
+const ManifestDotwebmanifestRoute = ManifestDotwebmanifestRouteImport.update({
+  id: '/manifest.webmanifest',
+  path: '/manifest.webmanifest',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ComponentsSplatRoute = ComponentsSplatRouteImport.update({
-  id: '/components/$',
-  path: '/components/$',
+const OpenapiDotjsonRoute = OpenapiDotjsonRouteImport.update({
+  id: '/openapi.json',
+  path: '/openapi.json',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ComponentsChar123Char125DotmdRoute =
-  ComponentsChar123Char125DotmdRouteImport.update({
-    id: '/components/{$}.md',
-    path: '/components/{$}.md',
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotwellKnownApiCatalogRoute = DotwellKnownApiCatalogRouteImport.update({
+  id: '/.well-known/api-catalog',
+  path: '/.well-known/api-catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiteIndexRoute = SiteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteSponsorRoute = SiteSponsorRouteImport.update({
+  id: '/sponsor',
+  path: '/sponsor',
+  getParentRoute: () => SiteRoute,
+} as any)
+const ApiStatusRoute = ApiStatusRouteImport.update({
+  id: '/api/status',
+  path: '/api/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDotmdContentDotmdRoute = LlmsDotmdContentDotmdRouteImport.update({
+  id: '/llms.md/content.md',
+  path: '/llms.md/content.md',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotwellKnownAgentSkillsIndexDotjsonRoute =
+  DotwellKnownAgentSkillsIndexDotjsonRouteImport.update({
+    id: '/.well-known/agent-skills/index.json',
+    path: '/.well-known/agent-skills/index.json',
     getParentRoute: () => rootRouteImport,
   } as any)
-const TemplatesIndexRoute = TemplatesIndexRouteImport.update({
-  id: '/templates/',
-  path: '/templates/',
-  getParentRoute: () => rootRouteImport,
+const DotwellKnownAgentSkillsSiteSkillDotmdRoute =
+  DotwellKnownAgentSkillsSiteSkillDotmdRouteImport.update({
+    id: '/.well-known/agent-skills/site-skill.md',
+    path: '/.well-known/agent-skills/site-skill.md',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SiteDocsSplatRoute = SiteDocsSplatRouteImport.update({
+  id: '/docs/$',
+  path: '/docs/$',
+  getParentRoute: () => SiteRoute,
 } as any)
-const TemplatesSplatRoute = TemplatesSplatRouteImport.update({
-  id: '/templates/$',
-  path: '/templates/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TransitionSlugRoute = TransitionSlugRouteImport.update({
-  id: '/transition/$slug',
-  path: '/transition/$slug',
+const LlmsDotmdDocsSplatRoute = LlmsDotmdDocsSplatRouteImport.update({
+  id: '/llms.md/docs/$',
+  path: '/llms.md/docs/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/': typeof SiteIndexRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/api/search': typeof ApiSearchRoute
-  '/components/$': typeof ComponentsSplatRoute
-  '/components/{$}.md': typeof ComponentsChar123Char125DotmdRoute
-  '/templates/$': typeof TemplatesSplatRoute
-  '/transition/$slug': typeof TransitionSlugRoute
-  '/templates/': typeof TemplatesIndexRoute
+  '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
+  '/openapi.json': typeof OpenapiDotjsonRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.well-known/api-catalog': typeof DotwellKnownApiCatalogRoute
+  '/sponsor': typeof SiteSponsorRoute
+  '/api/status': typeof ApiStatusRoute
+  '/llms.md/content.md': typeof LlmsDotmdContentDotmdRoute
+  '/.well-known/agent-skills/index.json': typeof DotwellKnownAgentSkillsIndexDotjsonRoute
+  '/.well-known/agent-skills/site-skill.md': typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  '/docs/$': typeof SiteDocsSplatRoute
+  '/llms.md/docs/$': typeof LlmsDotmdDocsSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/api/search': typeof ApiSearchRoute
-  '/components/$': typeof ComponentsSplatRoute
-  '/components/{$}.md': typeof ComponentsChar123Char125DotmdRoute
-  '/templates/$': typeof TemplatesSplatRoute
-  '/transition/$slug': typeof TransitionSlugRoute
-  '/templates': typeof TemplatesIndexRoute
+  '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
+  '/openapi.json': typeof OpenapiDotjsonRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.well-known/api-catalog': typeof DotwellKnownApiCatalogRoute
+  '/sponsor': typeof SiteSponsorRoute
+  '/api/status': typeof ApiStatusRoute
+  '/llms.md/content.md': typeof LlmsDotmdContentDotmdRoute
+  '/': typeof SiteIndexRoute
+  '/.well-known/agent-skills/index.json': typeof DotwellKnownAgentSkillsIndexDotjsonRoute
+  '/.well-known/agent-skills/site-skill.md': typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  '/docs/$': typeof SiteDocsSplatRoute
+  '/llms.md/docs/$': typeof LlmsDotmdDocsSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/_site': typeof SiteRouteWithChildren
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/api/search': typeof ApiSearchRoute
-  '/components/$': typeof ComponentsSplatRoute
-  '/components/{$}.md': typeof ComponentsChar123Char125DotmdRoute
-  '/templates/$': typeof TemplatesSplatRoute
-  '/transition/$slug': typeof TransitionSlugRoute
-  '/templates/': typeof TemplatesIndexRoute
+  '/manifest.webmanifest': typeof ManifestDotwebmanifestRoute
+  '/openapi.json': typeof OpenapiDotjsonRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.well-known/api-catalog': typeof DotwellKnownApiCatalogRoute
+  '/_site/sponsor': typeof SiteSponsorRoute
+  '/api/status': typeof ApiStatusRoute
+  '/llms.md/content.md': typeof LlmsDotmdContentDotmdRoute
+  '/_site/': typeof SiteIndexRoute
+  '/.well-known/agent-skills/index.json': typeof DotwellKnownAgentSkillsIndexDotjsonRoute
+  '/.well-known/agent-skills/site-skill.md': typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  '/_site/docs/$': typeof SiteDocsSplatRoute
+  '/llms.md/docs/$': typeof LlmsDotmdDocsSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/llms-full.txt'
     | '/llms.txt'
-    | '/api/search'
-    | '/components/$'
-    | '/components/{$}.md'
-    | '/templates/$'
-    | '/transition/$slug'
-    | '/templates/'
+    | '/manifest.webmanifest'
+    | '/openapi.json'
+    | '/robots.txt'
+    | '/rss.xml'
+    | '/sitemap.xml'
+    | '/.well-known/api-catalog'
+    | '/sponsor'
+    | '/api/status'
+    | '/llms.md/content.md'
+    | '/.well-known/agent-skills/index.json'
+    | '/.well-known/agent-skills/site-skill.md'
+    | '/docs/$'
+    | '/llms.md/docs/$'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/about'
     | '/llms-full.txt'
     | '/llms.txt'
-    | '/api/search'
-    | '/components/$'
-    | '/components/{$}.md'
-    | '/templates/$'
-    | '/transition/$slug'
-    | '/templates'
+    | '/manifest.webmanifest'
+    | '/openapi.json'
+    | '/robots.txt'
+    | '/rss.xml'
+    | '/sitemap.xml'
+    | '/.well-known/api-catalog'
+    | '/sponsor'
+    | '/api/status'
+    | '/llms.md/content.md'
+    | '/'
+    | '/.well-known/agent-skills/index.json'
+    | '/.well-known/agent-skills/site-skill.md'
+    | '/docs/$'
+    | '/llms.md/docs/$'
   id:
     | '__root__'
-    | '/'
-    | '/about'
+    | '/_site'
     | '/llms-full.txt'
     | '/llms.txt'
-    | '/api/search'
-    | '/components/$'
-    | '/components/{$}.md'
-    | '/templates/$'
-    | '/transition/$slug'
-    | '/templates/'
+    | '/manifest.webmanifest'
+    | '/openapi.json'
+    | '/robots.txt'
+    | '/rss.xml'
+    | '/sitemap.xml'
+    | '/.well-known/api-catalog'
+    | '/_site/sponsor'
+    | '/api/status'
+    | '/llms.md/content.md'
+    | '/_site/'
+    | '/.well-known/agent-skills/index.json'
+    | '/.well-known/agent-skills/site-skill.md'
+    | '/_site/docs/$'
+    | '/llms.md/docs/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  SiteRoute: typeof SiteRouteWithChildren
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
-  ApiSearchRoute: typeof ApiSearchRoute
-  ComponentsSplatRoute: typeof ComponentsSplatRoute
-  ComponentsChar123Char125DotmdRoute: typeof ComponentsChar123Char125DotmdRoute
-  TemplatesSplatRoute: typeof TemplatesSplatRoute
-  TransitionSlugRoute: typeof TransitionSlugRoute
-  TemplatesIndexRoute: typeof TemplatesIndexRoute
+  ManifestDotwebmanifestRoute: typeof ManifestDotwebmanifestRoute
+  OpenapiDotjsonRoute: typeof OpenapiDotjsonRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  DotwellKnownApiCatalogRoute: typeof DotwellKnownApiCatalogRoute
+  ApiStatusRoute: typeof ApiStatusRoute
+  LlmsDotmdContentDotmdRoute: typeof LlmsDotmdContentDotmdRoute
+  DotwellKnownAgentSkillsIndexDotjsonRoute: typeof DotwellKnownAgentSkillsIndexDotjsonRoute
+  DotwellKnownAgentSkillsSiteSkillDotmdRoute: typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  LlmsDotmdDocsSplatRoute: typeof LlmsDotmdDocsSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_site': {
+      id: '/_site'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+      preLoaderRoute: typeof SiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llms-full.txt': {
@@ -191,62 +268,138 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/search': {
-      id: '/api/search'
-      path: '/api/search'
-      fullPath: '/api/search'
-      preLoaderRoute: typeof ApiSearchRouteImport
+    '/manifest.webmanifest': {
+      id: '/manifest.webmanifest'
+      path: '/manifest.webmanifest'
+      fullPath: '/manifest.webmanifest'
+      preLoaderRoute: typeof ManifestDotwebmanifestRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/components/$': {
-      id: '/components/$'
-      path: '/components/$'
-      fullPath: '/components/$'
-      preLoaderRoute: typeof ComponentsSplatRouteImport
+    '/openapi.json': {
+      id: '/openapi.json'
+      path: '/openapi.json'
+      fullPath: '/openapi.json'
+      preLoaderRoute: typeof OpenapiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/components/{$}.md': {
-      id: '/components/{$}.md'
-      path: '/components/{$}.md'
-      fullPath: '/components/{$}.md'
-      preLoaderRoute: typeof ComponentsChar123Char125DotmdRouteImport
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/templates/': {
-      id: '/templates/'
-      path: '/templates'
-      fullPath: '/templates/'
-      preLoaderRoute: typeof TemplatesIndexRouteImport
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/templates/$': {
-      id: '/templates/$'
-      path: '/templates/$'
-      fullPath: '/templates/$'
-      preLoaderRoute: typeof TemplatesSplatRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/transition/$slug': {
-      id: '/transition/$slug'
-      path: '/transition/$slug'
-      fullPath: '/transition/$slug'
-      preLoaderRoute: typeof TransitionSlugRouteImport
+    '/.well-known/api-catalog': {
+      id: '/.well-known/api-catalog'
+      path: '/.well-known/api-catalog'
+      fullPath: '/.well-known/api-catalog'
+      preLoaderRoute: typeof DotwellKnownApiCatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_site/': {
+      id: '/_site/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/sponsor': {
+      id: '/_site/sponsor'
+      path: '/sponsor'
+      fullPath: '/sponsor'
+      preLoaderRoute: typeof SiteSponsorRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/api/status': {
+      id: '/api/status'
+      path: '/api/status'
+      fullPath: '/api/status'
+      preLoaderRoute: typeof ApiStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.md/content.md': {
+      id: '/llms.md/content.md'
+      path: '/llms.md/content.md'
+      fullPath: '/llms.md/content.md'
+      preLoaderRoute: typeof LlmsDotmdContentDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/agent-skills/index.json': {
+      id: '/.well-known/agent-skills/index.json'
+      path: '/.well-known/agent-skills/index.json'
+      fullPath: '/.well-known/agent-skills/index.json'
+      preLoaderRoute: typeof DotwellKnownAgentSkillsIndexDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/agent-skills/site-skill.md': {
+      id: '/.well-known/agent-skills/site-skill.md'
+      path: '/.well-known/agent-skills/site-skill.md'
+      fullPath: '/.well-known/agent-skills/site-skill.md'
+      preLoaderRoute: typeof DotwellKnownAgentSkillsSiteSkillDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_site/docs/$': {
+      id: '/_site/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof SiteDocsSplatRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/llms.md/docs/$': {
+      id: '/llms.md/docs/$'
+      path: '/llms.md/docs/$'
+      fullPath: '/llms.md/docs/$'
+      preLoaderRoute: typeof LlmsDotmdDocsSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
+interface SiteRouteChildren {
+  SiteSponsorRoute: typeof SiteSponsorRoute
+  SiteIndexRoute: typeof SiteIndexRoute
+  SiteDocsSplatRoute: typeof SiteDocsSplatRoute
+}
+
+const SiteRouteChildren: SiteRouteChildren = {
+  SiteSponsorRoute: SiteSponsorRoute,
+  SiteIndexRoute: SiteIndexRoute,
+  SiteDocsSplatRoute: SiteDocsSplatRoute,
+}
+
+const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  SiteRoute: SiteRouteWithChildren,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
-  ApiSearchRoute: ApiSearchRoute,
-  ComponentsSplatRoute: ComponentsSplatRoute,
-  ComponentsChar123Char125DotmdRoute: ComponentsChar123Char125DotmdRoute,
-  TemplatesSplatRoute: TemplatesSplatRoute,
-  TransitionSlugRoute: TransitionSlugRoute,
-  TemplatesIndexRoute: TemplatesIndexRoute,
+  ManifestDotwebmanifestRoute: ManifestDotwebmanifestRoute,
+  OpenapiDotjsonRoute: OpenapiDotjsonRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  DotwellKnownApiCatalogRoute: DotwellKnownApiCatalogRoute,
+  ApiStatusRoute: ApiStatusRoute,
+  LlmsDotmdContentDotmdRoute: LlmsDotmdContentDotmdRoute,
+  DotwellKnownAgentSkillsIndexDotjsonRoute:
+    DotwellKnownAgentSkillsIndexDotjsonRoute,
+  DotwellKnownAgentSkillsSiteSkillDotmdRoute:
+    DotwellKnownAgentSkillsSiteSkillDotmdRoute,
+  LlmsDotmdDocsSplatRoute: LlmsDotmdDocsSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

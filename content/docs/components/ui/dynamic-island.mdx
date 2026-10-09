@@ -1,0 +1,151 @@
+---
+title: "Dynamic Island"
+description: "A pill that springs between sizes as its state changes, with the content blurring across inside it."
+---
+
+import { DynamicIslandDemo } from "@/examples/ui/dynamic-island-demo";
+
+<ComponentPreview
+  name="ui/dynamic-island"
+  src="examples/ui/dynamic-island-demo.tsx"
+>
+  <DynamicIslandDemo />
+</ComponentPreview>
+
+A live-activity pill. Each state has its own content and size; switching states springs the black surface to the new size while the old and new content blur across inside it.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/dynamic-island" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/dynamic-island.tsx"
+  title="components/transitions/dynamic-island.tsx"
+/>
+
+<Step>Add the dynamic island styles to your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/dynamic-island.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  DynamicIsland,
+  DynamicIslandContent,
+  useDynamicIsland,
+} from "@/components/transitions/dynamic-island";
+```
+
+```tsx
+const [state, setState] = React.useState("idle");
+
+<DynamicIsland state={state} onStateChange={setState}>
+  <DynamicIslandContent state="idle" className="w-32 px-4 py-3">
+    Recording
+  </DynamicIslandContent>
+  <DynamicIslandContent state="timer" className="w-44 px-4 py-2.5">
+    04:59
+  </DynamicIslandContent>
+</DynamicIsland>;
+```
+
+Change `state` however you like, from a button, an effect or a server event. The island animates every change on its own; you don't need to wrap the update in `startTransition`.
+
+Buttons inside the island can change it with `useDynamicIsland()`, which works with both controlled and uncontrolled islands:
+
+```tsx
+const DeclineButton = () => {
+  const { setState } = useDynamicIsland();
+  return (
+    <button type="button" onClick={() => setState("idle")}>
+      Decline
+    </button>
+  );
+};
+```
+
+The island sizes to the active content, so give each `DynamicIslandContent` its own width and padding. Put the island in a container with a fixed height that fits the largest state, so the page doesn't move when it grows.
+
+## How it works
+
+- The island keeps a "shown" state that follows the `state` prop inside `startTransition`, so a plain `setState` in the parent still animates. A change that arrives mid-animation waits for the running one and then continues from where the island is.
+- The black surface is a separate, flat rectangle behind the content, clipped to the rounded root. Its `<ViewTransition>` has `update={tk("tk-morph", "tk-slow", "tk-spring", "tk-clip", "tk-dynamic-island-surface")}`, so it springs from the old size to the new one. `dynamic-island.css` stretches its snapshot to fill the moving box: a flat colour stretches without distortion, and the rounded corners come from the clip.
+- Every `DynamicIslandContent` wraps its content in a `<ViewTransition>` with the same `name`. Only the active state is mounted, so switching states unmounts one and mounts the other, and React pairs them through `share`. The pair rides the surface's spring with `tk-blur` crossfading between them. `dynamic-island.css` keeps both snapshots at their real size and centred in the box, so text and icons never stretch, and `tk-clip` keeps them inside the rounded shape while it grows.
+- The content comes after the surface in the DOM, so its snapshot paints on top.
+- The corner radius is `2rem`. Set `--tk-ui-dynamic-island-radius` on `:root` to change it; the root and the transition clip both read it. Short states stay fully round because the radius is capped at half the height.
+- The shared name comes from `useTransitionNames()`, so several islands on one page never pair with each other.
+
+## API Reference
+
+### DynamicIsland
+
+| Prop            | Type                      | Default  |
+| --------------- | ------------------------- | -------- |
+| `state`         | `string`                  | -        |
+| `defaultState`  | `string`                  | `"idle"` |
+| `onStateChange` | `(state: string) => void` | -        |
+
+Renders a `div` with `role="region"`, `aria-live="polite"` and `aria-label="Live activity"`. Pass your own `aria-label` to name it. The surface colour is `bg-foreground` on the `dynamic-island-surface` slot; change it from the root with a class such as `*:data-[slot=dynamic-island-surface]:bg-primary`.
+
+### DynamicIslandContent
+
+| Prop    | Type     | Default |
+| ------- | -------- | ------- |
+| `state` | `string` | -       |
+
+Rendered only while the island shows that state.
+
+### useDynamicIsland
+
+Returns `{ state, setState }` for the closest island. `setState` calls `onStateChange` and, when the island is uncontrolled, updates it.
+
+## Accessibility
+
+- The island is a named `region` with `aria-live="polite"`, so screen readers announce new content when the state changes.
+- Put real `<button type="button">` elements with `aria-label`s inside content for actions such as accept, decline or pause.
+- If focus is inside content that goes away, it moves to the first focusable element of the new content, or to the island itself, instead of falling back to the page.
+- With `prefers-reduced-motion`, the surface doesn't resize or bounce. It jumps to the new size and the content crossfades briefly.

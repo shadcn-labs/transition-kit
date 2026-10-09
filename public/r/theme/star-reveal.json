@@ -1,0 +1,35 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/star-reveal",
+  "title": "Star Reveal",
+  "description": "An expanding star-shaped mask reveals the new theme.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-theme-star-reveal)": {
+      "animation": "none"
+    },
+    "::view-transition-new(.tk-theme-star-reveal)": {
+      "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><polygon points=\"20,2 24.5,15 38,15 27,23 31,36 20,28 9,36 13,23 2,15 15.5,15\" fill=\"white\"/></svg>')",
+      "mask-repeat": "no-repeat",
+      "mask-position": "var(--tk-x) var(--tk-y)",
+      "mask-size": "0",
+      "animation": "tk-theme-star-reveal var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, ease-in) both"
+    },
+    "@keyframes tk-theme-star-reveal": {
+      "from": {
+        "mask-size": "0",
+        "mask-position": "var(--tk-x) var(--tk-y)"
+      },
+      "to": {
+        "mask-size": "calc(var(--tk-r) * 6.5)",
+        "mask-position": "calc(var(--tk-x) - var(--tk-r) * 3.25) calc(var(--tk-y) - var(--tk-r) * 3.25)"
+      }
+    }
+  },
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:item"
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ui/dynamic-island",
+  "title": "Dynamic Island",
+  "description": "A pill that springs between sizes as its state changes, with the content blurring across inside it.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/ui/ui-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/ui/dynamic-island.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { startTransition, ViewTransition } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { tk, useTransitionNames } from \"@/components/transitions/ui-transition\";\nimport type { TransitionNames } from \"@/components/transitions/ui-transition\";\n\nconst focusable =\n  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])';\n\ninterface DynamicIslandContextValue {\n  state: string;\n  setState: (state: string) => void;\n  name: TransitionNames;\n}\n\nconst DynamicIslandContext =\n  React.createContext<DynamicIslandContextValue | null>(null);\n\nconst useDynamicIslandContext = () => {\n  const context = React.useContext(DynamicIslandContext);\n  if (!context) {\n    throw new Error(\"DynamicIsland parts must be used within <DynamicIsland>.\");\n  }\n  return context;\n};\n\n/** The island's current state and a setter that morphs it to another one. */\nconst useDynamicIsland = () => {\n  const { setState, state } = useDynamicIslandContext();\n  return { setState, state };\n};\n\nconst DynamicIsland = ({\n  state: stateProp,\n  defaultState = \"idle\",\n  onStateChange,\n  className,\n  children,\n  ref,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  state?: string;\n  defaultState?: string;\n  onStateChange?: (state: string) => void;\n}) => {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultState);\n  const target = stateProp ?? uncontrolled;\n  // The state on screen. It follows `target` inside a React Transition, so\n  // controlled and uncontrolled changes animate the same way.\n  const [shown, setShown] = React.useState(target);\n  const rootRef = React.useRef<HTMLDivElement | null>(null);\n  const hadFocus = React.useRef(false);\n  const name = useTransitionNames();\n\n  React.useEffect(() => {\n    if (target === shown) {\n      return;\n    }\n    hadFocus.current =\n      rootRef.current?.contains(document.activeElement) ?? false;\n    startTransition(() => setShown(target));\n  }, [target, shown]);\n\n  // Focus inside content that just unmounted moves into the new content.\n  React.useLayoutEffect(() => {\n    const root = rootRef.current;\n    if (!hadFocus.current || !root || root.contains(document.activeElement)) {\n      return;\n    }\n    hadFocus.current = false;\n    (root.querySelector<HTMLElement>(focusable) ?? root).focus();\n  }, [shown]);\n\n  const setState = React.useCallback(\n    (next: string) => {\n      if (next === target) {\n        return;\n      }\n      if (stateProp === undefined) {\n        setUncontrolled(next);\n      }\n      onStateChange?.(next);\n    },\n    [target, stateProp, onStateChange]\n  );\n\n  const setRef = React.useCallback(\n    (node: HTMLDivElement | null) => {\n      rootRef.current = node;\n      if (typeof ref === \"function\") {\n        return ref(node);\n      }\n      if (ref) {\n        ref.current = node;\n      }\n    },\n    [ref]\n  );\n\n  const context = React.useMemo(\n    () => ({ name, setState, state: shown }),\n    [name, setState, shown]\n  );\n\n  return (\n    <DynamicIslandContext.Provider value={context}>\n      <div\n        ref={setRef}\n        role=\"region\"\n        aria-label=\"Live activity\"\n        aria-live=\"polite\"\n        tabIndex={-1}\n        data-slot=\"dynamic-island\"\n        data-state={shown}\n        className={cn(\n          \"text-background relative isolate inline-flex w-fit max-w-full overflow-hidden rounded-[var(--tk-ui-dynamic-island-radius,2rem)] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n          className\n        )}\n        {...props}\n      >\n        {/* A flat rectangle clipped by the root: it can fill any box without distorting. */}\n        <ViewTransition\n          default=\"none\"\n          update={tk(\n            \"tk-morph\",\n            \"tk-slow\",\n            \"tk-spring\",\n            \"tk-clip\",\n            \"tk-dynamic-island-surface\"\n          )}\n        >\n          <span\n            aria-hidden\n            data-slot=\"dynamic-island-surface\"\n            className=\"bg-foreground absolute inset-0\"\n          />\n        </ViewTransition>\n        {children}\n      </div>\n    </DynamicIslandContext.Provider>\n  );\n};\n\nconst DynamicIslandContent = ({\n  state,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & { state: string }) => {\n  const { name, state: shown } = useDynamicIslandContext();\n  if (state !== shown) {\n    return null;\n  }\n  // Every state's content shares one name, so the old and new content pair\n  // into one group that rides the surface's spring while they crossfade. It\n  // comes after the surface, so it paints above it.\n  return (\n    <ViewTransition\n      name={name(\"content\")}\n      default=\"none\"\n      share={tk(\n        \"tk-morph\",\n        \"tk-slow\",\n        \"tk-spring\",\n        \"tk-clip\",\n        \"tk-blur\",\n        \"tk-dynamic-island-content\"\n      )}\n    >\n      <div\n        data-slot=\"dynamic-island-content\"\n        data-state={state}\n        className={cn(\"relative\", className)}\n        {...props}\n      />\n    </ViewTransition>\n  );\n};\n\nexport { DynamicIsland, DynamicIslandContent, useDynamicIsland };\n",
+      "type": "registry:component",
+      "target": "components/transitions/dynamic-island.tsx"
+    }
+  ],
+  "css": {
+    "::view-transition-image-pair(.tk-dynamic-island-surface), ::view-transition-image-pair(.tk-dynamic-island-content)": {
+      "--tk-ui-radius": "var(--tk-ui-dynamic-island-radius, 2rem)"
+    },
+    "::view-transition-old(.tk-dynamic-island-surface), ::view-transition-new(.tk-dynamic-island-surface)": {
+      "block-size": "100%"
+    },
+    "::view-transition-old(.tk-dynamic-island-content), ::view-transition-new(.tk-dynamic-island-content)": {
+      "inline-size": "auto",
+      "block-size": "auto",
+      "inset-block-start": "50%",
+      "inset-inline-start": "50%",
+      "translate": "-50% -50%"
+    }
+  },
+  "categories": [
+    "ui"
+  ],
+  "type": "registry:component"
+}

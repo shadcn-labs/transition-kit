@@ -1,0 +1,385 @@
+---
+title: "Page Transition"
+description: "PageTransition and navigateWithTransition: route changes animated by React's <ViewTransition>."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/page-transition">
+  <PageTransitionDemo transition="slide" />
+</ComponentPreview>
+
+The core every page style builds on. `<PageTransition>` wraps the part of your layout that changes between routes and animates whenever its `id` changes inside a React Transition: the old page exits and the new one enters. `navigateWithTransition` runs any navigation as a Transition and can mark it as a backward navigation, so directional styles play in reverse. Styles are plain CSS; pick one per `<PageTransition>`.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/page-transition" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Make sure your project uses React 19.3 or later.</Step>
+
+```bash
+npm install react@latest react-dom@latest
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.tsx"
+  title="components/transitions/page-transition.tsx"
+/>
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+Then add at least one style, for example [Slide](/docs/components/page/slide):
+
+<InstallCommand name="page/slide" />
+
+## Setup
+
+Render `<PageTransition>` in a layout that stays mounted across navigations, around the content that changes, and pass the current pathname as `id`. Give it an opaque background: the snapshots are taken of its element, and a transparent page lets the other one show through.
+
+<Tabs defaultValue="next">
+
+<TabsList>
+  <TabsTrigger value="next">Next.js</TabsTrigger>
+  <TabsTrigger value="react-router">React Router</TabsTrigger>
+  <TabsTrigger value="tanstack">TanStack Router</TabsTrigger>
+  <TabsTrigger value="state">State</TabsTrigger>
+</TabsList>
+
+<TabsContent value="next">
+
+`usePathname` needs a Client Component, so add a small wrapper:
+
+```tsx title="components/page-transitions.tsx"
+"use client";
+
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+
+import { PageTransition } from "@/components/transitions/page-transition";
+
+export const PageTransitions = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname();
+
+  return (
+    <PageTransition id={pathname} transition="slide" className="bg-background">
+      {children}
+    </PageTransition>
+  );
+};
+```
+
+```tsx title="app/layout.tsx"
+import { PageTransitions } from "@/components/page-transitions";
+import { SiteHeader } from "@/components/site-header";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <SiteHeader />
+        <PageTransitions>{children}</PageTransitions>
+      </body>
+    </html>
+  );
+}
+```
+
+The App Router runs every `<Link>` click and `router.push()` in a React Transition, so they animate with no extra code. Tag backward navigations with the `page-back` type:
+
+```tsx
+<Link href="/" transitionTypes={["page-back"]}>
+  Back
+</Link>
+```
+
+```tsx
+router.push("/", { transitionTypes: ["page-back"] });
+```
+
+`transitionTypes` needs Next.js 16.2 or later. On older versions, run the navigation with `navigateWithTransition(() => router.push("/"), { direction: "back" })`.
+
+</TabsContent>
+
+<TabsContent value="react-router">
+
+```tsx title="app/layout.tsx"
+import { Outlet, useLocation } from "react-router";
+
+import { PageTransition } from "@/components/transitions/page-transition";
+
+export const Layout = () => {
+  const { pathname } = useLocation();
+
+  return (
+    <PageTransition id={pathname} transition="slide" className="bg-background">
+      <Outlet />
+    </PageTransition>
+  );
+};
+```
+
+React Router 7 runs `<Link>` and `navigate()` navigations in a React Transition, so they animate with no extra code. For backward navigations, wrap `navigate` in `navigateWithTransition`:
+
+```tsx
+const navigate = useNavigate();
+
+<button
+  type="button"
+  onClick={() =>
+    navigateWithTransition(() => navigate("/"), { direction: "back" })
+  }
+>
+  Back
+</button>;
+```
+
+Tested with React Router 7.18, in declarative and data router mode, on routes without loaders.
+
+</TabsContent>
+
+<TabsContent value="tanstack">
+
+TanStack Router is not supported yet. It publishes the current location through `useSyncExternalStore`, and React always commits those updates synchronously, never as a Transition, so `<PageTransition>` switches pages without animating. This also applies to navigations wrapped in `navigateWithTransition`. Tested with `@tanstack/react-router` 1.170.
+
+TanStack Router's own `viewTransition` option calls `document.startViewTransition` outside React, so it does not use these styles.
+
+</TabsContent>
+
+<TabsContent value="state">
+
+Any state works as `id`. Update it inside `navigateWithTransition`:
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  navigateWithTransition,
+  PageTransition,
+} from "@/components/transitions/page-transition";
+
+const TABS = ["overview", "activity", "settings"];
+
+export const Tabs = () => {
+  const [tab, setTab] = useState("overview");
+
+  return (
+    <>
+      <nav>
+        {TABS.map((next) => (
+          <button
+            key={next}
+            type="button"
+            onClick={() =>
+              navigateWithTransition(() => setTab(next), {
+                direction:
+                  TABS.indexOf(next) < TABS.indexOf(tab) ? "back" : "forward",
+              })
+            }
+          >
+            {next}
+          </button>
+        ))}
+      </nav>
+      <PageTransition id={tab} transition="slide" className="bg-background">
+        <TabPanel tab={tab} />
+      </PageTransition>
+    </>
+  );
+};
+```
+
+</TabsContent>
+
+</Tabs>
+
+## API Reference
+
+### PageTransition
+
+| Prop         | Type                    | Default  |
+| ------------ | ----------------------- | -------- |
+| `id`         | `string`                | -        |
+| `transition` | `string`                | `"fade"` |
+| `duration`   | `number`                | -        |
+| `easing`     | `string`                | -        |
+| `children`   | `ReactNode`             | -        |
+| `...props`   | `ComponentProps<"div">` | -        |
+
+- `id` identifies the current page, usually the pathname. When it changes inside a Transition, the old page exits and the new one enters.
+- `transition` is the style slug. Install the style first.
+- `duration` (milliseconds) and `easing` override the style's timing. Without them, each style uses its own.
+- The other props go to the `<div data-slot="page-transition">` that wraps each page and is snapshotted.
+
+### navigateWithTransition
+
+```ts
+navigateWithTransition(navigate: () => void, options?: { direction?: "forward" | "back" }): void
+```
+
+Runs `navigate` inside `startTransition`. With `direction: "back"` it also calls `addTransitionType("page-back")`, so directional styles play in reverse. `direction` defaults to `"forward"`.
+
+`navigate` can be anything that updates the state `id` comes from: `router.push`, React Router's `navigate`, or `setState`.
+
+### PAGE_BACK_TYPE
+
+The transition type for backward navigations, `"page-back"`. Pass it to your router's own transition types API (such as Next.js's `transitionTypes`) instead of `navigateWithTransition` when you prefer.
+
+## How it works
+
+`<PageTransition>` renders a keyed `<ViewTransition>` around the page:
+
+```tsx
+<ViewTransition
+  key={id}
+  default="none"
+  enter={{
+    "page-back": "tk-page tk-page-<style> tk-page-enter tk-page-back",
+    default: "tk-page tk-page-<style> tk-page-enter",
+  }}
+  exit={{
+    "page-back": "tk-page tk-page-<style> tk-page-exit tk-page-back",
+    default: "tk-page tk-page-<style> tk-page-exit",
+  }}
+>
+  <div data-slot="page-transition">{children}</div>
+</ViewTransition>
+```
+
+When `id` changes inside a Transition, React unmounts the old boundary and mounts the new one, and the browser animates them as two separate snapshots: the old page is `::view-transition-old(.tk-page-<style>)` with the class `tk-page-exit`, the new page is `::view-transition-new(.tk-page-<style>)` with the class `tk-page-enter`. Both get `tk-page-back` when the transition has the `page-back` type. Updates that keep the same `id` never animate. The core CSS clips each snapshot to its page, so pages inside a smaller frame stay inside it.
+
+### Geometry variables
+
+Each page can be taller than the viewport and scrolled. When pages mount and unmount, the core writes these variables to `<html>`, in pixels, in each page's own coordinate space:
+
+| Variable                                 | Meaning                                        |
+| ---------------------------------------- | ---------------------------------------------- |
+| `--tk-exit-cx`, `--tk-exit-cy`           | Viewport centre in the old page's coordinates. |
+| `--tk-enter-cx`, `--tk-enter-cy`         | Viewport centre in the new page's coordinates. |
+| `--tk-page-duration`, `--tk-page-easing` | The `duration` and `easing` props, when set.   |
+
+## Writing a custom style
+
+A style is a few rules targeting its own class. Animate `::view-transition-old` for the exit and `::view-transition-new` for the entrance, use the duration and easing variables with your own fallbacks, and pivot transforms around the viewport centre instead of `center` or `50%`, which is the middle of a long page:
+
+```css title="styles/globals.css"
+::view-transition-old(.tk-page-drop) {
+  transform-origin: var(--tk-exit-cx) var(--tk-exit-cy);
+  animation: tk-page-drop-out var(--tk-page-duration, 500ms)
+    var(--tk-page-easing, ease-in) both;
+}
+
+::view-transition-new(.tk-page-drop) {
+  animation: tk-page-drop-in var(--tk-page-duration, 500ms)
+    var(--tk-page-easing, ease-out) both;
+}
+
+/* Exit and entrance are separate groups: put the old page on top. */
+::view-transition-group(.tk-page-drop.tk-page-exit) {
+  z-index: 1;
+}
+
+/* Fall up instead of down on backward navigations. */
+::view-transition-old(.tk-page-drop.tk-page-back) {
+  animation-name: tk-page-drop-out-back;
+}
+
+@keyframes tk-page-drop-out {
+  to {
+    transform: translateY(40%) rotate(4deg) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes tk-page-drop-out-back {
+  to {
+    transform: translateY(-40%) rotate(-4deg) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes tk-page-drop-in {
+  from {
+    opacity: 0;
+  }
+}
+```
+
+```tsx
+<PageTransition id={pathname} transition="drop">
+  {children}
+</PageTransition>
+```
+
+The entering page is drawn above the exiting one unless you raise the exit group. For 3D styles, set `perspective` on `::view-transition-image-pair(.tk-page-<style>)`. The styles in this registry go one step further and pivot around the centre of the page's _visible part_, so pages in a smaller frame also animate around their own centre:
+
+```css
+::view-transition-image-pair(.tk-page-drop.tk-page-exit) {
+  --tk-page-x: calc(
+    (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) /
+      2
+  );
+  --tk-page-y: calc(
+    (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) /
+      2
+  );
+}
+```
+
+Reduced motion is handled by the core CSS.
+
+## Caveats
+
+- **React 19.3.** The core imports `ViewTransition` and `addTransitionType` from `react`.
+- **Unsupported browsers** switch pages instantly; nothing else changes.
+- **Reduced motion.** With `prefers-reduced-motion: reduce` pages switch instantly.
+- **Only Transitions animate.** A page change committed outside a Transition (a plain `setState` in an event handler, `flushSync`, or a router that updates through `useSyncExternalStore`) switches instantly.
+- **Browser back and forward buttons** play the forward direction unless your router adds the `page-back` type for them.
+- **Fixed and sticky headers** are part of the page behind the snapshots, so a page that scrolls under one covers it while the transition runs. Give the header its own snapshot above the pages. If you also use theme transitions, scope the name to other transitions so the header keeps switching theme with the rest of the page:
+
+  ```css title="styles/globals.css"
+  html:not(:active-view-transition-type(theme-transition)) .site-header {
+    view-transition-name: site-header;
+  }
+
+  ::view-transition-group(site-header) {
+    z-index: 2;
+  }
+  ```
+
+- **Nested `<ViewTransition>`s** inside a page enter and exit with it as one unit; their own `enter` and `exit` animations do not run when the page changes.

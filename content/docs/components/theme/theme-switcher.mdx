@@ -1,0 +1,89 @@
+---
+title: "Theme Switcher"
+description: "A light, dark and system segmented control with any transition style."
+---
+
+import { ThemeSwitcherDemo } from "@/examples/theme/theme-switcher-demo";
+
+<ComponentPreview name="theme/theme-switcher">
+  <ThemeSwitcherDemo />
+</ComponentPreview>
+
+A segmented control for System, Light and Dark. The transition starts at the option you pick. Choosing System only animates when it resolves to a different theme.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/theme-switcher" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core and
+  at least one style.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-switcher.tsx"
+  title="components/transitions/theme-switcher.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Render it anywhere inside `ThemeTransitionProvider`.
+
+```tsx
+import { ThemeSwitcher } from "@/components/transitions/theme-switcher";
+```
+
+```tsx
+<ThemeSwitcher />
+<ThemeSwitcher transition="polygon-reveal" />
+```
+
+## API Reference
+
+### ThemeSwitcher
+
+| Prop         | Type                    | Default                     |
+| ------------ | ----------------------- | --------------------------- |
+| `transition` | `string`                | The provider's `transition` |
+| `...props`   | `ComponentProps<"div">` | -                           |
+
+`transition` is a style slug such as `"circle-reveal"`; install the style first. Other props are spread onto the radio group.
+
+## Accessibility
+
+- A `role="radiogroup"` labelled "Theme" with one `role="radio"` button per option and `aria-checked` on the active one.
+- Roving focus: <kbd>Tab</kbd> lands on the checked option. <kbd>←</kbd> <kbd>↑</kbd> and <kbd>→</kbd> <kbd>↓</kbd> move to the previous and next option and select it, wrapping at the ends; <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last option.
+- The stored theme is unknown on the server, so no option is checked until hydration; the first option is focusable meanwhile.

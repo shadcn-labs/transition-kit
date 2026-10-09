@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/diagonal-wipe",
+  "title": "Diagonal Wipe",
+  "description": "A diagonal band sweeps across the viewport.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-theme-diagonal-wipe)": {
+      "animation": "none"
+    },
+    "::view-transition-new(.tk-theme-diagonal-wipe)": {
+      "animation": "tk-theme-diagonal-wipe-light var(--tk-theme-duration, 600ms) var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+    },
+    ".dark::view-transition-new(.tk-theme-diagonal-wipe)": {
+      "animation": "tk-theme-diagonal-wipe-dark var(--tk-theme-duration, 600ms) var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+    },
+    "@keyframes tk-theme-diagonal-wipe-light": {
+      "from": {
+        "clip-path": "polygon( calc(var(--tk-left) + 120vw) var(--tk-top), calc(var(--tk-left) + 140vw) var(--tk-top), calc(var(--tk-left) + 120vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 120vh) )"
+      },
+      "to": {
+        "clip-path": "polygon( calc(var(--tk-left) + 120vw) var(--tk-top), calc(var(--tk-left) + -20vw) var(--tk-top), calc(var(--tk-left) + -40vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 120vh) )"
+      }
+    },
+    "@keyframes tk-theme-diagonal-wipe-dark": {
+      "from": {
+        "clip-path": "polygon( calc(var(--tk-left) + -20vw) var(--tk-top), var(--tk-left) var(--tk-top), calc(var(--tk-left) + -20vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + -40vw) calc(var(--tk-top) + 120vh) )"
+      },
+      "to": {
+        "clip-path": "polygon( calc(var(--tk-left) + -20vw) var(--tk-top), calc(var(--tk-left) + 120vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + -40vw) calc(var(--tk-top) + 120vh) )"
+      }
+    }
+  },
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:item"
+}

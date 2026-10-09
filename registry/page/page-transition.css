@@ -1,0 +1,22 @@
+/*
+ * Shared rules for every page transition style. React adds
+ * `tk-page tk-page-<style> tk-page-exit` to the old page's snapshot and
+ * `tk-page tk-page-<style> tk-page-enter` to the new one (plus `tk-page-back`
+ * for backward navigations).
+ */
+::view-transition-old(.tk-page),
+::view-transition-new(.tk-page) {
+  mix-blend-mode: normal;
+}
+
+/* Snapshots ignore ancestor overflow; keep each page inside its frame. */
+::view-transition-image-pair(.tk-page) {
+  overflow: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.tk-page),
+  ::view-transition-new(.tk-page) {
+    animation: none !important;
+  }
+}

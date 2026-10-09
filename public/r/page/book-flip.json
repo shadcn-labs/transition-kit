@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/book-flip",
+  "title": "Book Flip",
+  "description": "The new page turns over the old one around a central spine.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-image-pair(.tk-page-book-flip.tk-page-exit)": {
+      "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+      "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+    },
+    "::view-transition-image-pair(.tk-page-book-flip.tk-page-enter)": {
+      "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+      "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+    },
+    "::view-transition-image-pair(.tk-page-book-flip)": {
+      "perspective": "1600px",
+      "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+    },
+    "::view-transition-old(.tk-page-book-flip), ::view-transition-new(.tk-page-book-flip)": {
+      "--tk-page-dir": "1",
+      "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+    },
+    "::view-transition-old(.tk-page-book-flip.tk-page-back), ::view-transition-new(.tk-page-book-flip.tk-page-back)": {
+      "--tk-page-dir": "-1"
+    },
+    "::view-transition-old(.tk-page-book-flip)": {
+      "animation": "tk-page-book-flip-out var(--tk-page-duration, 700ms) var(--tk-page-easing, ease-in-out) both"
+    },
+    "::view-transition-new(.tk-page-book-flip)": {
+      "animation": "tk-page-book-flip-in var(--tk-page-duration, 700ms) var(--tk-page-easing, ease-in-out) both"
+    },
+    "@keyframes tk-page-book-flip-out": {
+      "from": {
+        "transform": "rotateX(0deg)",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "rotateX(calc(90deg * var(--tk-page-dir)))",
+        "opacity": "0.3"
+      }
+    },
+    "@keyframes tk-page-book-flip-in": {
+      "from": {
+        "transform": "rotateX(calc(-90deg * var(--tk-page-dir)))",
+        "opacity": "0.3"
+      },
+      "to": {
+        "transform": "rotateX(0deg)",
+        "opacity": "1"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

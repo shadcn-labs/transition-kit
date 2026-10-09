@@ -1,0 +1,89 @@
+---
+title: "Wave Reveal"
+description: "A wavy edge sweeps across the viewport."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/wave-reveal">
+  <ThemeTransitionDemo transition="wave-reveal" />
+</ComponentPreview>
+
+A wavy edge falls from the top of the viewport to the bottom. It is anchored to the viewport, so it ignores `origin` and always covers exactly what is on screen, even when the page is scrolled.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/wave-reveal" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/wave-reveal.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="wave-reveal">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) => toggleTheme({ transition: "wave-reveal", origin: event })}
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `800ms` with `cubic-bezier(0.65, 0, 0.35, 1)` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="wave-reveal"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 800ms)` and `var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1))`.

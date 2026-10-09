@@ -1,0 +1,24 @@
+{
+  "title": "UI",
+  "pages": [
+    "index",
+    "ui-transition",
+    "tabs",
+    "segmented-control",
+    "accordion",
+    "carousel",
+    "stack-navigator",
+    "step-wizard",
+    "dynamic-island",
+    "status-button",
+    "number-flip",
+    "add-to-cart",
+    "morphing-popover",
+    "product-gallery",
+    "layout-switcher",
+    "animated-list",
+    "filter-grid",
+    "sortable-table",
+    "kanban-board"
+  ]
+}

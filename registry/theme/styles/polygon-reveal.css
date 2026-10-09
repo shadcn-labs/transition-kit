@@ -1,0 +1,52 @@
+/* Polygon Reveal: a diagonal polygon sweeps across the viewport (towards the bottom right into dark, back to the top left into light). */
+::view-transition-old(.tk-theme-polygon-reveal) {
+  animation: none;
+}
+
+::view-transition-new(.tk-theme-polygon-reveal) {
+  animation: tk-theme-polygon-reveal-light var(--tk-theme-duration, 700ms)
+    var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+.dark::view-transition-new(.tk-theme-polygon-reveal) {
+  animation: tk-theme-polygon-reveal-dark var(--tk-theme-duration, 700ms)
+    var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+@keyframes tk-theme-polygon-reveal-light {
+  from {
+    clip-path: polygon(
+      calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh),
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh),
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh),
+      calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh)
+    );
+  }
+  to {
+    clip-path: polygon(
+      calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh),
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh),
+      calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh),
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh)
+    );
+  }
+}
+
+@keyframes tk-theme-polygon-reveal-dark {
+  from {
+    clip-path: polygon(
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh),
+      calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh),
+      calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh),
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh)
+    );
+  }
+  to {
+    clip-path: polygon(
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh),
+      calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh),
+      calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh),
+      calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh)
+    );
+  }
+}

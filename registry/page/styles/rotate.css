@@ -1,0 +1,72 @@
+/* Rotate: the new page rotates in while the old one fades out; backward navigations turn the other way. */
+/* Centre of the page's visible part, in each snapshot's coordinates. */
+::view-transition-image-pair(.tk-page-rotate.tk-page-exit) {
+  --tk-page-x: calc(
+    (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) /
+      2
+  );
+  --tk-page-y: calc(
+    (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) /
+      2
+  );
+}
+
+::view-transition-image-pair(.tk-page-rotate.tk-page-enter) {
+  --tk-page-x: calc(
+    (
+        max(0px, var(--tk-enter-cx) - 50vw) +
+          min(100%, var(--tk-enter-cx) + 50vw)
+      ) /
+      2
+  );
+  --tk-page-y: calc(
+    (
+        max(0px, var(--tk-enter-cy) - 50vh) +
+          min(100%, var(--tk-enter-cy) + 50vh)
+      ) /
+      2
+  );
+}
+
+::view-transition-old(.tk-page-rotate),
+::view-transition-new(.tk-page-rotate) {
+  --tk-page-dir: 1;
+  transform-origin: var(--tk-page-x) var(--tk-page-y);
+}
+
+::view-transition-old(.tk-page-rotate.tk-page-back),
+::view-transition-new(.tk-page-rotate.tk-page-back) {
+  --tk-page-dir: -1;
+}
+
+::view-transition-old(.tk-page-rotate) {
+  animation: tk-page-rotate-out var(--tk-page-duration, 500ms)
+    var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both;
+}
+
+::view-transition-new(.tk-page-rotate) {
+  animation: tk-page-rotate-in var(--tk-page-duration, 500ms)
+    var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both;
+}
+
+@keyframes tk-page-rotate-out {
+  from {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(calc(-10deg * var(--tk-page-dir))) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes tk-page-rotate-in {
+  from {
+    transform: rotate(calc(10deg * var(--tk-page-dir))) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
