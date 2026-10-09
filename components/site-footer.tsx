@@ -6,6 +6,7 @@ import { useFeedback } from "@/hooks/use-feedback";
 import { addQueryParams } from "@/lib/url";
 
 export const SiteFooter = () => {
+  //test commit comment
   const playClick = useFeedback({ sound: "click" });
 
   return (
