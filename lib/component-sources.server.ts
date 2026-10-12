@@ -89,7 +89,9 @@ export const loadComponentSources = async (
     }
   };
   // Frontmatter is YAML, not MDX; descriptions may contain `<Tags>`.
-  collect(processor.parse(mdxSource.replace(/^---\n[\s\S]*?\n---\n/, "")));
+  collect(
+    processor.parse(mdxSource.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, ""))
+  );
 
   const sources: ComponentSources = {};
   await Promise.all(
