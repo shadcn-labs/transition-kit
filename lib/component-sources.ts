@@ -13,6 +13,13 @@ export interface ComponentSourceData {
 
 export type ComponentSources = Record<string, ComponentSourceData | null>;
 
+/** Shows registry sources as installed: `@/registry/<group>/x` → `@/components/transitions/x`. */
+export const toInstalledImports = (code: string) =>
+  code.replaceAll(
+    /@\/registry\/(?:theme|page|ui)\//g,
+    "@/components/transitions/"
+  );
+
 export const componentSourceKey = ({
   name,
   src,
