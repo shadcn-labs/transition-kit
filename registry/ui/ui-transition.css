@@ -1,0 +1,315 @@
+/*
+ * transition-kit UI: composable view transition classes for React's
+ * <ViewTransition>. Components pass them through `tk(...)` from
+ * ui-transition.ts, e.g. <ViewTransition update={tk("tk-morph", "tk-spring")}>,
+ * which always adds the `tk-ui` base class (reduced motion keys off it).
+ * Tune any setting on :root, e.g. `:root { --tk-ui-move: 300ms; }`.
+ */
+
+@property --tk-ui-exit {
+  syntax: "*";
+  inherits: true;
+  initial-value: 150ms;
+}
+@property --tk-ui-enter {
+  syntax: "*";
+  inherits: true;
+  initial-value: 220ms;
+}
+@property --tk-ui-move {
+  syntax: "*";
+  inherits: true;
+  initial-value: 380ms;
+}
+@property --tk-ui-slow {
+  syntax: "*";
+  inherits: true;
+  initial-value: 520ms;
+}
+@property --tk-ui-stagger {
+  syntax: "*";
+  inherits: true;
+  initial-value: 30ms;
+}
+@property --tk-ui-distance {
+  syntax: "*";
+  inherits: true;
+  initial-value: 1.5rem;
+}
+@property --tk-ui-ease {
+  syntax: "*";
+  inherits: true;
+  initial-value: cubic-bezier(0.32, 0.72, 0, 1);
+}
+@property --tk-ui-ease-out {
+  syntax: "*";
+  inherits: true;
+  initial-value: cubic-bezier(0.22, 1, 0.36, 1);
+}
+@property --tk-ui-spring {
+  syntax: "*";
+  inherits: true;
+  initial-value: linear(
+    0,
+    0.22 8%,
+    0.6 18%,
+    0.94 30%,
+    1.06 40%,
+    1.04 48%,
+    1 60%,
+    0.995 74%,
+    1
+  );
+}
+
+/* The page stays live and clickable while snapshots animate. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* ── Morph: shared elements move, resize and crossfade ──────────────── */
+
+::view-transition-group(.tk-morph) {
+  animation-duration: var(--tk-ui-move);
+  animation-timing-function: var(--tk-ui-ease);
+  animation-delay: var(--tk-ui-delay, 0s);
+}
+::view-transition-old(.tk-morph),
+::view-transition-new(.tk-morph) {
+  animation-duration: var(--tk-ui-move);
+  animation-timing-function: var(--tk-ui-ease-out);
+  animation-delay: var(--tk-ui-delay, 0s);
+}
+
+/* Text keeps its own size instead of stretching with the box. */
+::view-transition-old(.tk-text),
+::view-transition-new(.tk-text) {
+  inline-size: auto;
+  block-size: auto;
+}
+
+/* Clip children to the moving box (slides, rolls, growing surfaces). */
+::view-transition-image-pair(.tk-clip) {
+  overflow: clip;
+  border-radius: var(--tk-ui-radius, 0);
+}
+
+::view-transition-group(.tk-spring) {
+  animation-timing-function: var(--tk-ui-spring);
+}
+::view-transition-group(.tk-slow) {
+  animation-duration: var(--tk-ui-slow);
+}
+::view-transition-group(.tk-top) {
+  z-index: 10;
+}
+::view-transition-group(.tk-instant) {
+  animation: none;
+}
+
+/* ── Presence: elements that appear or disappear ─────────────────────── */
+
+::view-transition-old(.tk-fade):only-child {
+  animation: var(--tk-ui-exit) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s) both
+    tk-fade-out;
+}
+::view-transition-new(.tk-fade):only-child {
+  animation: var(--tk-ui-enter) var(--tk-ui-ease-out)
+    calc(var(--tk-ui-delay, 0s) + var(--tk-ui-exit) / 2) both tk-fade-in;
+}
+
+::view-transition-old(.tk-pop):only-child {
+  animation: var(--tk-ui-exit) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s) both
+    tk-pop-out;
+}
+::view-transition-new(.tk-pop):only-child {
+  animation: var(--tk-ui-move) var(--tk-ui-spring) var(--tk-ui-delay, 0s) both
+    tk-pop-in;
+}
+
+/* Blurred crossfade for whole views and paired text. */
+::view-transition-old(.tk-blur) {
+  animation: var(--tk-ui-enter) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s)
+    both tk-blur-out;
+}
+::view-transition-new(.tk-blur) {
+  animation: var(--tk-ui-enter) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s)
+    both tk-blur-in;
+}
+
+/* ── Direction: slides, pushes and rolls ─────────────────────────────── */
+
+::view-transition-group(.tk-forward),
+::view-transition-group(.tk-up) {
+  --tk-ui-dir: 1;
+}
+::view-transition-group(.tk-back),
+::view-transition-group(.tk-down) {
+  --tk-ui-dir: -1;
+}
+
+/* A short slide with a crossfade: tabs, steps, small panels. */
+::view-transition-old(.tk-slide) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-slide-out;
+}
+::view-transition-new(.tk-slide) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-slide-in;
+}
+
+/* A full-width push: carousels and stacked screens. Pair with tk-clip. */
+::view-transition-old(.tk-push) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-push-out;
+}
+::view-transition-new(.tk-push) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-push-in;
+}
+
+/* A vertical roll: digits and tickers. Pair with tk-clip. */
+::view-transition-old(.tk-roll) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-roll-out;
+}
+::view-transition-new(.tk-roll) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-roll-in;
+}
+
+::view-transition-image-pair(.tk-slide),
+::view-transition-image-pair(.tk-push),
+::view-transition-image-pair(.tk-roll) {
+  isolation: auto;
+}
+::view-transition-old(.tk-slide),
+::view-transition-new(.tk-slide),
+::view-transition-old(.tk-push),
+::view-transition-new(.tk-push),
+::view-transition-old(.tk-roll),
+::view-transition-new(.tk-roll) {
+  mix-blend-mode: normal;
+}
+
+/* ── Stagger: tk-delay-1 … tk-delay-8 ───────────────────────────────── */
+
+::view-transition-group(.tk-delay-1) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 1);
+}
+::view-transition-group(.tk-delay-2) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 2);
+}
+::view-transition-group(.tk-delay-3) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 3);
+}
+::view-transition-group(.tk-delay-4) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 4);
+}
+::view-transition-group(.tk-delay-5) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 5);
+}
+::view-transition-group(.tk-delay-6) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 6);
+}
+::view-transition-group(.tk-delay-7) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 7);
+}
+::view-transition-group(.tk-delay-8) {
+  --tk-ui-delay: calc(var(--tk-ui-stagger) * 8);
+}
+
+/* ── Accessibility and engine quirks ─────────────────────────────────── */
+
+/* Reduced motion: nothing travels, content still crossfades briefly. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(.tk-ui) {
+    animation: none !important;
+  }
+  ::view-transition-old(.tk-ui) {
+    animation: 150ms linear both tk-fade-out !important;
+  }
+  ::view-transition-new(.tk-ui) {
+    animation: 150ms linear both tk-fade-in !important;
+  }
+}
+
+/* WebKit offsets blurred snapshots; keep the fade, drop the blur. */
+@supports (font: -apple-system-body) {
+  ::view-transition-old(.tk-blur) {
+    animation-name: tk-fade-out;
+  }
+  ::view-transition-new(.tk-blur) {
+    animation-name: tk-fade-in;
+  }
+}
+
+@keyframes tk-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes tk-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes tk-pop-out {
+  to {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+@keyframes tk-pop-in {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+@keyframes tk-blur-out {
+  to {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+@keyframes tk-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+@keyframes tk-slide-out {
+  to {
+    opacity: 0;
+    translate: calc(var(--tk-ui-distance) * var(--tk-ui-dir, 1) * -1) 0;
+  }
+}
+@keyframes tk-slide-in {
+  from {
+    opacity: 0;
+    translate: calc(var(--tk-ui-distance) * var(--tk-ui-dir, 1)) 0;
+  }
+}
+@keyframes tk-push-out {
+  to {
+    translate: calc(-30% * var(--tk-ui-dir, 1)) 0;
+    opacity: 0.6;
+  }
+}
+@keyframes tk-push-in {
+  from {
+    translate: calc(100% * var(--tk-ui-dir, 1)) 0;
+  }
+}
+@keyframes tk-roll-out {
+  to {
+    opacity: 0;
+    translate: 0 calc(-100% * var(--tk-ui-dir, 1));
+  }
+}
+@keyframes tk-roll-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(100% * var(--tk-ui-dir, 1));
+  }
+}

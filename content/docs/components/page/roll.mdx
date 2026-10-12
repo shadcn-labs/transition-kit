@@ -1,0 +1,83 @@
+---
+title: "Roll"
+description: "The old page rolls away like a scroll as the new one unrolls."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/roll">
+  <PageTransitionDemo transition="roll" />
+</ComponentPreview>
+
+The old page rolls up towards the top of the screen like a scroll as the new one unrolls from it. Backward navigations roll from the bottom.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/roll" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/roll.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="roll">
+  {children}
+</PageTransition>
+```
+
+Mark backward navigations with `direction: "back"` and the style runs the other way:
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## Customization
+
+The style runs for `550ms` with `cubic-bezier(0.4, 0, 0.2, 1)` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="roll"
+  duration={1100}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 550ms)` and `var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1))`.
+
+It rolls towards the top of the page's visible part, so long scrolled pages roll up to the top of the screen, not the top of the document.

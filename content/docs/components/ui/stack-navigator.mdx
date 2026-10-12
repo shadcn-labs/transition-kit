@@ -1,0 +1,155 @@
+---
+title: "Stack Navigator"
+description: "iOS-style push and pop screens in a fixed frame. Screens slide in the direction you travel and the title glides into the back button."
+---
+
+import { StackNavigatorDemo } from "@/examples/ui/stack-navigator-demo";
+
+<ComponentPreview
+  name="ui/stack-navigator"
+  src="examples/ui/stack-navigator-demo.tsx"
+>
+  <StackNavigatorDemo />
+</ComponentPreview>
+
+Push and pop screens like an iOS navigation stack. The screen area slides in the direction you travel, the title glides into the back button and back again, and screens below the top keep their state.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/stack-navigator" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/stack-navigator.tsx"
+  title="components/transitions/stack-navigator.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  StackNavigator,
+  StackScreen,
+  useStack,
+} from "@/components/transitions/stack-navigator";
+```
+
+```tsx
+const Inbox = () => {
+  const { push } = useStack();
+  return (
+    <button type="button" onClick={() => push("chat", { id: "ava" })}>
+      Ava Chen
+    </button>
+  );
+};
+
+<StackNavigator initialScreen="inbox" className="h-96 max-w-sm">
+  <StackScreen name="inbox" title="Messages" render={() => <Inbox />} />
+  <StackScreen<{ id: string }>
+    name="chat"
+    title={({ id }) => getChat(id).name}
+    actions={({ id }) => <ContactButton id={id} />}
+    render={({ id }) => <Conversation id={id} />}
+  />
+</StackNavigator>;
+```
+
+Call `useStack()` inside a screen (or its header `actions`) to navigate. `push(screen, params)` adds a screen, `pop()` goes back one, `popToRoot()` returns to the first screen, and `stack` lists the current entries, root first.
+
+To drive the stack yourself, for example from the URL, pass `stack` and `onStackChange`. Each entry is `{ key, screen, params }`, and every `key` must be unique.
+
+## How it works
+
+- `push`, `pop` and `popToRoot` change the stack inside `startTransition` and tag it with the `FORWARD` (push) or `BACK` (pop) transition type from the core.
+- The screen area below the header is one `<ViewTransition>` whose `update` class depends on the type: `tk-push tk-clip` with `tk-forward` or `tk-back`. Every screen fills that area, so a navigation is an update of that one boundary: the old screen slides out and the new one slides in, clipped to the frame. The header sits outside it and doesn't move.
+- Each title is a `<ViewTransition>` named after its stack entry. On push, the current title unmounts from the centre and mounts as the back button label under the same name, so React pairs them (`share`) and it glides to the left while the new title fades in. Popping plays it in reverse. The back button fades in with the first push and out with the last pop, and header `actions` fade between screens.
+- The page stays live during an animation (the core sets `pointer-events: none` on `::view-transition`), so the back button can be clicked mid-slide. React finishes the running transition before it commits the next navigation.
+- Navigation builds on the stack requested by the previous call, not the last render, so rapid taps never lose a step. `push` and `pop` from a screen that is no longer on top are ignored, so a double click can't push the same screen twice.
+- Focus moves during React's commit, before the new snapshot is taken: into the pushed screen, or back to the control that opened the screen you popped.
+- Lower screens stay mounted but hidden, so their state, drafts and scroll position are still there when you come back.
+- Names are unique per navigator, so several navigators on one page never pair with each other.
+
+## API Reference
+
+### StackNavigator
+
+| Prop            | Type                            | Default             |
+| --------------- | ------------------------------- | ------------------- |
+| `initialScreen` | `string`                        | first `StackScreen` |
+| `initialParams` | `Record<string, unknown>`       | `{}`                |
+| `stack`         | `StackEntry[]`                  | -                   |
+| `onStackChange` | `(stack: StackEntry[]) => void` | -                   |
+
+Children other than `StackScreen` render below the screens, inside the frame (for example a tab bar).
+
+### StackScreen
+
+| Prop      | Type                                 | Default |
+| --------- | ------------------------------------ | ------- |
+| `name`    | `string`                             | -       |
+| `render`  | `(params) => ReactNode`              | -       |
+| `title`   | `ReactNode \| (params) => ReactNode` | -       |
+| `actions` | `ReactNode \| (params) => ReactNode` | -       |
+
+### useStack
+
+| Return      | Type                                                         |
+| ----------- | ------------------------------------------------------------ |
+| `push`      | `(screen: string, params?: Record<string, unknown>) => void` |
+| `pop`       | `() => void`                                                 |
+| `popToRoot` | `() => void`                                                 |
+| `stack`     | `StackEntry[]`                                               |
+
+## Accessibility
+
+- The back button is a real `<button>` named "Back to _previous title_" when the title is text.
+- <kbd>Esc</kbd> anywhere inside the navigator goes back one screen.
+- Pushing moves focus to the new screen, which is labelled by the header title. Popping returns focus to the control that opened the screen.
+- Hidden lower screens use `visibility: hidden`, so they are skipped by the keyboard and screen readers.
+- With `prefers-reduced-motion`, nothing slides; screens and titles crossfade briefly.

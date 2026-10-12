@@ -1,0 +1,83 @@
+---
+title: "Skew Slide"
+description: "Pages skew as they slide past each other."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/skew-slide">
+  <PageTransitionDemo transition="skew-slide" />
+</ComponentPreview>
+
+Like Slide, but both pages skew by 8° and fade as they move, for a faster, more energetic feel. Backward navigations reverse.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/skew-slide" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/skew-slide.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="skew-slide">
+  {children}
+</PageTransition>
+```
+
+Mark backward navigations with `direction: "back"` and the style runs the other way:
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## Customization
+
+The style runs for `450ms` with `cubic-bezier(0.4, 0, 0.2, 1)` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="skew-slide"
+  duration={900}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 450ms)` and `var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1))`.
+
+It pivots around the centre of the page's visible part, so long scrolled pages and pages inside a smaller frame both animate around what the user sees.

@@ -1,0 +1,30 @@
+---
+title: Browser support
+description: How transition-kit behaves across browsers, frameworks and server rendering.
+---
+
+## Graceful fallback
+
+transition-kit never calls `document.startViewTransition` itself. React does, and only when the browser supports it. In browsers without the View Transitions API, React simply applies the update: the theme changes, the page swaps or the component updates instantly, with no errors.
+
+Styles target snapshots by class with [`view-transition-class`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/view-transition-class), supported in Chrome 125+, Safari 18.2+ and Firefox 144+.
+
+## Reduced motion
+
+The core CSS disables the animations when the user prefers reduced motion. Styles don't need to handle it. UI components still crossfade briefly, but nothing moves or resizes.
+
+## React version
+
+`<ViewTransition>` and `addTransitionType` require **React 19.3** or later. On older versions the cores won't import.
+
+## Server rendering
+
+`ThemeTransitionProvider` reads the saved theme on the client. Render `<ThemeTransitionScript />` in `<head>` so the right `light`/`dark` class is on `<html>` before the first paint, and add `suppressHydrationWarning` to `<html>` because the script changes it before React hydrates.
+
+## Routers
+
+`<PageTransition>` animates only when its `id` changes **inside a React Transition**. Routers whose navigation is a React state update — `router.push` in Next.js, `navigate` in React Router, plain `setState` — work when wrapped in `navigateWithTransition`.
+
+If your router updates outside React's transitions (for example, a full page load or a link the router handles synchronously), the page swaps without animating. Intercept the link click and call `navigateWithTransition(() => navigate(href))` instead.
+
+Browser back and forward buttons trigger navigations you don't start. Pass `{ direction: "back" }` only for navigations you know go backwards.

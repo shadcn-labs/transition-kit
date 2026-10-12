@@ -1,0 +1,226 @@
+---
+title: Installation
+description: Install theme, page and UI transitions from the registry.
+---
+
+## Prerequisites
+
+transition-kit needs **React 19.3** or later for `<ViewTransition>` and `addTransitionType`.
+
+```bash
+npm install react@19.3 react-dom@19.3
+```
+
+<Tabs defaultValue="next">
+  <TabsList>
+    <TabsTrigger value="next">Next.js</TabsTrigger>
+    <TabsTrigger value="vite">Vite</TabsTrigger>
+    <TabsTrigger value="tanstack">TanStack Start</TabsTrigger>
+  </TabsList>
+  <TabsContent value="next">
+    Next.js 16 canary bundles a React build that ships `<ViewTransition>`.
+
+    ```bash
+    npm install next@canary
+    ```
+
+  </TabsContent>
+  <TabsContent value="vite">
+    Install React 19.3 as above. No other configuration is needed.
+  </TabsContent>
+  <TabsContent value="tanstack">
+    Install React 19.3 as above. Navigation must run inside a React Transition (see [Browser support](/docs/browser-support)).
+  </TabsContent>
+</Tabs>
+
+<Steps>
+<Step>
+
+### Initialize shadcn
+
+Skip this if your project already has a `components.json`.
+
+```bash
+npx shadcn@latest init
+```
+
+</Step>
+<Step>
+
+### Add the registry
+
+```json title="components.json"
+{
+  "registries": {
+    "@transition-kit": "https://transition-kit.space/r/{name}.json"
+  }
+}
+```
+
+</Step>
+</Steps>
+
+## Theme transitions
+
+<Steps>
+<Step>
+
+### Install a style
+
+```bash
+npx shadcn@latest add @transition-kit/theme/circle-reveal
+```
+
+This pulls in the theme core (`components/transitions/theme-transition.tsx`) and merges the style's CSS into `globals.css`.
+
+</Step>
+<Step>
+
+### Wrap your app
+
+Render `<ThemeTransitionScript />` in `<head>` to apply the saved theme before hydration, and add `suppressHydrationWarning` to `<html>`.
+
+```tsx title="app/layout.tsx"
+import {
+  ThemeTransitionProvider,
+  ThemeTransitionScript,
+} from "@/components/transitions/theme-transition";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeTransitionScript />
+      </head>
+      <body>
+        <ThemeTransitionProvider transition="circle-reveal">
+          {children}
+        </ThemeTransitionProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+</Step>
+<Step>
+
+### Toggle the theme
+
+Pass the click event as `origin` so the transition starts at the pointer.
+
+```tsx title="components/theme-button.tsx"
+"use client";
+
+import { useThemeTransition } from "@/components/transitions/theme-transition";
+
+export const ThemeButton = () => {
+  const { toggleTheme } = useThemeTransition();
+
+  return (
+    <button type="button" onClick={(event) => toggleTheme({ origin: event })}>
+      Toggle theme
+    </button>
+  );
+};
+```
+
+</Step>
+</Steps>
+
+## Page transitions
+
+<Steps>
+<Step>
+
+### Install a style
+
+```bash
+npx shadcn@latest add @transition-kit/page/slide
+```
+
+</Step>
+<Step>
+
+### Wrap your routes
+
+Give `<PageTransition>` an `id` that changes per page, usually the pathname.
+
+```tsx title="app/template.tsx"
+"use client";
+
+import { usePathname } from "next/navigation";
+import { PageTransition } from "@/components/transitions/page-transition";
+
+export default function Template({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  return (
+    <PageTransition id={pathname} transition="slide">
+      {children}
+    </PageTransition>
+  );
+}
+```
+
+</Step>
+<Step>
+
+### Navigate
+
+Run navigations through `navigateWithTransition`. Pass `direction: "back"` to play the style in reverse.
+
+```tsx
+import { navigateWithTransition } from "@/components/transitions/page-transition";
+
+navigateWithTransition(() => router.push(href));
+navigateWithTransition(() => router.back(), { direction: "back" });
+```
+
+</Step>
+</Steps>
+
+## UI components
+
+<Steps>
+<Step>
+
+### Install a component
+
+```bash
+npx shadcn@latest add @transition-kit/ui/tabs
+```
+
+This pulls in the UI core (`components/transitions/ui-transition.ts` and the `tk-*` classes merged into `globals.css`), any shadcn primitives the component uses, and the component itself in `components/transitions/`.
+
+</Step>
+<Step>
+
+### Use it
+
+UI components need no provider: their state changes animate through React's `<ViewTransition>` on their own.
+
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/transitions/tabs";
+
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings.</TabsContent>
+  <TabsContent value="password">Change your password.</TabsContent>
+</Tabs>;
+```
+
+</Step>
+</Steps>

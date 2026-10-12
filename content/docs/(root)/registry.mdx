@@ -1,0 +1,85 @@
+---
+title: Registry
+description: Learn how to use the transition-kit registry with the shadcn CLI.
+---
+
+The **transition-kit** registry ships theme transitions, page transitions and animated UI components in the [shadcn registry format](https://ui.shadcn.com/docs/registry). Register the namespace once in `components.json`, then pull items by name with the CLI.
+
+## Setup
+
+Add a **registries** entry for this site. See the [shadcn registry documentation](https://ui.shadcn.com/docs/registry) for all `components.json` fields and behaviors.
+
+```json title="components.json"
+{
+  "registries": {
+    "@transition-kit": "https://transition-kit.space/r/{name}.json"
+  }
+}
+```
+
+You can replace `@transition-kit` with another namespace; it only needs to match what you pass to `shadcn add`.
+
+## Usage
+
+Items are named by group: `theme/<slug>` for theme transitions, `page/<slug>` for page transitions and `ui/<slug>` for UI components.
+
+Registry files follow these destinations:
+
+- Cores and components install into `components/transitions/`.
+- Style and component CSS is merged into your `globals.css`.
+
+Styles and components declare the core they need, and UI components also declare the shadcn primitives and other transition-kit components they use, so installing one does not require additional setup.
+
+### Theme
+
+Install a style:
+
+```bash
+npx shadcn@latest add @transition-kit/theme/circle-reveal
+```
+
+Without a registry alias, use the full URL (as on each docs page):
+
+```bash
+npx shadcn@latest add https://transition-kit.space/r/theme/circle-reveal.json
+```
+
+### Page
+
+Install a style:
+
+```bash
+npx shadcn@latest add @transition-kit/page/slide
+```
+
+Without a registry alias, use the full URL:
+
+```bash
+npx shadcn@latest add https://transition-kit.space/r/page/slide.json
+```
+
+### UI
+
+Install a component:
+
+```bash
+npx shadcn@latest add @transition-kit/ui/tabs
+```
+
+Without a registry alias, use the full URL:
+
+```bash
+npx shadcn@latest add https://transition-kit.space/r/ui/tabs.json
+```
+
+## Inspect an item
+
+Preview the files an item will add before installing it:
+
+```bash
+npx shadcn@latest view @transition-kit/theme/circle-reveal
+```
+
+## MCP
+
+Once the registry is in `components.json`, AI assistants can browse and install transition-kit items through the [shadcn MCP server](https://ui.shadcn.com/docs/mcp).

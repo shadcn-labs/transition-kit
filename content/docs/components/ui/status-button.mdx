@@ -1,0 +1,156 @@
+---
+title: "Status Button"
+description: "A button that morphs from idle to loading to success or error, resizing smoothly while its label and icon crossfade."
+---
+
+import { StatusButtonDemo } from "@/examples/ui/status-button-demo";
+
+<ComponentPreview
+  name="ui/status-button"
+  src="examples/ui/status-button-demo.tsx"
+>
+  <StatusButtonDemo />
+</ComponentPreview>
+
+A button that reports the work it starts. Return a promise from `onClick` and it shows a spinner, then success or error, then returns to idle. The button resizes to each label while the label and icon crossfade inside it.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/status-button" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+npx shadcn@latest add button
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/status-button.tsx"
+  title="components/transitions/status-button.tsx"
+/>
+
+<Step>Add the status button styles to your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/status-button.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { StatusButton } from "@/components/transitions/status-button";
+```
+
+Return a promise from `onClick` and the button handles the rest: it shows the pending state until the promise settles, then success or error, then returns to idle after `resetAfter` milliseconds.
+
+```tsx
+<StatusButton
+  onClick={() => saveProfile(values)}
+  labels={{ pending: "Saving…", success: "Saved", error: "Couldn't save" }}
+>
+  Save changes
+</StatusButton>
+```
+
+Pass a function as `children` to build the label from the status:
+
+```tsx
+<StatusButton onClick={subscribe} icons={{ idle: <BellIcon /> }}>
+  {(status) => (status === "success" ? "Subscribed" : "Subscribe")}
+</StatusButton>
+```
+
+Control the status yourself with `status` and `onStatusChange`. Changes made from outside, such as a server push, animate the same way; you don't need to wrap them in `startTransition`:
+
+```tsx
+const [status, setStatus] = React.useState<StatusButtonStatus>("idle");
+
+<StatusButton status={status} onStatusChange={setStatus} onClick={publish}>
+  Publish
+</StatusButton>;
+```
+
+The button's width follows its label, so anything laid out after it in the same row moves. Put it at the end of a row, or give it a fixed width (`className="w-36"`) to keep the layout still; the label and icon still crossfade.
+
+## How it works
+
+- The button keeps a "shown" status that follows `status` inside `startTransition`, so controlled and uncontrolled changes animate identically.
+- The `<button>` is wrapped in a `<ViewTransition>` with `update={tk("tk-morph", "tk-status-button-surface")}`: the button is the morphing surface, and its size and colour animate from the old status to the new one. `status-button.css` stretches its snapshot to the full height of the box; by default a snapshot keeps its aspect ratio and would shrink vertically while the width changes.
+- The icon and the label are nested `<ViewTransition>`s, so they leave the button's snapshot and paint above it as their own layers.
+- The label's `update` is `tk-morph tk-text tk-blur`: the old and new text keep their own size and crossfade with a blur while sliding to their new position, so text never stretches.
+- The icon uses `tk-pop` for `enter` and `exit` (idle to pending) and `tk-morph tk-blur` for `update` (spinner to check).
+
+## API Reference
+
+### StatusButton
+
+Accepts every `<button>` prop as well.
+
+| Prop             | Type                                                                          | Default                                |
+| ---------------- | ----------------------------------------------------------------------------- | -------------------------------------- |
+| `status`         | `"idle" \| "pending" \| "success" \| "error"`                                 | -                                      |
+| `defaultStatus`  | `"idle" \| "pending" \| "success" \| "error"`                                 | `"idle"`                               |
+| `onStatusChange` | `(status: StatusButtonStatus) => void`                                        | -                                      |
+| `onClick`        | `(event) => void \| PromiseLike<unknown>`                                     | -                                      |
+| `resetAfter`     | `number \| false`                                                             | `2000`                                 |
+| `labels`         | `Partial<Record<StatusButtonStatus, ReactNode>>`                              | `{ success: "Done", error: "Failed" }` |
+| `icons`          | `Partial<Record<StatusButtonStatus, ReactNode>>`                              | spinner, check and x icons             |
+| `variants`       | `Partial<Record<StatusButtonStatus, ButtonVariant>>`                          | `{ error: "destructive" }`             |
+| `variant`        | `"default" \| "destructive" \| "outline" \| "secondary" \| "ghost" \| "link"` | `"default"`                            |
+| `size`           | `"default" \| "sm" \| "lg" \| "icon" \| "icon-sm" \| "icon-lg"`               | `"default"`                            |
+| `children`       | `ReactNode \| (status: StatusButtonStatus) => ReactNode`                      | -                                      |
+
+- `children` is the idle label, and the pending label unless `labels.pending` is set. As a function, it returns the label for every status and `labels` is ignored.
+- `onClick` returning a promise moves the status to `pending`, then to `success` when it resolves or `error` when it rejects. The rejection is caught; handle or report the error inside `onClick`.
+- `icons` and `variants` merge with the defaults. Pass `null` to remove a default icon, e.g. `icons={{ pending: null }}`.
+- `resetAfter` applies to success and error. `false` keeps the final status until you change it.
+- The button sets `data-status` to the current status, so you can style each state with `data-[status=success]:`.
+
+## Accessibility
+
+- A visually hidden `role="status"` region next to the button announces the pending, success and error labels politely.
+- While pending the button has `aria-disabled` and `aria-busy` instead of `disabled`, so it keeps keyboard focus. Clicks, <kbd>Enter</kbd> and <kbd>Space</kbd> are ignored, and a `type="submit"` button won't submit its form again.
+- The status icons are `aria-hidden`; the label carries the meaning.
+- With `prefers-reduced-motion`, nothing resizes or slides; the label and icon crossfade briefly.

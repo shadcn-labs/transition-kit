@@ -1,0 +1,25 @@
+{
+  "title": "Page",
+  "pages": [
+    "index",
+    "page-transition",
+    "fade",
+    "slide",
+    "scale",
+    "flip",
+    "blur",
+    "rotate",
+    "zoom",
+    "curtain",
+    "cube",
+    "skew-slide",
+    "page-curl",
+    "accordion",
+    "doorway",
+    "book-flip",
+    "roll",
+    "fold",
+    "glitch",
+    "iris-wipe"
+  ]
+}

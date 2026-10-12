@@ -1,0 +1,40 @@
+---
+title: "Theme"
+description: "Animated light and dark theme changes, built on React's <ViewTransition>."
+---
+
+Theme transitions have three parts:
+
+- **The core** — `ThemeTransitionProvider` owns the theme and `useThemeTransition` returns `theme`, `resolvedTheme`, `setTheme` and `toggleTheme`. Only theme changes animate; other updates inside the provider never do.
+- **Styles** — plain CSS that decides how the new theme is revealed. Install as many as you like and pick one per change.
+- **Components** — ready-made toggles that call the core for you.
+
+Installing any style or component pulls in the core automatically.
+
+## Usage
+
+```tsx
+<ThemeTransitionProvider transition="circle-reveal">
+  {children}
+</ThemeTransitionProvider>
+```
+
+```tsx
+const { setTheme, toggleTheme } = useThemeTransition();
+
+// Use the provider's style, starting at the pointer.
+toggleTheme({ origin: event });
+
+// Use a different style for this change.
+setTheme("dark", { transition: "diagonal-wipe" });
+```
+
+`origin` accepts a pointer event or an element; without it the transition starts at the centre of the viewport. `duration` and `easing` on the provider override every style's timing.
+
+## Components
+
+<ItemGrid group="theme" kind="component" />
+
+## Styles
+
+<ItemGrid group="theme" kind="style" />

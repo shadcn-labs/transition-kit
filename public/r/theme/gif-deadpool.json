@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/gif-deadpool",
+  "title": "GIF Deadpool",
+  "description": "Deadpool breaks in through an expanding mask.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-theme-gif-deadpool)": {
+      "animation": "none"
+    },
+    "::view-transition-new(.tk-theme-gif-deadpool)": {
+      "mask-image": "url(\"https://media.tenor.com/VJlZzo7UdagAAAAi/deadpool-marvel.gif\")",
+      "mask-repeat": "no-repeat",
+      "mask-position": "var(--tk-x) var(--tk-y)",
+      "mask-size": "0",
+      "animation": "tk-theme-gif-deadpool var(--tk-theme-duration, 1900ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+    },
+    "@keyframes tk-theme-gif-deadpool": {
+      "0%": {
+        "mask-size": "0",
+        "mask-position": "var(--tk-x) var(--tk-y)"
+      },
+      "10%, 90%": {
+        "mask-size": "50vmax",
+        "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 0.8675 / 2)"
+      },
+      "100%": {
+        "mask-size": "2000vmax",
+        "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 0.8675 / 2)"
+      }
+    }
+  },
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:item"
+}

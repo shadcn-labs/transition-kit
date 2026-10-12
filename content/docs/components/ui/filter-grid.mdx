@@ -1,0 +1,177 @@
+---
+title: "Filter Grid"
+description: "Filter a grid with chips and search. Matches reflow into place, the rest pop out, and new items pop in one after another."
+---
+
+import { FilterGridDemo } from "@/examples/ui/filter-grid-demo";
+
+<ComponentPreview name="ui/filter-grid" src="examples/ui/filter-grid-demo.tsx">
+  <FilterGridDemo />
+</ComponentPreview>
+
+A grid you can narrow down with filter chips and a search field. Items that still match glide to their new cells, the rest pop out, and items that come back pop in one after another.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/filter-grid" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Add the shadcn/ui Input component.</Step>
+
+```bash
+npx shadcn@latest add input
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/filter-grid.tsx"
+  title="components/transitions/filter-grid.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  FILTER_ALL,
+  FilterGrid,
+  FilterGridFilter,
+  FilterGridFilters,
+  FilterGridItems,
+  FilterGridSearch,
+} from "@/components/transitions/filter-grid";
+```
+
+```tsx
+const projects = [
+  { id: "brand", title: "Brand refresh", tags: ["Design"] },
+  { id: "api", title: "Public API v2", tags: ["Engineering"] },
+  { id: "pricing", title: "Pricing page", tags: ["Product"] },
+];
+
+<FilterGrid items={projects}>
+  <FilterGridFilters aria-label="Team">
+    <FilterGridFilter value={FILTER_ALL}>All</FilterGridFilter>
+    <FilterGridFilter value="Design">Design</FilterGridFilter>
+    <FilterGridFilter value="Engineering">Engineering</FilterGridFilter>
+    <FilterGridFilter value="Product">Product</FilterGridFilter>
+  </FilterGridFilters>
+  <FilterGridSearch placeholder="Search projects…" />
+  <FilterGridItems<(typeof projects)[number]>>
+    {(project) => <div className="rounded-lg border p-4">{project.title}</div>}
+  </FilterGridItems>
+</FilterGrid>;
+```
+
+Each item needs an `id` and a `tags` array. A filter value matches items whose `tags` include it; `FILTER_ALL` (`"all"`) shows everything. The search matches every word of the query against the item's string fields and tags, or pass your own `match`.
+
+Control the state from outside with `filter` / `onFilterChange` and `query` / `onQueryChange`:
+
+```tsx
+const [team, setTeam] = useState("all");
+
+<FilterGrid items={projects} filter={team} onFilterChange={setTeam}>
+  …
+</FilterGrid>;
+```
+
+## How it works
+
+- A chip changes the filter inside `startTransition`. Choosing the active chip does nothing. Search results change inside a transition too, but a query that leaves the same items visible updates without one.
+- Each visible item is a keyed `<ViewTransition>`. An item in both states glides to its new cell (`update`), an item that no longer matches pops out (`exit`), and an item that starts matching pops in (`enter`), all with `tk-morph tk-pop`.
+- Items also get `tk-delay-1` to `tk-delay-8` from their position, so the grid settles as a short cascade instead of all at once.
+- Hidden items are not rendered at all, so the grid reflows and the DOM stays small.
+- The active chip renders a highlight that only exists in the checked chip, under one name from `useTransitionNames()`. React pairs the highlight leaving one chip with the one appearing in the next (`share`), so it glides there. Every chip label is captured with `tk-top`, so labels paint above the moving highlight whichever way it travels.
+- The search waits until you stop typing for 150 ms (`debounce`) before it filters, so each pause runs one transition rather than one per keystroke. <kbd>Enter</kbd> filters right away.
+- `FilterGridItems` sets its `min-height` to the height of the unfiltered grid, measured from the column count, row height and gap. Filtering never moves the content below, and the empty state fades into that space. This assumes rows of equal height; pass `reserveSpace={false}` for uneven items.
+
+## API Reference
+
+### FilterGrid
+
+| Prop             | Type                                         | Default                      |
+| ---------------- | -------------------------------------------- | ---------------------------- |
+| `items`          | `{ id: string \| number; tags: string[] }[]` | -                            |
+| `filter`         | `string`                                     | -                            |
+| `defaultFilter`  | `string`                                     | `"all"`                      |
+| `onFilterChange` | `(filter: string) => void`                   | -                            |
+| `query`          | `string`                                     | -                            |
+| `defaultQuery`   | `string`                                     | `""`                         |
+| `onQueryChange`  | `(query: string) => void`                    | -                            |
+| `match`          | `(item: T, query: string) => boolean`        | words in string fields, tags |
+| `status`         | `(shown: number, total: number) => string`   | `"Showing 4 of 12"`          |
+
+### FilterGridFilter
+
+| Prop    | Type     | Default |
+| ------- | -------- | ------- |
+| `value` | `string` | -       |
+
+### FilterGridSearch
+
+Accepts all `<input>` props except `value`, `defaultValue` and `type`.
+
+| Prop       | Type     | Default |
+| ---------- | -------- | ------- |
+| `debounce` | `number` | `150`   |
+
+### FilterGridItems
+
+| Prop           | Type                                    | Default              |
+| -------------- | --------------------------------------- | -------------------- |
+| `children`     | `(item: T, index: number) => ReactNode` | -                    |
+| `empty`        | `ReactNode`                             | `"Nothing matches."` |
+| `reserveSpace` | `boolean`                               | `true`               |
+
+## Accessibility
+
+- The chips follow the WAI-ARIA radio group pattern: `radiogroup` with `radio` buttons and `aria-checked`. Only the checked chip is in the tab order. Give `FilterGridFilters` an `aria-label` that names what it filters.
+- <kbd>←</kbd> / <kbd>→</kbd> (or <kbd>↑</kbd> / <kbd>↓</kbd>) select the
+  previous or next chip, <kbd>Home</kbd> / <kbd>End</kbd> the first or last.
+- The search is a labelled `type="search"` input. <kbd>Escape</kbd> clears it, and the clear button returns focus to the input.
+- A polite live region announces the result count after each change, for example "Showing 4 of 12".
+- The grid is a list (`ul` / `li`); the empty state is announced through the live region and shown in place of the items.
+- With `prefers-reduced-motion`, nothing travels; items crossfade briefly.

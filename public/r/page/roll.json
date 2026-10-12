@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/roll",
+  "title": "Roll",
+  "description": "The old page rolls away like a scroll as the new one unrolls.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-image-pair(.tk-page-roll.tk-page-exit)": {
+      "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+      "--tk-page-top": "max(0px, var(--tk-exit-cy) - 50vh)",
+      "--tk-page-bottom": "min(100%, var(--tk-exit-cy) + 50vh)"
+    },
+    "::view-transition-image-pair(.tk-page-roll.tk-page-enter)": {
+      "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+      "--tk-page-top": "max(0px, var(--tk-enter-cy) - 50vh)",
+      "--tk-page-bottom": "min(100%, var(--tk-enter-cy) + 50vh)"
+    },
+    "::view-transition-old(.tk-page-roll), ::view-transition-new(.tk-page-roll)": {
+      "--tk-page-dir": "1",
+      "--tk-page-shift": "calc((var(--tk-page-bottom) - var(--tk-page-top)) / -5)",
+      "transform-origin": "var(--tk-page-x) var(--tk-page-top)"
+    },
+    "::view-transition-old(.tk-page-roll.tk-page-back), ::view-transition-new(.tk-page-roll.tk-page-back)": {
+      "--tk-page-dir": "-1",
+      "transform-origin": "var(--tk-page-x) var(--tk-page-bottom)"
+    },
+    "::view-transition-old(.tk-page-roll)": {
+      "animation": "tk-page-roll-out var(--tk-page-duration, 550ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+    },
+    "::view-transition-new(.tk-page-roll)": {
+      "animation": "tk-page-roll-in var(--tk-page-duration, 550ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+    },
+    "@keyframes tk-page-roll-out": {
+      "from": {
+        "transform": "scaleY(1) translateY(0)",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "scaleY(0) translateY(calc(var(--tk-page-shift) * var(--tk-page-dir)))",
+        "opacity": "0"
+      }
+    },
+    "@keyframes tk-page-roll-in": {
+      "from": {
+        "transform": "scaleY(0) translateY(calc(var(--tk-page-shift) * var(--tk-page-dir)))",
+        "opacity": "0"
+      },
+      "to": {
+        "transform": "scaleY(1) translateY(0)",
+        "opacity": "1"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

@@ -1,0 +1,96 @@
+---
+title: "Star Reveal"
+description: "An expanding star-shaped mask reveals the new theme."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/star-reveal">
+  <ThemeTransitionDemo transition="star-reveal" />
+</ComponentPreview>
+
+It starts at the transition origin: the pointer when you pass the click event, the centre of a control activated from the keyboard, or the centre of the viewport when you pass no `origin`.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/star-reveal" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/star-reveal.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="star-reveal">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) => toggleTheme({ transition: "star-reveal", origin: event })}
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `1000ms` with `ease-in` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="star-reveal"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 1000ms)` and `var(--tk-theme-easing, ease-in)`.
+
+Pass the click event as `origin` to start at the pointer, or an element to start at its centre:
+
+```tsx
+toggleTheme({ origin: event });
+setTheme("dark", { origin: buttonElement });
+```

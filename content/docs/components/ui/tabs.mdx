@@ -1,0 +1,120 @@
+---
+title: "Tabs"
+description: "The active pill glides to the selected tab and the panel slides in the direction you moved."
+---
+
+import { TabsDemo } from "@/examples/ui/tabs-demo";
+
+<ComponentPreview name="ui/tabs" src="examples/ui/tabs-demo.tsx">
+  <TabsDemo />
+</ComponentPreview>
+
+Tabs whose active indicator glides from the old tab to the new one, while the panel slides out and the next one slides in from the side you moved toward. Comes in a `pill` and an `underline` variant.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/tabs" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/tabs.tsx"
+  title="components/transitions/tabs.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/transitions/tabs";
+```
+
+```tsx
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings.</TabsContent>
+  <TabsContent value="password">Change your password.</TabsContent>
+</Tabs>
+```
+
+Use `variant="underline"` for a line under the active tab instead of a pill.
+
+## How it works
+
+- Selecting a tab sets the value inside `startTransition` and tags it with the `FORWARD` or `BACK` transition type from the core, depending on whether the new tab comes after or before the old one. Selecting the active tab does nothing and starts no transition.
+- The indicator is rendered only inside the active trigger, wrapped in a `<ViewTransition>` with one name from `useTransitionNames()`. React pairs the indicator leaving the old trigger with the one appearing in the new trigger (`share`), so it glides there with `tk-morph`.
+- In the `pill` variant each label is its own `<ViewTransition>` with `tk-top`, which paints it above the gliding pill so the pill never covers text on its way past. React only captures a boundary whose content changed, so each label carries `data-active-value`, which changes with every selection.
+- Only the active panel is mounted. Every panel shares one name, so the leaving and entering panels pair into one group whose box morphs to the new height, while the class picked by the transition type (`tk-slide` with `tk-forward` or `tk-back`) slides the old content out and the new content in.
+- Names are unique per `<Tabs>`, so several tab sets on one page never pair with each other.
+
+## API Reference
+
+### Tabs
+
+| Prop            | Type                      | Default  |
+| --------------- | ------------------------- | -------- |
+| `value`         | `string`                  | -        |
+| `defaultValue`  | `string`                  | `""`     |
+| `onValueChange` | `(value: string) => void` | -        |
+| `variant`       | `"pill" \| "underline"`   | `"pill"` |
+
+### TabsTrigger / TabsContent
+
+| Prop    | Type     | Default |
+| ------- | -------- | ------- |
+| `value` | `string` | -       |
+
+`TabsList` renders the `tablist` `div`. Other props are spread onto each part's element; calling `event.preventDefault()` in a trigger's `onClick` skips the change.
+
+## Accessibility
+
+- Implements the WAI-ARIA tabs pattern: `tablist`, `tab` and `tabpanel` roles with `aria-selected`, `aria-controls` and `aria-labelledby`.
+- <kbd>←</kbd> / <kbd>→</kbd> move between tabs and select them, <kbd>Home</kbd>
+  / <kbd>End</kbd> jump to the first and last tab. Only the active tab is in the
+  tab order, and the panel itself is focusable.
+- With `prefers-reduced-motion`, nothing travels; the indicator and panel crossfade briefly.

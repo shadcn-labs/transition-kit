@@ -1,0 +1,162 @@
+---
+title: "Kanban Board"
+description: "Drag cards between columns, or move them with the keyboard. The card glides into place, its neighbours make room and the column counts roll."
+---
+
+import { KanbanBoardDemo } from "@/examples/ui/kanban-board-demo";
+
+<ComponentPreview
+  name="ui/kanban-board"
+  src="examples/ui/kanban-board-demo.tsx"
+>
+  <KanbanBoardDemo />
+</ComponentPreview>
+
+A board of columns and cards. Drag a card, or pick it up with the keyboard, and it glides to its new spot while the neighbouring cards make room and the column counts roll.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/kanban-board" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/kanban-board.tsx"
+  title="components/transitions/kanban-board.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  KanbanBoard,
+  KanbanCard,
+  KanbanCardActions,
+  KanbanColumn,
+} from "@/components/transitions/kanban-board";
+```
+
+```tsx
+const columns = [
+  { id: "todo", title: "Todo" },
+  { id: "done", title: "Done" },
+];
+
+const [cards, setCards] = useState([
+  { id: "1", column: "todo", title: "Write the changelog" },
+  { id: "2", column: "done", title: "Ship the release" },
+]);
+
+<KanbanBoard columns={columns} cards={cards} onCardsChange={setCards}>
+  {columns.map((column) => (
+    <KanbanColumn key={column.id} value={column.id}>
+      {(card) => (
+        <KanbanCard>
+          {card.title}
+          <KanbanCardActions />
+        </KanbanCard>
+      )}
+    </KanbanColumn>
+  ))}
+</KanbanBoard>;
+```
+
+Cards are one flat array. Each card names its `column`, and its order inside that column is its order in the array. Every move hands you the whole new array, so saving it is one `setCards` (or one request). Leave out `cards` and pass `defaultCards` to let the board keep the state itself.
+
+## How it works
+
+- Every move runs inside `startTransition`. Each card is a `<ViewTransition>` named after its `id` with `useTransitionNames()`, so the moved card travels to its new place while the cards around it slide to make room (`tk-morph`).
+- A card that changes column unmounts from one list and mounts in the other. Because both share the name, React pairs them (`share`) and the card glides across instead of disappearing and reappearing. The moved card carries `tk-top`, so it stays above the cards it passes.
+- On drop, the card is parked under the pointer just before React takes the old snapshot, and released inside the update. It glides from where you let go, not from where you picked it up.
+- A move between columns adds two transition types, one for the column the card left and one for the column it entered. Each column count is a `<ViewTransition>` whose `update` class depends on those types: `tk-roll` with `tk-down` in the column that lost a card and `tk-up` in the one that gained it. Counts that didn't change hold still.
+- Keyboard moves apply to the board right away, so holding an arrow key moves the card one step per press, and a new move starts from wherever the running animation is.
+- Names and transition types come from `useTransitionNames()`, so several boards on one page never pair with each other. Drags are only accepted by the board they started in.
+
+## API Reference
+
+### KanbanBoard
+
+| Prop            | Type                   | Default |
+| --------------- | ---------------------- | ------- |
+| `columns`       | `KanbanColumnData[]`   | -       |
+| `cards`         | `T[]`                  | -       |
+| `defaultCards`  | `T[]`                  | `[]`    |
+| `onCardsChange` | `(cards: T[]) => void` | -       |
+
+`KanbanColumnData` is `{ id: string; title: string }`. `T` extends `KanbanCardData`, which is `{ id: string; column: string; title: string }`. Add any other fields your cards need. `title` is used for the accessible name and for announcements.
+
+### KanbanColumn
+
+| Prop       | Type                     | Default |
+| ---------- | ------------------------ | ------- |
+| `value`    | `string`                 | -       |
+| `children` | `(card: T) => ReactNode` | -       |
+
+`value` is a column `id` from `columns`. The column renders its title, the card count and an `<ul>`. Return a `<KanbanCard>` from `children`.
+
+### KanbanCard
+
+A `<li>` that can be dragged and focused. Takes any `li` props. Its state is exposed as `data-state="idle" | "lifted" | "dragging"`.
+
+### KanbanCardActions
+
+Previous and next column buttons for the card they sit in. They fade in on hover and focus and are always visible on touch screens. Place them anywhere inside `<KanbanCard>`.
+
+## Accessibility
+
+- Each card is a list item in a labelled column `section`. A card is focusable as a button named after its `title`, with the role description "draggable card" and usage instructions attached through `aria-describedby`.
+- <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> move focus between cards
+  and columns.
+- <kbd>Space</kbd> or <kbd>Enter</kbd> picks a card up (`aria-pressed="true"`).
+  While it is picked up, the arrow keys move it within its column and to the
+  neighbouring columns, <kbd>Space</kbd> or <kbd>Enter</kbd> drops it, and
+  <kbd>Escape</kbd> puts it back where it started. Tabbing away drops it where
+  it is.
+- Focus follows the card as it moves, including when it changes column.
+- Each pick up, move, drop and cancel is announced in an `aria-live` region, for example "Fix Safari focus ring moved to In progress, position 1 of 3."
+- The move buttons are named "Move [card] to [column]". At the first and last column the matching button is disabled and hidden, but still takes up its space, so nothing shifts.
+- With `prefers-reduced-motion`, cards don't travel; they crossfade briefly in place.

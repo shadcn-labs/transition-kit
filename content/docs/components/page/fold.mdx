@@ -1,0 +1,83 @@
+---
+title: "Fold"
+description: "The old page folds inward along its centre as the new one emerges."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/fold">
+  <PageTransitionDemo transition="fold" />
+</ComponentPreview>
+
+The old page folds inward along its vertical centre line, in front of the new one, which grows in from 90% behind it.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/fold" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/fold.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="fold">
+  {children}
+</PageTransition>
+```
+
+Navigations that run in a React Transition animate: router links, or any update wrapped in `navigateWithTransition`. The style looks the same in both directions.
+
+## Customization
+
+The style runs for `600ms` with `ease-in-out` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="fold"
+  duration={1200}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 600ms)` and `var(--tk-page-easing, ease-in-out)`.
+
+It pivots around the centre of the page's visible part, so long scrolled pages and pages inside a smaller frame both animate around what the user sees.
+
+The 3D depth comes from `perspective: 1200px` on `::view-transition-image-pair(.tk-page-fold)`; lower it for a stronger effect.
+
+The old page is drawn on top of the new one with `::view-transition-group(.tk-page-fold.tk-page-exit) { z-index: 1; }`.

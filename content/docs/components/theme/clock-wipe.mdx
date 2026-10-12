@@ -1,0 +1,89 @@
+---
+title: "Clock Wipe"
+description: "A wedge sweeps clockwise around the viewport centre, like a clock hand."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/clock-wipe">
+  <ThemeTransitionDemo transition="clock-wipe" />
+</ComponentPreview>
+
+A hand sweeps clockwise around the centre of the viewport, starting at twelve o'clock. It is anchored to the viewport, so it ignores `origin` and always covers exactly what is on screen, even when the page is scrolled.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/clock-wipe" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/clock-wipe.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="clock-wipe">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) => toggleTheme({ transition: "clock-wipe", origin: event })}
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `1100ms` with `linear` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="clock-wipe"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 1100ms)` and `var(--tk-theme-easing, linear)`.

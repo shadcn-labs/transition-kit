@@ -1,0 +1,341 @@
+---
+title: "Theme Transition"
+description: "ThemeTransitionProvider and useThemeTransition: theme state animated by React's <ViewTransition>."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/theme-transition">
+  <ThemeTransitionDemo transition="circle-reveal" />
+</ComponentPreview>
+
+The core every theme style and toggle builds on. `ThemeTransitionProvider` owns the theme (`light`, `dark` or `system`), stores it in `localStorage`, sets the `dark` class on `<html>`, and animates every change with React's `<ViewTransition>`. Styles are plain CSS; pick one per provider or per change.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/theme-transition" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Make sure your project uses React 19.3 or later.</Step>
+
+```bash
+npm install react@latest react-dom@latest
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+Then add at least one style, for example [Circle Reveal](/docs/components/theme/circle-reveal):
+
+<InstallCommand name="theme/circle-reveal" />
+
+## Setup
+
+Wrap everything the user sees in `ThemeTransitionProvider`: the element it renders is what gets snapshotted. Render `ThemeTransitionScript` in `<head>` so the stored theme is applied before the first paint.
+
+<Tabs defaultValue="tanstack">
+
+<TabsList>
+  <TabsTrigger value="tanstack">TanStack Start</TabsTrigger>
+  <TabsTrigger value="next">Next.js</TabsTrigger>
+  <TabsTrigger value="vite">Vite</TabsTrigger>
+</TabsList>
+
+<TabsContent value="tanstack">
+
+```tsx title="src/routes/__root.tsx"
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
+
+import {
+  ThemeTransitionProvider,
+  ThemeTransitionScript,
+} from "@/components/transitions/theme-transition";
+
+const RootDocument = () => (
+  <html lang="en" suppressHydrationWarning>
+    <head>
+      <HeadContent />
+      <ThemeTransitionScript />
+    </head>
+    <body>
+      <ThemeTransitionProvider transition="circle-reveal">
+        <Outlet />
+      </ThemeTransitionProvider>
+      <Scripts />
+    </body>
+  </html>
+);
+
+export const Route = createRootRoute({ component: RootDocument });
+```
+
+</TabsContent>
+
+<TabsContent value="next">
+
+```tsx title="app/layout.tsx"
+import {
+  ThemeTransitionProvider,
+  ThemeTransitionScript,
+} from "@/components/transitions/theme-transition";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeTransitionScript />
+      </head>
+      <body>
+        <ThemeTransitionProvider transition="circle-reveal">
+          {children}
+        </ThemeTransitionProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+The App Router renders with the React build bundled in Next.js; use a Next.js version whose React includes `<ViewTransition>` and `addTransitionType`.
+
+</TabsContent>
+
+<TabsContent value="vite">
+
+```tsx title="src/main.tsx"
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import { ThemeTransitionProvider } from "@/components/transitions/theme-transition";
+import { App } from "./app";
+import "./index.css";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <ThemeTransitionProvider transition="circle-reveal">
+      <App />
+    </ThemeTransitionProvider>
+  </StrictMode>
+);
+```
+
+A client-only app renders after the page has painted, so apply the stored theme with an inline script in `index.html` instead of `ThemeTransitionScript`:
+
+```html title="index.html"
+<script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("theme") || "system";
+      var dark =
+        theme === "dark" ||
+        (theme === "system" &&
+          matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.classList.add(dark ? "dark" : "light");
+      document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    } catch (e) {}
+  })();
+</script>
+```
+
+</TabsContent>
+
+</Tabs>
+
+The provider renders a `<div>` with `bg-background text-foreground min-h-svh`, so the snapshot is opaque and covers the viewport. Tailwind's `dark:` variant works as usual: the core toggles the `dark` class on `<html>`.
+
+## Usage
+
+```tsx
+import { useThemeTransition } from "@/components/transitions/theme-transition";
+
+export const ThemeButton = () => {
+  const { resolvedTheme, setTheme, toggleTheme } = useThemeTransition();
+
+  return (
+    <>
+      {/* The provider's style, starting at the pointer. */}
+      <button type="button" onClick={(event) => toggleTheme({ origin: event })}>
+        {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+      </button>
+
+      {/* Another style for this change only. */}
+      <button
+        type="button"
+        onClick={() => setTheme("system", { transition: "diagonal-wipe" })}
+      >
+        System
+      </button>
+    </>
+  );
+};
+```
+
+Or use a ready-made control: [Theme Toggle Button](/docs/components/theme/theme-toggle-button), [Theme Toggle Switch](/docs/components/theme/theme-toggle-switch), [Theme Switcher](/docs/components/theme/theme-switcher) or [Animated Theme Toggler](/docs/components/theme/animated-theme-toggler).
+
+## API Reference
+
+### ThemeTransitionProvider
+
+| Prop           | Type                            | Default           |
+| -------------- | ------------------------------- | ----------------- |
+| `transition`   | `string`                        | `"circle-reveal"` |
+| `defaultTheme` | `"light" \| "dark" \| "system"` | `"system"`        |
+| `storageKey`   | `string`                        | `"theme"`         |
+| `duration`     | `number`                        | -                 |
+| `easing`       | `string`                        | -                 |
+| `children`     | `ReactNode`                     | -                 |
+| `...props`     | `ComponentProps<"div">`         | -                 |
+
+- `transition` is the style slug used when `setTheme` and `toggleTheme` are called without one. Install the style first.
+- `duration` (milliseconds) and `easing` override the timing of every style. Without them, each style uses its own.
+- The theme is kept in sync across tabs through the `storage` event, and `system` follows `prefers-color-scheme`.
+
+### ThemeTransitionScript
+
+| Prop           | Type                            | Default    |
+| -------------- | ------------------------------- | ---------- |
+| `storageKey`   | `string`                        | `"theme"`  |
+| `defaultTheme` | `"light" \| "dark" \| "system"` | `"system"` |
+| `nonce`        | `string`                        | -          |
+
+Use the same `storageKey` and `defaultTheme` as the provider. `getThemeScript(storageKey, defaultTheme)` returns the script's source if you need to inline it yourself.
+
+### useThemeTransition
+
+Returns the theme state. Must be called inside `ThemeTransitionProvider`.
+
+| Property        | Type                                                                |
+| --------------- | ------------------------------------------------------------------- |
+| `mounted`       | `boolean`, `false` on the server and until the stored theme is read |
+| `theme`         | `"light" \| "dark" \| "system"`                                     |
+| `resolvedTheme` | `"light" \| "dark"`                                                 |
+| `setTheme`      | `(theme: Theme, options?: ThemeTransitionOptions) => void`          |
+| `toggleTheme`   | `(options?: ThemeTransitionOptions) => void`                        |
+
+### ThemeTransitionOptions
+
+| Option       | Type                                              | Default                     |
+| ------------ | ------------------------------------------------- | --------------------------- |
+| `transition` | `string`                                          | The provider's `transition` |
+| `origin`     | `{ clientX: number; clientY: number } \| Element` | The centre of the viewport  |
+
+Pass the click event as `origin` to start at the pointer. Keyboard activation reports a click at `(0, 0)`, so the core uses the centre of `event.currentTarget` instead. Pass an element to start at its centre.
+
+## How it works
+
+The provider follows React's pattern for animating a single mutation:
+
+```tsx
+<ViewTransition
+  default="none"
+  update={{ "theme-transition": "tk-theme tk-theme-<style>", default: "none" }}
+>
+  <div data-theme={resolvedTheme}>
+    <ViewTransition update="none">{children}</ViewTransition>
+  </div>
+</ViewTransition>
+```
+
+`setTheme` writes the transition geometry to `<html>`, then runs:
+
+```tsx
+startTransition(() => {
+  addTransitionType("theme-transition");
+  setState({ theme, transition });
+});
+```
+
+React starts a view transition for the update. The outer `<ViewTransition>` only reacts to the `theme-transition` type, and the inner one opts the children out, so the `data-theme` change on the provider's element is the only thing that animates: other transitions in your app never trigger it. A layout effect flips the `light` / `dark` class on `<html>` inside React's update, before the browser captures the new theme.
+
+The old and new themes become `::view-transition-old` and `::view-transition-new` snapshots of the provider's element, with the view transition classes `tk-theme` and `tk-theme-<style>`. Each style animates them in CSS.
+
+### Geometry variables
+
+The snapshot is the provider's element, which can be taller than the viewport and scrolled. The core writes these variables to `<html>` before every change, in pixels, in the element's coordinate space:
+
+| Variable                                   | Meaning                                                                          |
+| ------------------------------------------ | -------------------------------------------------------------------------------- |
+| `--tk-x`, `--tk-y`                         | Transition origin: the click point, the control's centre or the viewport centre. |
+| `--tk-cx`, `--tk-cy`                       | Viewport centre.                                                                 |
+| `--tk-left`, `--tk-top`                    | Viewport top-left corner. The viewport spans `--tk-left` to `--tk-left + 100vw`. |
+| `--tk-r`                                   | Distance from the origin to the farthest viewport corner.                        |
+| `--tk-theme-duration`, `--tk-theme-easing` | The provider's `duration` and `easing`, when set.                                |
+
+## Writing a custom style
+
+A style is a few rules targeting its own class. Position everything with the geometry variables, never with `center`, `50%` or viewport units relative to the snapshot, and use the duration and easing variables with your own fallbacks:
+
+```css title="styles/globals.css"
+::view-transition-old(.tk-theme-iris) {
+  animation: none;
+}
+
+::view-transition-new(.tk-theme-iris) {
+  animation: tk-theme-iris var(--tk-theme-duration, 800ms)
+    var(--tk-theme-easing, ease-out) both;
+}
+
+@keyframes tk-theme-iris {
+  from {
+    clip-path: circle(0 at var(--tk-x) var(--tk-y));
+  }
+  to {
+    clip-path: circle(var(--tk-r) at var(--tk-x) var(--tk-y));
+  }
+}
+```
+
+```tsx
+toggleTheme({ transition: "iris", origin: event });
+```
+
+The old snapshot already sits under the new one, so most styles only animate `::view-transition-new`. To animate differently into dark and light, prefix the selector with `.dark`: the class is on `<html>` while the transition runs. Reduced motion is handled by the core CSS.
+
+## Caveats
+
+- **React 19.3.** The core imports `ViewTransition` and `addTransitionType` from `react`.
+- **Unsupported browsers** switch the theme instantly; nothing else changes.
+- **Reduced motion.** With `prefers-reduced-motion: reduce` the theme switches instantly.
+- **Portals.** Content rendered outside the provider's element (dialogs, popovers and toasts portalled to `<body>`) is not part of the snapshot and switches instantly.
+- **Only theme changes animate.** Other updates inside the provider never trigger a theme style; only `setTheme` and `toggleTheme` do.

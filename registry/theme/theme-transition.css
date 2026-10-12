@@ -1,0 +1,17 @@
+/*
+ * Shared rules for every theme transition style. React adds
+ * `tk-theme tk-theme-<style>` as the view-transition-class of the provider's
+ * snapshot when the theme changes.
+ */
+::view-transition-old(.tk-theme),
+::view-transition-new(.tk-theme) {
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(.tk-theme),
+  ::view-transition-old(.tk-theme),
+  ::view-transition-new(.tk-theme) {
+    animation: none !important;
+  }
+}

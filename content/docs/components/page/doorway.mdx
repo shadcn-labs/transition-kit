@@ -1,0 +1,87 @@
+---
+title: "Doorway"
+description: "The old page swings away on a hinge, revealing the new one."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/doorway">
+  <PageTransitionDemo transition="doorway" />
+</ComponentPreview>
+
+The old page swings open like a door hinged on its left edge, revealing the new page behind it. Backward navigations hinge the door on the right.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/doorway" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/doorway.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="doorway">
+  {children}
+</PageTransition>
+```
+
+Mark backward navigations with `direction: "back"` and the style runs the other way:
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## Customization
+
+The style runs for `600ms`; the old page uses `ease-in` and the new one `ease-out`. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it for both pages:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="doorway"
+  duration={1200}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 600ms)` and `var(--tk-page-easing, ease-in)` (and `ease-out` for the new page).
+
+The hinge is the edge of the page's visible part, vertically centred on it.
+
+The 3D depth comes from `perspective: 1200px` on `::view-transition-image-pair(.tk-page-doorway)`; lower it for a stronger effect.
+
+The old page is drawn on top of the new one with `::view-transition-group(.tk-page-doorway.tk-page-exit) { z-index: 1; }`.

@@ -1,0 +1,91 @@
+---
+title: "Venetian Blinds"
+description: "Horizontal slats open one by one, like blinds."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/venetian-blinds">
+  <ThemeTransitionDemo transition="venetian-blinds" />
+</ComponentPreview>
+
+Nine slats across the viewport open together, like blinds. It is anchored to the viewport, so it ignores `origin` and always covers exactly what is on screen, even when the page is scrolled.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/venetian-blinds" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/venetian-blinds.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="venetian-blinds">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "venetian-blinds", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `700ms` with `ease-in-out` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="venetian-blinds"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 700ms)` and `var(--tk-theme-easing, ease-in-out)`.

@@ -1,0 +1,92 @@
+/* Venetian Blinds: horizontal slats across the viewport open like blinds. */
+::view-transition-old(.tk-theme-venetian-blinds) {
+  animation: none;
+}
+
+::view-transition-new(.tk-theme-venetian-blinds) {
+  animation: tk-theme-venetian-blinds var(--tk-theme-duration, 700ms)
+    var(--tk-theme-easing, ease-in-out) both;
+}
+
+@keyframes tk-theme-venetian-blinds {
+  from {
+    clip-path: polygon(
+      var(--tk-left) var(--tk-top),
+      calc(var(--tk-left) + 100vw) var(--tk-top),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 2vh),
+      var(--tk-left) calc(var(--tk-top) + 2vh),
+      var(--tk-left) calc(var(--tk-top) + 12vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 12vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 14vh),
+      var(--tk-left) calc(var(--tk-top) + 14vh),
+      var(--tk-left) calc(var(--tk-top) + 24vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 24vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 26vh),
+      var(--tk-left) calc(var(--tk-top) + 26vh),
+      var(--tk-left) calc(var(--tk-top) + 36vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 36vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 38vh),
+      var(--tk-left) calc(var(--tk-top) + 38vh),
+      var(--tk-left) calc(var(--tk-top) + 48vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 48vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 50vh),
+      var(--tk-left) calc(var(--tk-top) + 50vh),
+      var(--tk-left) calc(var(--tk-top) + 60vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 60vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 62vh),
+      var(--tk-left) calc(var(--tk-top) + 62vh),
+      var(--tk-left) calc(var(--tk-top) + 72vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 72vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 74vh),
+      var(--tk-left) calc(var(--tk-top) + 74vh),
+      var(--tk-left) calc(var(--tk-top) + 84vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 84vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 86vh),
+      var(--tk-left) calc(var(--tk-top) + 86vh),
+      var(--tk-left) calc(var(--tk-top) + 96vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 96vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 98vh),
+      var(--tk-left) calc(var(--tk-top) + 98vh)
+    );
+  }
+  to {
+    clip-path: polygon(
+      var(--tk-left) var(--tk-top),
+      calc(var(--tk-left) + 100vw) var(--tk-top),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 10vh),
+      var(--tk-left) calc(var(--tk-top) + 10vh),
+      var(--tk-left) calc(var(--tk-top) + 10vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 10vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 22vh),
+      var(--tk-left) calc(var(--tk-top) + 22vh),
+      var(--tk-left) calc(var(--tk-top) + 22vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 22vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 34vh),
+      var(--tk-left) calc(var(--tk-top) + 34vh),
+      var(--tk-left) calc(var(--tk-top) + 34vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 34vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 46vh),
+      var(--tk-left) calc(var(--tk-top) + 46vh),
+      var(--tk-left) calc(var(--tk-top) + 46vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 46vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 58vh),
+      var(--tk-left) calc(var(--tk-top) + 58vh),
+      var(--tk-left) calc(var(--tk-top) + 58vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 58vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 70vh),
+      var(--tk-left) calc(var(--tk-top) + 70vh),
+      var(--tk-left) calc(var(--tk-top) + 70vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 70vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 82vh),
+      var(--tk-left) calc(var(--tk-top) + 82vh),
+      var(--tk-left) calc(var(--tk-top) + 82vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 82vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 94vh),
+      var(--tk-left) calc(var(--tk-top) + 94vh),
+      var(--tk-left) calc(var(--tk-top) + 94vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 94vh),
+      calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh),
+      var(--tk-left) calc(var(--tk-top) + 100vh)
+    );
+  }
+}

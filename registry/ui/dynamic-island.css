@@ -1,0 +1,26 @@
+/*
+ * Dynamic Island: a surface that resizes without stretching its content.
+ * Change the corner radius with `:root { --tk-ui-dynamic-island-radius: 1.5rem; }`.
+ */
+
+/* Both the surface and the content are clipped to the island's rounded box. */
+::view-transition-image-pair(.tk-dynamic-island-surface),
+::view-transition-image-pair(.tk-dynamic-island-content) {
+  --tk-ui-radius: var(--tk-ui-dynamic-island-radius, 2rem);
+}
+
+/* The surface snapshot is a flat rectangle, so filling the box is lossless. */
+::view-transition-old(.tk-dynamic-island-surface),
+::view-transition-new(.tk-dynamic-island-surface) {
+  block-size: 100%;
+}
+
+/* Content keeps its own size and stays centred while the box grows around it. */
+::view-transition-old(.tk-dynamic-island-content),
+::view-transition-new(.tk-dynamic-island-content) {
+  inline-size: auto;
+  block-size: auto;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+}

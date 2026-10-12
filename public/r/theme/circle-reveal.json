@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/circle-reveal",
+  "title": "Circle Reveal",
+  "description": "An expanding circle reveals the new theme from the click point.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-theme-circle-reveal)": {
+      "animation": "none"
+    },
+    "::view-transition-new(.tk-theme-circle-reveal)": {
+      "animation": "tk-theme-circle-reveal var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, ease-in-out) both"
+    },
+    "@keyframes tk-theme-circle-reveal": {
+      "from": {
+        "clip-path": "circle(0 at var(--tk-x) var(--tk-y))"
+      },
+      "to": {
+        "clip-path": "circle(var(--tk-r) at var(--tk-x) var(--tk-y))"
+      }
+    }
+  },
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:item"
+}

@@ -1,0 +1,161 @@
+---
+title: "Layout Switcher"
+description: "Toggle a collection between grid and list. Every card, avatar, name and stat glides to its new spot."
+---
+
+import { LayoutSwitcherDemo } from "@/examples/ui/layout-switcher-demo";
+
+<ComponentPreview
+  name="ui/layout-switcher"
+  src="examples/ui/layout-switcher-demo.tsx"
+>
+  <LayoutSwitcherDemo />
+</ComponentPreview>
+
+A collection that switches between a grid of cards and a list of rows. Each card turns into its row in place: the avatar, the name, the role and the stat all glide to where they sit in the other layout.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/layout-switcher" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/layout-switcher.tsx"
+  title="components/transitions/layout-switcher.tsx"
+/>
+
+<Step>Add the layout switcher styles to your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/layout-switcher.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  LayoutSwitcher,
+  LayoutSwitcherItem,
+  LayoutSwitcherItemContent,
+  LayoutSwitcherItemDescription,
+  LayoutSwitcherItemMedia,
+  LayoutSwitcherItemMeta,
+  LayoutSwitcherItems,
+  LayoutSwitcherItemTitle,
+  LayoutSwitcherToggle,
+} from "@/components/transitions/layout-switcher";
+```
+
+```tsx
+<LayoutSwitcher defaultLayout="grid">
+  <LayoutSwitcherToggle />
+  <LayoutSwitcherItems>
+    {members.map((member) => (
+      <LayoutSwitcherItem key={member.id} value={member.id}>
+        <LayoutSwitcherItemMedia>
+          <img src={member.avatar} alt="" />
+        </LayoutSwitcherItemMedia>
+        <LayoutSwitcherItemContent>
+          <LayoutSwitcherItemTitle>{member.name}</LayoutSwitcherItemTitle>
+          <LayoutSwitcherItemDescription>
+            {member.role}
+          </LayoutSwitcherItemDescription>
+        </LayoutSwitcherItemContent>
+        <LayoutSwitcherItemMeta>{member.pulls} merged</LayoutSwitcherItemMeta>
+      </LayoutSwitcherItem>
+    ))}
+  </LayoutSwitcherItems>
+</LayoutSwitcher>
+```
+
+Every part reads the current layout, so the same markup renders a card in the grid and a row in the list. Each part also carries `data-layout="grid"` or `data-layout="list"`, so you can restyle one layout with classes like `data-[layout=list]:py-2`.
+
+## How it works
+
+- The toggle changes the layout inside `startTransition`. Selecting the current layout does nothing.
+- Each item and each of its parts (media, title, description, meta) is wrapped in a `<ViewTransition>` named after the item's `value` with `useTransitionNames()`. A part keeps its name in both layouts, so it glides from its old box to its new one, even if you render the two layouts in different places.
+- The card itself is drawn on the moving `::view-transition-group` by `layout-switcher.css` instead of stretching a screenshot of it. Corners and the border stay crisp while a card turns into a row. If you restyle items, set `--tk-ui-layout-switcher-background`, `--tk-ui-layout-switcher-border` and `--tk-ui-layout-switcher-radius` on `:root` to match.
+- Title, description and meta use `tk-text`, so the text keeps its size and crossfades in place instead of stretching with its box. They shrink to fit their text, so the old and new snapshots line up.
+- Groups paint in DOM order, so an item's parts are never covered by its own card, and later cards pass over earlier ones as a whole.
+- `LayoutSwitcherItems` is a `<ViewTransition>` with `tk-clip`, around everything else. Give it a background and it grows or shrinks smoothly with the content.
+- Content inside an item that is not one of the parts is hidden for the length of the glide. Put anything that should stay visible inside a part.
+- The toggle's pill is rendered only in the selected option, under one name, so React pairs the old and new pill and it glides between them. The icons use `tk-top`, so the pill never covers them.
+
+## API Reference
+
+### LayoutSwitcher
+
+| Prop             | Type                                 | Default  |
+| ---------------- | ------------------------------------ | -------- |
+| `layout`         | `"grid" \| "list"`                   | -        |
+| `defaultLayout`  | `"grid" \| "list"`                   | `"grid"` |
+| `onLayoutChange` | `(layout: "grid" \| "list") => void` | -        |
+
+### LayoutSwitcherToggle
+
+| Prop     | Type                             | Default                          |
+| -------- | -------------------------------- | -------------------------------- |
+| `labels` | `{ grid: string; list: string }` | `{ grid: "Grid", list: "List" }` |
+
+### LayoutSwitcherItem
+
+| Prop    | Type     | Default |
+| ------- | -------- | ------- |
+| `value` | `string` | -       |
+
+`value` must be unique within the switcher and stay the same between renders. `LayoutSwitcherItems` renders a `ul`, `LayoutSwitcherItem` an `li`, and the other parts a `div`; all accept the props of the element they render.
+
+## Accessibility
+
+- The toggle is a `radiogroup` labelled "Layout" with one `radio` per layout and `aria-checked` on the selected one.
+- <kbd>←</kbd> / <kbd>→</kbd> (or <kbd>↑</kbd> / <kbd>↓</kbd>) switch the layout
+  and move focus with it; <kbd>Home</kbd> / <kbd>End</kbd> jump to the first and
+  last option. Only the selected option is in the tab order.
+- Items are a real list, and the DOM order of the parts is the same in both layouts, so screen readers read each item the same way whatever the layout.
+- With `prefers-reduced-motion`, nothing travels; the parts crossfade briefly in their new places.

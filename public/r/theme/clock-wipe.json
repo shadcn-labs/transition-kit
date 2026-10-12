@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/clock-wipe",
+  "title": "Clock Wipe",
+  "description": "A wedge sweeps clockwise around the viewport centre, like a clock hand.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-theme-clock-wipe)": {
+      "animation": "none"
+    },
+    "::view-transition-new(.tk-theme-clock-wipe)": {
+      "animation": "tk-theme-clock-wipe var(--tk-theme-duration, 1100ms) var(--tk-theme-easing, linear) both"
+    },
+    "@keyframes tk-theme-clock-wipe": {
+      "0%": {
+        "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top) )"
+      },
+      "12.5%": {
+        "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top) )"
+      },
+      "37.5%": {
+        "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh) )"
+      },
+      "62.5%": {
+        "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh) )"
+      },
+      "87.5%": {
+        "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) var(--tk-top), var(--tk-left) var(--tk-top) )"
+      },
+      "100%": {
+        "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top) )"
+      }
+    }
+  },
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:item"
+}

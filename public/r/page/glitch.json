@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/glitch",
+  "title": "Glitch",
+  "description": "The old page jitters out in stepped frames before the new one snaps in.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-page-glitch)": {
+      "animation": "tk-page-glitch-out var(--tk-page-duration, 400ms) var(--tk-page-easing, steps(6, end)) both"
+    },
+    "::view-transition-new(.tk-page-glitch)": {
+      "animation": "tk-page-glitch-in var(--tk-page-duration, 400ms) var(--tk-page-easing, steps(6, end)) both"
+    },
+    "@keyframes tk-page-glitch-out": {
+      "0%": {
+        "transform": "translate(0, 0)",
+        "opacity": "1"
+      },
+      "20%": {
+        "transform": "translate(-6px, 2px)",
+        "opacity": "0.9"
+      },
+      "40%": {
+        "transform": "translate(6px, -2px)",
+        "opacity": "0.7"
+      },
+      "60%": {
+        "transform": "translate(-4px, 0)",
+        "opacity": "0.5"
+      },
+      "80%": {
+        "transform": "translate(4px, 2px)",
+        "opacity": "0.2"
+      },
+      "100%": {
+        "transform": "translate(0, 0)",
+        "opacity": "0"
+      }
+    },
+    "@keyframes tk-page-glitch-in": {
+      "0%": {
+        "transform": "translate(4px, -2px)",
+        "opacity": "0"
+      },
+      "30%": {
+        "transform": "translate(-6px, 2px)",
+        "opacity": "0.4"
+      },
+      "60%": {
+        "transform": "translate(6px, 0)",
+        "opacity": "0.8"
+      },
+      "100%": {
+        "transform": "translate(0, 0)",
+        "opacity": "1"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

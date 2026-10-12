@@ -1,0 +1,91 @@
+---
+title: "Polygon Reveal"
+description: "A clip-path polygon sweeps a geometric wipe across the page."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/polygon-reveal">
+  <ThemeTransitionDemo transition="polygon-reveal" />
+</ComponentPreview>
+
+A diagonal band sweeps across the viewport: towards the bottom right when switching to dark, back towards the top left when switching to light. The direction comes from the `dark` class on `<html>`, which the core sets before the new theme is captured. It is anchored to the viewport, so it ignores `origin` and always covers exactly what is on screen, even when the page is scrolled.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/polygon-reveal" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/styles/polygon-reveal.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Make it the default style of the provider:
+
+```tsx
+<ThemeTransitionProvider transition="polygon-reveal">
+  {children}
+</ThemeTransitionProvider>
+```
+
+Or use it for a single change:
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "polygon-reveal", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## Customization
+
+The style runs for `700ms` with `cubic-bezier(0.16, 1, 0.3, 1)` easing. `duration` (in milliseconds) and `easing` on the provider override every style:
+
+```tsx
+<ThemeTransitionProvider
+  transition="polygon-reveal"
+  duration={1500}
+  easing="ease-out"
+>
+  {children}
+</ThemeTransitionProvider>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-theme-duration, 700ms)` and `var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1))`.

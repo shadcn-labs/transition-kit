@@ -1,0 +1,24 @@
+/*
+ * Step wizard: snapshots that stretch with their box, and a viewport that
+ * clips only top and bottom.
+ */
+
+/* Plain surfaces (the card, the progress fill) stretch with the morphing box
+   instead of keeping their aspect ratio, so edges stay on the box edges. */
+::view-transition-old(.tk-step-wizard-fill),
+::view-transition-new(.tk-step-wizard-fill) {
+  block-size: 100%;
+}
+
+/* The step viewport changes height: clip above and below so steps never spill
+   over the buttons, but let the horizontal slide travel past the sides. */
+::view-transition-image-pair(.tk-step-wizard-viewport) {
+  clip-path: inset(0 -100vw);
+}
+
+/* Step numbers stay above the gliding marker in both directions (groups
+   otherwise stack in the old DOM order, which puts the marker on top when
+   moving back). */
+::view-transition-group(.tk-step-wizard-dot) {
+  z-index: 1;
+}

@@ -1,0 +1,8 @@
+/*
+ * Carousel: rounds the clipped slide snapshot (tk-clip on CarouselContent's
+ * group) to match CarouselItem's rounded-xl. Change it if you change the
+ * slide radius.
+ */
+::view-transition-group(.tk-carousel-slide) {
+  --tk-ui-radius: calc(var(--radius, 0.625rem) + 4px);
+}

@@ -1,0 +1,79 @@
+---
+title: "Zoom"
+description: "The old page zooms out as the new one zooms in."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/zoom">
+  <PageTransitionDemo transition="zoom" />
+</ComponentPreview>
+
+The old page zooms out to half size and fades while the new one zooms in from twice its size.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/zoom" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/zoom.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="zoom">
+  {children}
+</PageTransition>
+```
+
+Navigations that run in a React Transition animate: router links, or any update wrapped in `navigateWithTransition`. The style looks the same in both directions.
+
+## Customization
+
+The style runs for `400ms` with `cubic-bezier(0.4, 0, 0.2, 1)` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="zoom"
+  duration={800}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 400ms)` and `var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1))`.
+
+It pivots around the centre of the page's visible part, so long scrolled pages and pages inside a smaller frame both animate around what the user sees.

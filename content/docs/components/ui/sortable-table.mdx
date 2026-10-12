@@ -1,0 +1,170 @@
+---
+title: "Sortable Table"
+description: "Click a column header to sort and the rows glide to their new positions. Filtered rows fade out while the rest close the gap."
+---
+
+import { SortableTableDemo } from "@/examples/ui/sortable-table-demo";
+
+<ComponentPreview
+  name="ui/sortable-table"
+  src="examples/ui/sortable-table-demo.tsx"
+>
+  <SortableTableDemo />
+</ComponentPreview>
+
+A data table with sortable columns and an optional search. Sorting glides every row to its new position; searching fades out the rows that no longer match while the rest close the gap.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/sortable-table" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Add the shadcn/ui Input component.</Step>
+
+```bash
+npx shadcn@latest add input
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/sortable-table.tsx"
+  title="components/transitions/sortable-table.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { SortableTable } from "@/components/transitions/sortable-table";
+import type { SortableTableColumn } from "@/components/transitions/sortable-table";
+```
+
+```tsx
+interface Member {
+  id: string;
+  name: string;
+  role: string;
+  commits: number;
+}
+
+const columns: SortableTableColumn<Member>[] = [
+  { key: "name", header: "Name", width: "40%" },
+  { key: "role", header: "Role" },
+  { key: "commits", header: "Commits", align: "right" },
+];
+
+<SortableTable
+  caption="Team members"
+  columns={columns}
+  rows={members}
+  defaultSort={{ key: "commits", direction: "desc" }}
+  searchable
+/>;
+```
+
+Each click on a header cycles through ascending, descending and the original order. Pass `sort` and `onSortChange` to control the order yourself, or `query` and `onQueryChange` to control the search.
+
+## How it works
+
+- Sorting and searching update the rows inside `startTransition`. Every row is a `<ViewTransition>` keyed by its `id`, so React tracks each row across the reorder and animates it from its old position to its new one (`update`, `tk-morph`).
+- Rows inherit an opaque background from the table root, so two rows that cross mid-sort slide over each other instead of mixing their text. Set the background with `className` (for example `bg-card`) and the rows follow.
+- A row that stops matching the search fades out where it was (`exit`, `tk-fade`), the remaining rows glide up to close the gap, and rows that match again fade back in (`enter`). The empty message fades in and out the same way.
+- The header has no `<ViewTransition>`, so it stays live during the transition: buttons stay clickable and the sort arrow rotates with a plain CSS transition. Clicking again mid-animation starts the next transition from where things are.
+- The table uses `table-layout: fixed`, so column widths never depend on which rows are visible. Give columns a `width`; the rest share the remaining space. While a search is active the table keeps its full height, so content below it does not jump.
+- The search field updates on every keystroke, while the rows follow inside a transition. Keystrokes that don't change the visible rows skip the transition.
+
+## API Reference
+
+### SortableTable
+
+Also accepts every `div` prop; they are spread onto the root element.
+
+| Prop                | Type                                               | Default         |
+| ------------------- | -------------------------------------------------- | --------------- |
+| `columns`           | `SortableTableColumn<Row>[]`                       | -               |
+| `rows`              | `Row[]` (each row needs an `id: string \| number`) | -               |
+| `sort`              | `SortableTableSort \| null`                        | -               |
+| `defaultSort`       | `SortableTableSort \| null`                        | `null`          |
+| `onSortChange`      | `(sort: SortableTableSort \| null) => void`        | -               |
+| `searchable`        | `boolean`                                          | `false`         |
+| `query`             | `string`                                           | -               |
+| `defaultQuery`      | `string`                                           | `""`            |
+| `onQueryChange`     | `(query: string) => void`                          | -               |
+| `searchFn`          | `(row: Row, query: string) => boolean`             | any column      |
+| `searchPlaceholder` | `string`                                           | `"Search…"`     |
+| `caption`           | `ReactNode`                                        | -               |
+| `emptyMessage`      | `ReactNode`                                        | `"No results."` |
+
+### SortableTableColumn
+
+| Field       | Type                                          | Default    |
+| ----------- | --------------------------------------------- | ---------- |
+| `key`       | `string`                                      | -          |
+| `header`    | `ReactNode`                                   | -          |
+| `label`     | `string`                                      | `header`   |
+| `accessor`  | `(row: Row) => string \| number \| Date \| …` | `row[key]` |
+| `cell`      | `(row: Row) => ReactNode`                     | value      |
+| `sortFn`    | `(a: Row, b: Row) => number`                  | -          |
+| `sortable`  | `boolean`                                     | `true`     |
+| `align`     | `"left" \| "center" \| "right"`               | `"left"`   |
+| `width`     | `number \| string`                            | -          |
+| `className` | `string`                                      | -          |
+
+`accessor` returns the value used to sort and search. Numbers and dates compare numerically, strings with a locale-aware natural collator, and empty values sort last. `sortFn` replaces the comparison and should return the ascending order; descending reverses it.
+
+### SortableTableSort
+
+| Field       | Type              |
+| ----------- | ----------------- |
+| `key`       | `string`          |
+| `direction` | `"asc" \| "desc"` |
+
+## Accessibility
+
+- Renders a real `<table>` with `<thead>`, `<tbody>` and `scope="col"` headers. `caption` becomes a visually hidden `<caption>` that names the table.
+- Each sortable header holds a `<button type="button">`, reachable with <kbd>Tab</kbd> and activated with <kbd>Enter</kbd> or <kbd>Space</kbd>. Focus stays on the button after sorting.
+- The sorted header has `aria-sort="ascending"` or `"descending"`. A polite live region announces the row count and the current order after each change.
+- The search field has a label, and with `prefers-reduced-motion` rows don't travel; they crossfade briefly into place.

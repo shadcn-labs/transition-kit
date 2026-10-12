@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/skew-slide",
+  "title": "Skew Slide",
+  "description": "Pages skew as they slide past each other.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-image-pair(.tk-page-skew-slide.tk-page-exit)": {
+      "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+      "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+    },
+    "::view-transition-image-pair(.tk-page-skew-slide.tk-page-enter)": {
+      "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+      "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+    },
+    "::view-transition-old(.tk-page-skew-slide), ::view-transition-new(.tk-page-skew-slide)": {
+      "--tk-page-dir": "1",
+      "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+    },
+    "::view-transition-old(.tk-page-skew-slide.tk-page-back), ::view-transition-new(.tk-page-skew-slide.tk-page-back)": {
+      "--tk-page-dir": "-1"
+    },
+    "::view-transition-old(.tk-page-skew-slide)": {
+      "animation": "tk-page-skew-slide-out var(--tk-page-duration, 450ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+    },
+    "::view-transition-new(.tk-page-skew-slide)": {
+      "animation": "tk-page-skew-slide-in var(--tk-page-duration, 450ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+    },
+    "@keyframes tk-page-skew-slide-out": {
+      "from": {
+        "transform": "skewX(0deg) translateX(0)",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "skewX(calc(-8deg * var(--tk-page-dir))) translateX(calc(-100% * var(--tk-page-dir)))",
+        "opacity": "0"
+      }
+    },
+    "@keyframes tk-page-skew-slide-in": {
+      "from": {
+        "transform": "skewX(calc(8deg * var(--tk-page-dir))) translateX(calc(100% * var(--tk-page-dir)))",
+        "opacity": "0"
+      },
+      "to": {
+        "transform": "skewX(0deg) translateX(0)",
+        "opacity": "1"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

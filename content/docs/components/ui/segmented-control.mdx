@@ -1,0 +1,144 @@
+---
+title: "Segmented Control"
+description: "An iOS-style segmented control whose thumb glides to the chosen option with a slight spring."
+---
+
+import { SegmentedControlDemo } from "@/examples/ui/segmented-control-demo";
+
+<ComponentPreview
+  name="ui/segmented-control"
+  src="examples/ui/segmented-control-demo.tsx"
+>
+  <SegmentedControlDemo />
+</ComponentPreview>
+
+A single-choice control in the iOS style. The thumb springs to the option you pick, works in forms through a hidden input, and comes in three sizes, with text, icons or both.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/segmented-control" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [UI Transition](/docs/components/ui/ui-transition) core: copy its
+  helper and add its CSS to your global stylesheet.
+</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/segmented-control.tsx"
+  title="components/transitions/segmented-control.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+} from "@/components/transitions/segmented-control";
+```
+
+```tsx
+<SegmentedControl defaultValue="week" name="view" aria-label="Calendar view">
+  <SegmentedControlItem value="day">Day</SegmentedControlItem>
+  <SegmentedControlItem value="week">Week</SegmentedControlItem>
+  <SegmentedControlItem value="month">Month</SegmentedControlItem>
+</SegmentedControl>
+```
+
+Pass `icon` for an icon next to the label. Leave out the children for an icon-only item and give it an `aria-label`:
+
+```tsx
+<SegmentedControl defaultValue="left" size="sm" aria-label="Text alignment">
+  <SegmentedControlItem
+    value="left"
+    icon={<AlignLeft />}
+    aria-label="Align left"
+  />
+  <SegmentedControlItem
+    value="center"
+    icon={<AlignCenter />}
+    aria-label="Align center"
+  />
+  <SegmentedControlItem
+    value="right"
+    icon={<AlignRight />}
+    aria-label="Align right"
+  />
+</SegmentedControl>
+```
+
+## How it works
+
+- Picking an option sets the value inside `startTransition`. Picking the checked option does nothing and starts no transition; a controlled `onValueChange` runs in the same transition, so your state change animates too.
+- The thumb is rendered only inside the checked item, wrapped in a `<ViewTransition>` with one name from `useTransitionNames()`. React pairs the thumb leaving the old item with the one appearing in the new item (`share`) and morphs it there; `tk-spring` gives the move a small overshoot.
+- Every label is its own `<ViewTransition>` with `tk-top`, which paints it above the thumb, so the thumb can travel across other items without covering their text. React only captures a boundary whose content changed, so each label carries `data-checked-value`, which changes with every selection.
+- Items share the width equally and keep the same font weight when checked, so nothing reflows during the move.
+- With `name`, a hidden input holds the value, so the control submits with a surrounding `<form>` and follows the form's reset button when uncontrolled.
+- Names are unique per control, so several controls on one page never pair with each other.
+
+## API Reference
+
+### SegmentedControl
+
+| Prop            | Type                      | Default |
+| --------------- | ------------------------- | ------- |
+| `value`         | `string`                  | -       |
+| `defaultValue`  | `string`                  | `""`    |
+| `onValueChange` | `(value: string) => void` | -       |
+| `name`          | `string`                  | -       |
+| `form`          | `string`                  | -       |
+| `size`          | `"sm" \| "md" \| "lg"`    | `"md"`  |
+| `disabled`      | `boolean`                 | `false` |
+
+### SegmentedControlItem
+
+| Prop       | Type              | Default |
+| ---------- | ----------------- | ------- |
+| `value`    | `string`          | -       |
+| `icon`     | `React.ReactNode` | -       |
+| `disabled` | `boolean`         | `false` |
+
+## Accessibility
+
+- Implements the WAI-ARIA radio group pattern: a `radiogroup` of `radio` buttons with `aria-checked`. Label the group with `aria-label` or `aria-labelledby`.
+- Only one item is in the tab order: the checked one, or the first enabled item when nothing is checked.
+- <kbd>←</kbd> / <kbd>→</kbd> (and <kbd>↑</kbd> / <kbd>↓</kbd>) move to the
+  previous or next option and select it, wrapping at the ends and skipping
+  disabled items. <kbd>Home</kbd> / <kbd>End</kbd> jump to the first and last
+  option. Arrow keys follow the reading direction in right-to-left layouts.
+- With `prefers-reduced-motion`, the thumb doesn't travel; the change is a short crossfade.

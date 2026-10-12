@@ -1,0 +1,89 @@
+---
+title: "Animated Theme Toggler"
+description: "An icon button whose sun and moon morph while the theme transitions."
+---
+
+import { AnimatedThemeTogglerDemo } from "@/examples/theme/animated-theme-toggler-demo";
+
+<ComponentPreview name="theme/animated-theme-toggler">
+  <AnimatedThemeTogglerDemo />
+</ComponentPreview>
+
+An icon button whose sun shrinks its rays and grows into a crescent moon, and back. The morph is driven by CSS transitions on the `dark` class, which the provider flips inside the view transition, so it plays inside the new theme as the style reveals it.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/animated-theme-toggler" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Theme Transition](/docs/components/theme/theme-transition) core and
+  at least one style.
+</Step>
+
+<InstallCommand name="theme/theme-transition" />
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/animated-theme-toggler.tsx"
+  title="components/transitions/animated-theme-toggler.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Render it anywhere inside `ThemeTransitionProvider`.
+
+```tsx
+import { AnimatedThemeToggler } from "@/components/transitions/animated-theme-toggler";
+```
+
+```tsx
+<AnimatedThemeToggler />
+<AnimatedThemeToggler transition="circle-reveal" />
+```
+
+## API Reference
+
+### AnimatedThemeToggler
+
+| Prop         | Type                       | Default                     |
+| ------------ | -------------------------- | --------------------------- |
+| `transition` | `string`                   | The provider's `transition` |
+| `...props`   | `ComponentProps<"button">` | -                           |
+
+`transition` is a style slug such as `"circle-reveal"`; install the style first. Any other prop is spread onto the `<button>`; calling `event.preventDefault()` in your `onClick` skips the theme change.
+
+## Accessibility
+
+- A native `<button type="button">` whose `aria-label` describes the action: "Switch to dark theme" or "Switch to light theme" ("Toggle theme" until hydration).
+- The icon is decorative (`aria-hidden`).
+- The morph is disabled when the user prefers reduced motion; the core already skips the theme transition in that case.

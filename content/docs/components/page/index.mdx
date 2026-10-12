@@ -1,0 +1,30 @@
+---
+title: "Page"
+description: "Animated navigation between routes, built on React's <ViewTransition>."
+---
+
+Page transitions have two parts:
+
+- **The core** — `<PageTransition>` wraps your routes and animates whenever its `id` changes inside a React Transition. `navigateWithTransition` runs any navigation as one, and `direction: "back"` plays the style in reverse.
+- **Styles** — plain CSS for how the old page exits and the new one enters.
+
+Installing any style pulls in the core automatically.
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="slide">
+  {children}
+</PageTransition>
+```
+
+```tsx
+navigateWithTransition(() => router.push(href));
+navigateWithTransition(() => router.back(), { direction: "back" });
+```
+
+`duration` and `easing` on `<PageTransition>` override the style's timing.
+
+## Styles
+
+<ItemGrid group="page" kind="style" />

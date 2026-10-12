@@ -1,0 +1,83 @@
+/* Cube: pages turn around the faces of a 3D cube; backward navigations turn the other way. */
+/* Centre of the page's visible part, in each snapshot's coordinates. */
+::view-transition-image-pair(.tk-page-cube.tk-page-exit) {
+  --tk-page-x: calc(
+    (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) /
+      2
+  );
+  --tk-page-y: calc(
+    (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) /
+      2
+  );
+  --tk-page-left: max(0px, var(--tk-exit-cx) - 50vw);
+  --tk-page-right: min(100%, var(--tk-exit-cx) + 50vw);
+}
+
+::view-transition-image-pair(.tk-page-cube.tk-page-enter) {
+  --tk-page-x: calc(
+    (
+        max(0px, var(--tk-enter-cx) - 50vw) +
+          min(100%, var(--tk-enter-cx) + 50vw)
+      ) /
+      2
+  );
+  --tk-page-y: calc(
+    (
+        max(0px, var(--tk-enter-cy) - 50vh) +
+          min(100%, var(--tk-enter-cy) + 50vh)
+      ) /
+      2
+  );
+  --tk-page-left: max(0px, var(--tk-enter-cx) - 50vw);
+  --tk-page-right: min(100%, var(--tk-enter-cx) + 50vw);
+}
+
+::view-transition-image-pair(.tk-page-cube) {
+  perspective: 1500px;
+  perspective-origin: var(--tk-page-x) var(--tk-page-y);
+}
+
+::view-transition-old(.tk-page-cube),
+::view-transition-new(.tk-page-cube) {
+  --tk-page-dir: 1;
+}
+
+::view-transition-old(.tk-page-cube) {
+  transform-origin: var(--tk-page-right) var(--tk-page-y);
+  animation: tk-page-cube-out var(--tk-page-duration, 700ms)
+    var(--tk-page-easing, ease-in-out) both;
+}
+
+::view-transition-new(.tk-page-cube) {
+  transform-origin: var(--tk-page-left) var(--tk-page-y);
+  animation: tk-page-cube-in var(--tk-page-duration, 700ms)
+    var(--tk-page-easing, ease-in-out) both;
+}
+
+::view-transition-old(.tk-page-cube.tk-page-back) {
+  --tk-page-dir: -1;
+  transform-origin: var(--tk-page-left) var(--tk-page-y);
+}
+
+::view-transition-new(.tk-page-cube.tk-page-back) {
+  --tk-page-dir: -1;
+  transform-origin: var(--tk-page-right) var(--tk-page-y);
+}
+
+@keyframes tk-page-cube-out {
+  from {
+    transform: rotateY(0deg) translateZ(0);
+  }
+  to {
+    transform: rotateY(calc(-90deg * var(--tk-page-dir))) translateZ(-200px);
+  }
+}
+
+@keyframes tk-page-cube-in {
+  from {
+    transform: rotateY(calc(90deg * var(--tk-page-dir))) translateZ(-200px);
+  }
+  to {
+    transform: rotateY(0deg) translateZ(0);
+  }
+}

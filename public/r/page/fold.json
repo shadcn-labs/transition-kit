@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/fold",
+  "title": "Fold",
+  "description": "The old page folds inward along its centre as the new one emerges.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/page/page-transition.json"
+  ],
+  "css": {
+    "::view-transition-image-pair(.tk-page-fold.tk-page-exit)": {
+      "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+      "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+    },
+    "::view-transition-image-pair(.tk-page-fold.tk-page-enter)": {
+      "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+      "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+    },
+    "::view-transition-group(.tk-page-fold.tk-page-exit)": {
+      "z-index": "1"
+    },
+    "::view-transition-image-pair(.tk-page-fold)": {
+      "perspective": "1200px",
+      "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+    },
+    "::view-transition-old(.tk-page-fold), ::view-transition-new(.tk-page-fold)": {
+      "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+    },
+    "::view-transition-old(.tk-page-fold)": {
+      "animation": "tk-page-fold-out var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in-out) both"
+    },
+    "::view-transition-new(.tk-page-fold)": {
+      "animation": "tk-page-fold-in var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in-out) both"
+    },
+    "@keyframes tk-page-fold-out": {
+      "from": {
+        "transform": "rotateY(0deg) scaleX(1)",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "rotateY(90deg) scaleX(0.3)",
+        "opacity": "0"
+      }
+    },
+    "@keyframes tk-page-fold-in": {
+      "from": {
+        "transform": "scale(0.9)",
+        "opacity": "0"
+      },
+      "to": {
+        "transform": "scale(1)",
+        "opacity": "1"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:item"
+}

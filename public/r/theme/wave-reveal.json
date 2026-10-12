@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme/wave-reveal",
+  "title": "Wave Reveal",
+  "description": "A wavy edge sweeps across the viewport.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/theme/theme-transition.json"
+  ],
+  "css": {
+    "::view-transition-old(.tk-theme-wave-reveal)": {
+      "animation": "none"
+    },
+    "::view-transition-new(.tk-theme-wave-reveal)": {
+      "animation": "tk-theme-wave-reveal var(--tk-theme-duration, 800ms) var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+    },
+    "@keyframes tk-theme-wave-reveal": {
+      "from": {
+        "clip-path": "polygon( var(--tk-left) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 97.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 95vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 92.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 90vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 87.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 85vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 82.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 80vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 77.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 75vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 72.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 70vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 67.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 65vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 62.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 60vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 57.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 55vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 52.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 47.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 45vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 42.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 40vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 37.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 35vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 32.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 30vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 27.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 25vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 22.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 20vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 17.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 15vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 12.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 10vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 7.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 5vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 2.5vw) calc(var(--tk-top) + -3.879vh), var(--tk-left) calc(var(--tk-top) + -6vh) )"
+      },
+      "to": {
+        "clip-path": "polygon( var(--tk-left) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 97.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 95vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 92.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 90vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 87.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 85vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 82.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 80vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 77.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 75vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 72.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 70vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 67.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 65vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 62.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 60vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 57.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 55vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 52.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 47.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 45vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 42.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 40vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 37.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 35vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 32.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 30vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 27.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 25vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 22.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 20vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 17.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 15vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 12.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 10vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 7.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 5vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 2.5vw) calc(var(--tk-top) + 108.121vh), var(--tk-left) calc(var(--tk-top) + 106vh) )"
+      }
+    }
+  },
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:item"
+}

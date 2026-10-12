@@ -1,0 +1,79 @@
+---
+title: "Scale"
+description: "The new page scales up while the old one fades out."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/scale">
+  <PageTransitionDemo transition="scale" />
+</ComponentPreview>
+
+The old page shrinks to 80% and fades out while the new one settles from 120% to full size.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/scale" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/scale.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="scale">
+  {children}
+</PageTransition>
+```
+
+Navigations that run in a React Transition animate: router links, or any update wrapped in `navigateWithTransition`. The style looks the same in both directions.
+
+## Customization
+
+The style runs for `500ms` with `cubic-bezier(0.16, 1, 0.3, 1)` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="scale"
+  duration={1000}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 500ms)` and `var(--tk-page-easing, cubic-bezier(0.16, 1, 0.3, 1))`.
+
+It pivots around the centre of the page's visible part, so long scrolled pages and pages inside a smaller frame both animate around what the user sees.

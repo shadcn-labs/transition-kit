@@ -1,0 +1,77 @@
+---
+title: "Glitch"
+description: "The old page jitters out in stepped frames before the new one snaps in."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview name="page/glitch">
+  <PageTransitionDemo transition="glitch" />
+</ComponentPreview>
+
+Both pages jitter a few pixels in stepped frames: the old one flickers out as the new one snaps into place.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/glitch" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>
+  Add the [Page Transition](/docs/components/page/page-transition) core.
+</Step>
+
+<InstallCommand name="page/page-transition" />
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/styles/glitch.css"
+  title="styles/globals.css"
+/>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="glitch">
+  {children}
+</PageTransition>
+```
+
+Navigations that run in a React Transition animate: router links, or any update wrapped in `navigateWithTransition`. The style looks the same in both directions.
+
+## Customization
+
+The style runs for `400ms` with `steps(6, end)` easing. `duration` (in milliseconds) and `easing` on `<PageTransition>` override it:
+
+```tsx
+<PageTransition
+  id={pathname}
+  transition="glitch"
+  duration={800}
+  easing="ease-out"
+>
+  {children}
+</PageTransition>
+```
+
+To change only this style, edit the fallbacks in its CSS: `var(--tk-page-duration, 400ms)` and `var(--tk-page-easing, steps(6, end))`.

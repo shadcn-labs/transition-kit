@@ -1,0 +1,49 @@
+/*
+ * Product gallery: images keep their crop and round their corners in flight.
+ *
+ * Snapshots keep their own aspect ratio by default, so a square thumbnail
+ * growing into a wider hero would leave a gap or overflow. Here both snapshots
+ * cover the moving box (like `object-fit: cover` on the real <img>), and the
+ * clip radius travels from the thumbnail radius to the hero radius and back.
+ * Override the radii on :root; the component reads the same variables.
+ */
+:root {
+  --tk-ui-product-gallery-radius: calc(var(--radius) + 4px);
+  --tk-ui-product-gallery-thumb-radius: var(--radius);
+}
+
+::view-transition-old(.tk-product-gallery-image),
+::view-transition-new(.tk-product-gallery-image) {
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Thumbnail growing into the hero. */
+::view-transition-group(.tk-product-gallery-hero) {
+  --tk-ui-radius: var(--tk-ui-product-gallery-radius);
+  --tk-ui-product-gallery-from: var(--tk-ui-product-gallery-thumb-radius);
+}
+
+/* Hero shrinking back into its thumbnail slot. */
+::view-transition-group(.tk-product-gallery-leaving) {
+  --tk-ui-radius: var(--tk-ui-product-gallery-thumb-radius);
+  --tk-ui-product-gallery-from: var(--tk-ui-product-gallery-radius);
+}
+
+::view-transition-image-pair(.tk-product-gallery-hero),
+::view-transition-image-pair(.tk-product-gallery-leaving) {
+  animation: var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both
+    tk-product-gallery-radius;
+}
+
+/* Prev / next buttons stay above the images passing underneath them. */
+::view-transition-group(.tk-product-gallery-control) {
+  z-index: 20;
+}
+
+@keyframes tk-product-gallery-radius {
+  from {
+    border-radius: var(--tk-ui-product-gallery-from);
+  }
+}

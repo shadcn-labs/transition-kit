@@ -1,0 +1,14 @@
+/*
+ * Layout switcher: the item card is drawn on its moving group instead of
+ * stretching a snapshot, so corners and border stay crisp while a card turns
+ * into a row. Match a restyled item with these settings on :root.
+ */
+::view-transition-group(.tk-layout-switcher-surface) {
+  border-radius: var(--tk-ui-layout-switcher-radius, calc(var(--radius) + 4px));
+  background: var(--tk-ui-layout-switcher-background, var(--card));
+  box-shadow: inset 0 0 0 1px var(--tk-ui-layout-switcher-border, var(--border));
+}
+::view-transition-old(.tk-layout-switcher-surface),
+::view-transition-new(.tk-layout-switcher-surface) {
+  display: none;
+}

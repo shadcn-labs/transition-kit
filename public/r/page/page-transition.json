@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page/page-transition",
+  "title": "Page Transition",
+  "description": "PageTransition and navigateWithTransition: route changes animated by React's <ViewTransition>.",
+  "files": [
+    {
+      "path": ".registry-build/registry/page/page-transition.tsx",
+      "content": "\"use client\";\n\nimport {\n  addTransitionType,\n  startTransition,\n  useLayoutEffect,\n  useRef,\n  ViewTransition,\n} from \"react\";\nimport type { ComponentProps, ReactNode } from \"react\";\n\n/** Transition type for backward navigations; reverses directional styles. */\nexport const PAGE_BACK_TYPE = \"page-back\";\n\n/**\n * Runs a navigation as a React Transition so `<PageTransition>` animates it.\n * Works with any router whose navigation is a React state update, e.g.\n * `router.push` (Next.js), `navigate` (React Router) or plain `setState`.\n */\nexport const navigateWithTransition = (\n  navigate: () => void,\n  { direction = \"forward\" }: { direction?: \"forward\" | \"back\" } = {}\n) => {\n  startTransition(() => {\n    if (direction === \"back\") {\n      addTransitionType(PAGE_BACK_TYPE);\n    }\n    navigate();\n  });\n};\n\n/**\n * Writes the viewport centre in the frame's own coordinates, so styles can\n * pivot around what the user sees instead of the middle of a long page.\n */\nconst writeCenter = (element: HTMLElement, phase: \"enter\" | \"exit\") => {\n  const rect = element.getBoundingClientRect();\n  const { style } = document.documentElement;\n  style.setProperty(\n    `--tk-${phase}-cx`,\n    `${window.innerWidth / 2 - rect.left}px`\n  );\n  style.setProperty(\n    `--tk-${phase}-cy`,\n    `${window.innerHeight / 2 - rect.top}px`\n  );\n};\n\nconst PageTransitionFrame = (props: ComponentProps<\"div\">) => {\n  const ref = useRef<HTMLDivElement>(null);\n\n  // The new frame mounts and the old one unmounts inside React's view\n  // transition update, before either snapshot is animated.\n  useLayoutEffect(() => {\n    const element = ref.current;\n    if (!element) {\n      return;\n    }\n    writeCenter(element, \"enter\");\n    return () => writeCenter(element, \"exit\");\n  }, []);\n\n  return <div ref={ref} data-slot=\"page-transition\" {...props} />;\n};\n\nexport interface PageTransitionProps extends ComponentProps<\"div\"> {\n  /** Identifies the current page, usually the pathname. A new id animates. */\n  id: string;\n  /** Style slug, e.g. `\"slide\"`. */\n  transition?: string;\n  /** Overrides the style's duration, in milliseconds. */\n  duration?: number;\n  /** Overrides the style's easing function. */\n  easing?: string;\n  children: ReactNode;\n}\n\n/**\n * Animates between pages with React's `<ViewTransition>`: the old page exits\n * and the new one enters whenever `id` changes inside a Transition.\n */\nexport const PageTransition = ({\n  id,\n  transition = \"fade\",\n  duration,\n  easing,\n  children,\n  ...props\n}: PageTransitionProps) => {\n  const base = `tk-page tk-page-${transition}`;\n\n  useLayoutEffect(() => {\n    const { style } = document.documentElement;\n    if (duration === undefined) {\n      style.removeProperty(\"--tk-page-duration\");\n    } else {\n      style.setProperty(\"--tk-page-duration\", `${duration}ms`);\n    }\n    if (easing === undefined) {\n      style.removeProperty(\"--tk-page-easing\");\n    } else {\n      style.setProperty(\"--tk-page-easing\", easing);\n    }\n  }, [duration, easing]);\n\n  return (\n    <ViewTransition\n      key={id}\n      default=\"none\"\n      enter={{\n        [PAGE_BACK_TYPE]: `${base} tk-page-enter tk-page-back`,\n        default: `${base} tk-page-enter`,\n      }}\n      exit={{\n        [PAGE_BACK_TYPE]: `${base} tk-page-exit tk-page-back`,\n        default: `${base} tk-page-exit`,\n      }}\n    >\n      <PageTransitionFrame {...props}>{children}</PageTransitionFrame>\n    </ViewTransition>\n  );\n};\n",
+      "type": "registry:component",
+      "target": "components/transitions/page-transition.tsx"
+    }
+  ],
+  "css": {
+    "::view-transition-old(.tk-page), ::view-transition-new(.tk-page)": {
+      "mix-blend-mode": "normal"
+    },
+    "::view-transition-image-pair(.tk-page)": {
+      "overflow": "clip"
+    },
+    "@media (prefers-reduced-motion: reduce)": {
+      "::view-transition-old(.tk-page), ::view-transition-new(.tk-page)": {
+        "animation": "none !important"
+      }
+    }
+  },
+  "categories": [
+    "page"
+  ],
+  "type": "registry:component"
+}

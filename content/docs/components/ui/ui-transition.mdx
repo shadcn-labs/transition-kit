@@ -1,0 +1,238 @@
+---
+title: "UI Transition"
+description: "The tk() class helper, useTransitionNames and the tk-* View Transition Classes every UI component composes with React's <ViewTransition>."
+---
+
+import { UiTransitionDemo } from "@/examples/ui/ui-transition-demo";
+
+<ComponentPreview
+  name="ui/ui-transition"
+  src="examples/ui/ui-transition-demo.tsx"
+>
+  <UiTransitionDemo />
+</ComponentPreview>
+
+The core every UI component builds on. It ships a tiny helper module and a stylesheet of composable View Transition Classes. Components wrap their animated parts in React's `<ViewTransition>`, pick the triggers that should animate, and name the motion with `tk-*` classes. You can compose your own components the same way.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="ui/ui-transition" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Make sure your project uses React 19.3 or later.</Step>
+
+```bash
+npm install react@latest react-dom@latest
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+Every UI component installs the core for you, for example [Tabs](/docs/components/ui/tabs):
+
+<InstallCommand name="ui/tabs" />
+
+## Usage
+
+Run the state change inside `startTransition`, and wrap each part that should animate in a `<ViewTransition>` placed directly around its DOM element. `default="none"` turns every trigger off; list only the ones you want and pass their classes through `tk()`.
+
+```tsx
+"use client";
+
+import { startTransition, useState, ViewTransition } from "react";
+
+import { tk } from "@/components/transitions/ui-transition";
+
+export const Expandable = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <ViewTransition
+      default="none"
+      update={tk("tk-morph", "tk-spring", "tk-clip")}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => startTransition(() => setOpen((value) => !value))}
+        className={open ? "h-64 w-80" : "h-10 w-32"}
+      >
+        Details
+      </button>
+    </ViewTransition>
+  );
+};
+```
+
+### Triggers
+
+React decides which trigger fires for each boundary in a Transition:
+
+| Trigger  | Fires when                                                                                      | Typical classes                  |
+| -------- | ----------------------------------------------------------------------------------------------- | -------------------------------- |
+| `update` | Something inside the boundary changed, or the boundary moved or resized.                        | `tk-morph`, `tk-text`, `tk-clip` |
+| `enter`  | The boundary mounted.                                                                           | `tk-fade`, `tk-pop`, `tk-slide`  |
+| `exit`   | The boundary unmounted.                                                                         | `tk-fade`, `tk-pop`, `tk-slide`  |
+| `share`  | A named boundary unmounted in one place and a boundary with the same `name` mounted in another. | `tk-morph`                       |
+
+A parent's `update` fires for changes that no nested boundary captured. To animate only the nested parts, give the parent `update="none"`.
+
+### Shared elements
+
+An element that moves between two places, like the active tab's pill, is unmounted in one place and mounted in the other. Give both boundaries the same `name` and a `share` class, and render it in exactly one place at a time. `useTransitionNames()` builds names unique to the component instance, so two tab sets on one page never pair up.
+
+```tsx
+const names = useTransitionNames();
+
+{
+  isActive && (
+    <ViewTransition name={names("pill")} share={tk("tk-morph")}>
+      <span className="bg-background absolute inset-0 rounded-md" />
+    </ViewTransition>
+  );
+}
+```
+
+Only name shared elements: React names every other boundary automatically, and two mounted boundaries with the same `name` are an error.
+
+### Direction
+
+An exiting element keeps the props of its last render, so a class computed from new state never reaches it. Tag the Transition with a type instead, and map types to classes:
+
+```tsx
+import { addTransitionType, startTransition, ViewTransition } from "react";
+
+import { BACK, FORWARD, tk } from "@/components/transitions/ui-transition";
+
+const slide = {
+  [FORWARD]: tk("tk-slide", "tk-forward"),
+  [BACK]: tk("tk-slide", "tk-back"),
+  default: "none",
+};
+
+const go = (next: number) =>
+  startTransition(() => {
+    addTransitionType(next > index ? FORWARD : BACK);
+    setIndex(next);
+  });
+
+<ViewTransition key={index} default="none" enter={slide} exit={slide}>
+  <Panel index={index} />
+</ViewTransition>;
+```
+
+Keying the boundary makes every change an exit of the old panel and an enter of the new one. For vertical motion use your own types (for example `"tk-up"` and `"tk-down"`) with the `tk-up` / `tk-down` classes.
+
+## API Reference
+
+### ui-transition.ts
+
+| Export                 | Description                                                                                                                     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `tk(...classes)`       | Returns a View Transition Class string for `<ViewTransition>` props: `tk-ui` plus the given classes. Falsy entries are skipped. |
+| `useTransitionNames()` | Returns `names(...parts)`, building `<ViewTransition name>`s unique to the component instance.                                  |
+| `FORWARD` / `BACK`     | Transition types (`"tk-forward"`, `"tk-back"`) for `addTransitionType` and type-keyed class maps.                               |
+| `TransitionNames`      | The type of the function `useTransitionNames()` returns.                                                                        |
+
+Always go through `tk()`: the `tk-ui` base class is what reduced motion keys off.
+
+### Motion
+
+| Class        | Effect                                                                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tk-morph`   | Moves and resizes between the old and new box over `--tk-ui-move` with `--tk-ui-ease`, crossfading the content. Use it for shared elements and anything that changes position. |
+| `tk-text`    | Keeps snapshots at their natural size, anchored top-left, so text never stretches while the box resizes. Combine with `tk-morph`.                                              |
+| `tk-clip`    | Clips the snapshots to the moving box (`overflow: clip`), with corners from `--tk-ui-radius`.                                                                                  |
+| `tk-spring`  | Uses the `--tk-ui-spring` curve for the move: a soft overshoot.                                                                                                                |
+| `tk-slow`    | Uses `--tk-ui-slow` for the move: big shape changes.                                                                                                                           |
+| `tk-top`     | Raises the group above other animating groups.                                                                                                                                 |
+| `tk-instant` | No movement: the group jumps to its new box.                                                                                                                                   |
+
+### Presence
+
+| Class     | Effect                                                                              |
+| --------- | ----------------------------------------------------------------------------------- |
+| `tk-fade` | Elements that appear or disappear fade; entering ones wait for leaving ones.        |
+| `tk-pop`  | Entering elements scale up from 0.92 with the spring, leaving ones shrink and fade. |
+| `tk-blur` | Crossfade through a blur, for whole views and swapped text.                         |
+
+### Direction
+
+| Class                       | Effect                                                                            |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `tk-slide`                  | Old content slides out by `--tk-ui-distance`, new content slides in, both fading. |
+| `tk-push`                   | Full-width push with a parallax on the outgoing view. Pair with `tk-clip`.        |
+| `tk-roll`                   | Vertical roll by a full line, for digits and tickers. Pair with `tk-clip`.        |
+| `tk-forward` / `tk-back`    | Direction for `tk-slide` and `tk-push` (back reverses).                           |
+| `tk-up` / `tk-down`         | Direction for `tk-roll`.                                                          |
+| `tk-delay-1` … `tk-delay-8` | Delays the element by n × `--tk-ui-stagger`.                                      |
+
+### Settings
+
+| Variable           | Default                          | Used for                          |
+| ------------------ | -------------------------------- | --------------------------------- |
+| `--tk-ui-exit`     | `150ms`                          | Leaving content                   |
+| `--tk-ui-enter`    | `220ms`                          | Entering content and crossfades   |
+| `--tk-ui-move`     | `380ms`                          | Moves and resizes                 |
+| `--tk-ui-slow`     | `520ms`                          | `tk-slow`                         |
+| `--tk-ui-stagger`  | `30ms`                           | Step between `tk-delay-*` classes |
+| `--tk-ui-distance` | `1.5rem`                         | `tk-slide` travel                 |
+| `--tk-ui-ease`     | `cubic-bezier(0.32, 0.72, 0, 1)` | Moves                             |
+| `--tk-ui-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | Fades                             |
+| `--tk-ui-spring`   | `linear(...)`                    | `tk-spring`, `tk-pop`             |
+| `--tk-ui-radius`   | `0`                              | `tk-clip` corners                 |
+
+Snapshots live on the root, not inside your component, so set these on `:root` (or `html`). Variables set on the component element itself don't reach its pseudo-elements.
+
+```css
+:root {
+  --tk-ui-move: 300ms;
+  --tk-ui-radius: 0.5rem;
+}
+```
+
+## Rules of thumb
+
+- Guard no-op updates: selecting the active tab must not start a Transition.
+- Snapshots paint above the page in document order. Wrap foreground parts (labels, icons) in their own boundaries after the surface behind them, or the surface covers them mid-animation.
+- Snapshots ignore ancestor `overflow`; clip with `tk-clip` and `--tk-ui-radius`.
+- The core sets `::view-transition { pointer-events: none }`, so the page stays clickable while snapshots animate.
+
+## Accessibility
+
+- With `prefers-reduced-motion: reduce`, nothing travels: groups jump to their final box and content crossfades for 150ms. This applies to every boundary whose classes come from `tk()`.
+- Transitions never change focus, roles or the accessibility tree; components handle those themselves.
+- Browsers without view transitions apply the update instantly.

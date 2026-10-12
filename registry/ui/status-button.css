@@ -1,0 +1,11 @@
+/*
+ * Status button: the surface snapshot fills its morphing box.
+ *
+ * Snapshots keep their aspect ratio by default, so a button that only
+ * changes width would also shrink or grow vertically mid-morph. The label
+ * and icon are separate groups (tk-text), so only the plain surface stretches.
+ */
+::view-transition-old(.tk-status-button-surface),
+::view-transition-new(.tk-status-button-surface) {
+  block-size: 100%;
+}

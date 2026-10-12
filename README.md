@@ -1,189 +1,213 @@
-<div align="center">
-
-<a href="https://transition-kit.space">
-  <img src="public/og-image.webp" alt="Transition Kit" width="100%" />
-</a>
-
-<br />
-<br />
-
-<p>
-  <b>An open source library of page transitions and theme toggles for the modern web.</b><br />
-  Pure CSS animations for the View Transitions API that run over your live, fully interactive interface.
+<p align="center">
+  <img src="./public/og-image.webp" alt="transition-kit banner" />
 </p>
 
-<p>
-  <a href="https://transition-kit.space"><b>transition-kit.space</b></a> ·
-  <a href="https://transition-kit.space/templates">Templates</a> ·
-  <a href="https://transition-kit.space/components">Components</a> ·
-  <a href="https://transition-kit.space/templates/theme-toggles">Theme toggles</a> ·
-  <a href="https://transition-kit.space/templates/page-transitions">Page transitions</a>
+<h1 align="center">transition-kit</h1>
+
+<p align="center">
+  Free & open-source theme, page and UI transitions for React.<br/>
+  Built on React 19.3 <code>&lt;ViewTransition&gt;</code> and <code>addTransitionType</code>, distributed with <a href="https://ui.shadcn.com/">shadcn/ui</a>.
 </p>
 
-<p>
-  <a href="https://github.com/AbdullahMukadam/Transition-kit/stargazers"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/stars/AbdullahMukadam/Transition-kit.svg?variant=secondary&size=sm&mode=dark" /><img alt="GitHub stars" src="https://shieldcn.dev/github/stars/AbdullahMukadam/Transition-kit.svg?variant=secondary&size=sm&mode=light" /></picture></a>
-  <a href="https://transition-kit.space/templates"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/transitions-32.svg?variant=secondary&size=sm&logo=shadcnui&mode=dark" /><img alt="32 transitions" src="https://shieldcn.dev/badge/transitions-32.svg?variant=secondary&size=sm&logo=shadcnui&mode=light" /></picture></a>
-  <a href="https://github.com/AbdullahMukadam/Transition-kit"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/made_with-View_Transitions_API.svg?variant=secondary&size=sm&mode=dark" /><img alt="Made with the View Transitions API" src="https://shieldcn.dev/badge/made_with-View_Transitions_API.svg?variant=secondary&size=sm&mode=light" /></picture></a>
+<p align="center">
+  <a href="https://github.com/shadcn-labs/transition-kit"><img src="https://www.shieldcn.dev/github/stars/shadcn-labs/transition-kit.svg?variant=secondary&size=xs&theme=zinc" alt="GitHub Stars" /></a>
+  <a href="https://github.com/shadcn-labs/transition-kit/actions"><img src="https://www.shieldcn.dev/github/ci/shadcn-labs/transition-kit.svg?variant=secondary&size=xs&theme=zinc" alt="CI" /></a>
+  <a href="https://discord.gg/N6G36KhYK4"><img src="https://www.shieldcn.dev/discord/online-members/N6G36KhYK4.svg?variant=secondary&size=xs&theme=zinc" alt="Discord Members" /></a>
+  <a href="https://x.com/shadcnlabs"><img src="https://www.shieldcn.dev/x/follow/shadcnlabs.svg?variant=branded&size=xs&theme=zinc" alt="X Follow" /></a>
 </p>
 
-<p>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/React.svg?variant=secondary&size=sm&logo=react&logoColor=61DAFB&mode=dark" /><img alt="React" src="https://shieldcn.dev/badge/React.svg?variant=secondary&size=sm&logo=react&logoColor=61DAFB&mode=light" /></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Next.js.svg?variant=secondary&size=sm&logo=nextdotjs&mode=dark" /><img alt="Next.js" src="https://shieldcn.dev/badge/Next.js.svg?variant=secondary&size=sm&logo=nextdotjs&mode=light" /></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Vue.svg?variant=secondary&size=sm&logo=vuedotjs&logoColor=4FC08D&mode=dark" /><img alt="Vue" src="https://shieldcn.dev/badge/Vue.svg?variant=secondary&size=sm&logo=vuedotjs&logoColor=4FC08D&mode=light" /></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Svelte.svg?variant=secondary&size=sm&logo=svelte&logoColor=FF3E00&mode=dark" /><img alt="Svelte" src="https://shieldcn.dev/badge/Svelte.svg?variant=secondary&size=sm&logo=svelte&logoColor=FF3E00&mode=light" /></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/TypeScript.svg?variant=secondary&size=sm&logo=typescript&logoColor=3178C6&mode=dark" /><img alt="TypeScript" src="https://shieldcn.dev/badge/TypeScript.svg?variant=secondary&size=sm&logo=typescript&logoColor=3178C6&mode=light" /></picture>
+<p align="center">
+  <a href="https://transition-kit.space/docs">Get Started</a> ·
+  <a href="https://transition-kit.space/docs/components/theme">Theme</a> ·
+  <a href="https://transition-kit.space/docs/components/page">Page</a> ·
+  <a href="https://transition-kit.space/docs/components/ui">UI</a>
 </p>
 
-</div>
+## Features
 
-## What makes it different
+- ⚛️ **React-native transitions** — Driven by `<ViewTransition>`, `startTransition`, and `addTransitionType`; no manual `document.startViewTransition`
+- 🌗 **Theme transitions** — Animate light/dark switches from the click point, a control, or the viewport centre
+- 🧭 **Page transitions** — Animate route changes, with reversed animations for back navigation
+- 🧩 **UI components** — Tabs, carousels, lists, kanban boards and more whose state changes glide, morph and slide
+- 🎨 **Pure CSS styles** — Every style is a small CSS file you own; tune duration and easing with CSS variables
+- 📦 **shadcn/ui compatible** — Install the core and any style with the shadcn CLI
+- 🛟 **Graceful fallback** — Browsers without view transitions switch instantly
 
-Transition Kit is CSS-first. Every template injects a small animation into the [`::view-transition-old(root)` and `::view-transition-new(root)`](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) pseudo-elements, then flips the theme or swaps the page through `document.startViewTransition()`. No heavy animation libraries, no wrapper components around your content — the page stays live and interactive while the effect plays.
+## Components
 
-Where the View Transitions API is not supported, components fall back to an instant, dependency-free swap, so every visitor gets a working page.
+### Theme
 
-<table>
-<tr>
-<td align="center"></td>
-<td><b>32 transitions</b> and counting: Circle Reveal, Cube, Glitch, Page Curl, and more</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td><b>Framework agnostic</b>: every template ships for React, Next.js, Vue, Svelte, and vanilla</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td><b>Copy, do not install</b>: components land in your repo via a shadcn-compatible registry</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td><b>Zero config</b>: self-contained CSS with no dependencies and sensible defaults</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td><b>Customize</b>: tune duration, easing, and direction on any template</td>
-</tr>
-</table>
+- **Core:** Theme Transition (`ThemeTransitionProvider`, `useThemeTransition`, `ThemeTransitionScript`)
+- **Controls (4):** Theme Toggle Button, Theme Toggle Switch, Theme Switcher, Animated Theme Toggler
+- **Styles (19):** Circle Reveal, Circle Blur, Polygon Reveal, Star Reveal, Heart Reveal, Diagonal Wipe, Checkerboard Reveal, Ripple Reveal, Venetian Blinds, Spiral Reveal, Wave Reveal, Clock Wipe, GIF Frog, GIF Penguin, GIF Cat, GIF Michael Jackson, GIF Deadpool, GIF Chika, GIF Hakari Dance
+
+### Page
+
+- **Core:** Page Transition (`PageTransition`, `navigateWithTransition`)
+- **Styles (18):** Fade, Slide, Scale, Flip, Blur, Rotate, Zoom, Curtain, Cube, Skew Slide, Page Curl, Accordion, Doorway, Book Flip, Roll, Fold, Glitch, Iris Wipe
+
+### UI
+
+- **Core:** UI Transition (`tk()`, `useTransitionNames`, `FORWARD`/`BACK` transition types, and the composable `tk-*` View Transition Classes)
+- **Components (17):** Tabs, Segmented Control, Accordion, Carousel, Stack Navigator, Step Wizard, Dynamic Island, Status Button, Number Flip, Add to Cart, Morphing Popover, Product Gallery, Layout Switcher, Animated List, Filter Grid, Sortable Table, Kanban Board
 
 ## Quick start
 
-Add the registry to your `components.json`, then install a component with the shadcn CLI:
+transition-kit requires `react` and `react-dom` 19.3 or later.
+
+Add the registry to your `components.json`:
 
 ```json
 {
   "registries": {
-    "@transitions": "https://transition-kit.space/r/{name}.json"
+    "@transition-kit": "https://transition-kit.space/r/{name}.json"
   }
 }
 ```
 
+### Theme transitions
+
+Install a style (it pulls in the `theme/theme-transition` core):
+
 ```bash
-npx shadcn@latest add @transitions/theme-toggle-button
+npx shadcn@latest add @transition-kit/theme/circle-reveal
 ```
 
-Swap `theme-toggle-button` for `animated-theme-toggler`, `theme-toggle-switch`, or `theme-switcher`. Source lands in `components/ui/`, yours to edit.
+Wrap your app and switch themes through the hook:
 
 ```tsx
-import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
+import {
+  ThemeTransitionProvider,
+  ThemeTransitionScript,
+  useThemeTransition,
+} from "@/components/transitions/theme-transition";
 
-export default function Page() {
-  return <ThemeToggleButton transition="circle-reveal" />;
-}
+export const App = ({ children }: { children: React.ReactNode }) => (
+  <>
+    <ThemeTransitionScript />
+    <ThemeTransitionProvider transition="circle-reveal">
+      {children}
+    </ThemeTransitionProvider>
+  </>
+);
+
+export const ThemeButton = () => {
+  const { resolvedTheme, setTheme } = useThemeTransition();
+  return (
+    <button
+      onClick={(event) =>
+        setTheme(resolvedTheme === "dark" ? "light" : "dark", { origin: event })
+      }
+    >
+      Toggle theme
+    </button>
+  );
+};
 ```
 
-Each component is self-contained — the transition CSS is bundled inside it. See the [installation guide](https://transition-kit.space/docs) for manual setup.
+### Page transitions
 
-## Templates
+```bash
+npx shadcn@latest add @transition-kit/page/slide
+```
 
-Browse all templates in the [gallery](https://transition-kit.space/templates), preview them live, and copy the code for your framework.
+Key the page by its route and wrap navigations:
 
-<details open>
-<summary><b>Mask reveals</b>: theme toggles driven by expanding masks</summary>
+```tsx
+import {
+  navigateWithTransition,
+  PageTransition,
+} from "@/components/transitions/page-transition";
 
-| Component                                                                     | What it does                                    | Component                                                                       | What it does                              |
-| ----------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------- |
-| [**Circle Reveal**](https://transition-kit.space/transition/circle-reveal)    | Expanding circular mask from the center         | [**Circle Blur**](https://transition-kit.space/transition/circle-blur)          | Soft, diffused circular reveal            |
-| [**Polygon Reveal**](https://transition-kit.space/transition/polygon-reveal)  | Clip-path polygon wipe                          | [**GIF Frog**](https://transition-kit.space/transition/gif-frog)                | A dancing frog reveals the new theme      |
-| [**GIF Penguin**](https://transition-kit.space/transition/gif-penguin)        | Mask reveal with a penguin                      | [**GIF Cat**](https://transition-kit.space/transition/gif-cat)                  | Mask reveal with a cat                    |
-| [**Star Reveal**](https://transition-kit.space/transition/star-reveal)        | Expanding star-shaped mask                      | [**Heart Reveal**](https://transition-kit.space/transition/heart-reveal)        | Expanding heart-shaped mask               |
-| [**Checkerboard**](https://transition-kit.space/transition/checkerboard-reveal) | Checkerboard tiles expand                       | [**Ripple Reveal**](https://transition-kit.space/transition/ripple-reveal)      | Concentric rings from the click point     |
-| [**Spiral Reveal**](https://transition-kit.space/transition/spiral-reveal)    | Spiral-shaped mask                              | [**Iris Wipe**](https://transition-kit.space/transition/iris-wipe-page)         | Film-style iris that closes and opens     |
+<PageTransition id={pathname} transition="slide">
+  {children}
+</PageTransition>;
 
-</details>
+navigateWithTransition(() => navigate("/about"));
+navigateWithTransition(() => history.back(), { direction: "back" });
+```
 
-<details open>
-<summary><b>Simple</b>: page transitions built on transform and opacity</summary>
+### UI components
 
-| Component                                                   | What it does                          | Component                                                     | What it does                          |
-| ----------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------- | ------------------------------------- |
-| [**Fade**](https://transition-kit.space/transition/fade)    | Cross-fade between pages              | [**Slide**](https://transition-kit.space/transition/slide)    | Pages slide past each other           |
-| [**Scale**](https://transition-kit.space/transition/scale)  | New page scales in                    | [**Rotate**](https://transition-kit.space/transition/rotate)  | New page rotates in from the center   |
-| [**Zoom**](https://transition-kit.space/transition/zoom)    | Zoom transition between pages         |                                                               |                                       |
+Install a component (it pulls in the `ui/ui-transition` core and any shadcn primitives it uses):
 
-</details>
+```bash
+npx shadcn@latest add @transition-kit/ui/tabs
+```
 
-<details open>
-<summary><b>3D</b>: perspective-driven page turns</summary>
+Use it like any shadcn component; no provider is needed:
 
-| Component                                                       | What it does                              | Component                                                         | What it does                             |
-| --------------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------- |
-| [**Flip**](https://transition-kit.space/transition/flip)        | 3D flip around an axis                    | [**Cube**](https://transition-kit.space/transition/cube)          | Pages rotate around a cube axis          |
-| [**Skew Slide**](https://transition-kit.space/transition/skew-slide) | Skewed, energetic slide                   | [**Page Curl**](https://transition-kit.space/transition/page-curl) | Old page curls up like a book page       |
-| [**Accordion**](https://transition-kit.space/transition/accordion) | Folds shut in vertical pleats             | [**Doorway**](https://transition-kit.space/transition/doorway)    | Page swings away like a door             |
-| [**Book Flip**](https://transition-kit.space/transition/book-flip) | Flips like a page on a spine              | [**Fold**](https://transition-kit.space/transition/fold)          | Folds inward along its center            |
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/transitions/tabs";
 
-</details>
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings.</TabsContent>
+  <TabsContent value="password">Change your password.</TabsContent>
+</Tabs>;
+```
 
-<details open>
-<summary><b>Composite</b>: layered clip-path and transform effects</summary>
-
-| Component                                                                 | What it does                             | Component                                                                  | What it does                            |
-| ------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------- |
-| [**Blur**](https://transition-kit.space/transition/blur)                  | Blur dissolve between pages              | [**Diagonal Wipe**](https://transition-kit.space/transition/diagonal-wipe) | Diagonal band sweeps across the screen  |
-| [**Venetian Blinds**](https://transition-kit.space/transition/venetian-blinds-theme) | Slats clip open one by one               | [**Wave Reveal**](https://transition-kit.space/transition/wave-reveal-theme) | Wavy edge sweeps across the screen      |
-| [**Curtain**](https://transition-kit.space/transition/curtain)            | Old page splits apart like curtains      | [**Roll**](https://transition-kit.space/transition/roll)                   | Page rolls away like a scroll           |
-| [**Glitch**](https://transition-kit.space/transition/glitch)              | RGB-split slices before the new page     |                                                                            |                                         |
-
-</details>
+See the [docs](https://transition-kit.space/docs) for every style, the controls, the UI components, and customization options.
 
 ## Browser support
 
-| Browser                        | Full effect | Fallback                                    |
-| ------------------------------ | :---------: | ------------------------------------------- |
-| Chrome 111+ / Edge 111+ / Opera 111+ |     ✅      | —                                           |
-| Firefox / Safari               |      ⚠️     | Instant swap, still fully functional        |
+Styles rely on the View Transition API and `view-transition-class`:
 
-The View Transitions API is available in Chrome 111+, Edge 111+, and Opera 111+. All templates include a graceful fallback that swaps the theme or page instantly, so the site works everywhere.
+| Browser       | Version |
+| ------------- | ------- |
+| Chrome / Edge | 125+    |
+| Safari        | 18.2+   |
+| Firefox       | 144+    |
+
+In other browsers, React applies the update without an animation, so themes, pages and components switch instantly.
 
 ## Development
 
-This repo holds the library source, the docs site (TanStack Start, Tailwind v4, on Cloudflare Workers), and the registry build.
-
 ```bash
+git clone https://github.com/shadcn-labs/transition-kit.git
+cd transition-kit
 pnpm install
-pnpm dev             # starts the dev server on port 3001
-pnpm test            # runs the Vitest suite
-pnpm build           # generates the sitemap, then production build
-pnpm build-registry  # regenerates public/r/* for the shadcn CLI
-pnpm deploy          # build and deploy to Cloudflare
+pnpm dev             # docs site at http://localhost:3000
+pnpm registry:build  # regenerate registry.json and public/r
+pnpm build           # registry + Vite build
+pnpm typecheck
+pnpm check           # lint and format (ultracite)
+pnpm deploy          # build and deploy to Cloudflare Workers
 ```
 
-| Path                                   | What lives here                                                   |
-| -------------------------------------- | ----------------------------------------------------------------- |
-| `src/data/transitions.ts`              | Single source of truth: CSS, JS, and snippets for all 32 templates |
-| `src/components/transitions/`          | Live previews, transition cards, and the playground               |
-| `scripts/templates/` + `src/registry/` | shadcn-compatible components (React, Vue, Svelte, vanilla)        |
-| `scripts/build-registry.ts`            | Generates `public/r/*.json` for the shadcn CLI                    |
-| `content/docs/` + `content/templates/` | Documentation site content                                        |
+The site is built with TanStack Start, Vite, and Fumadocs and deployed to Cloudflare Workers. Registry source lives in `registry/`; [AGENTS.md](./AGENTS.md) documents the architecture.
+
+## Community
+
+The transition-kit community lives on [GitHub](https://github.com/shadcn-labs/transition-kit), where you can ask questions, share ideas, and show what you've built.
 
 ## Contributing
 
-Issues and pull requests welcome. Open an issue or submit a PR on the [GitHub repo](https://github.com/AbdullahMukadam/Transition-kit).
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) to get the repo running locally and land a change, and use [issues](https://github.com/shadcn-labs/transition-kit/issues) and [discussions](https://github.com/shadcn-labs/transition-kit/discussions) to collaborate. By participating, you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
-<div align="center">
-<br />
-<sub>Built by <a href="https://github.com/AbdullahMukadam">Abdullah Mukadam</a> · <a href="https://transition-kit.space">transition-kit.space</a></sub>
-<br /><br />
-<a href="https://transition-kit.space"><b>transition-kit.space</b></a>
+## Security
 
-</div>
+Please do not open public issues for security vulnerabilities. Follow [SECURITY.md](./SECURITY.md) and report them privately through GitHub Security Advisories.
+
+## License
+
+[MIT](LICENSE)
+
+## Credits
+
+- Created by [Abdullah Mukadam](https://github.com/AbdullahMukadam).
+- Part of [Shadcn Labs](https://shadcn-labs.com).
+
+## Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=shadcn-labs/transition-kit)](https://github.com/shadcn-labs/transition-kit/graphs/contributors)
+
+> Made with [contrib.rocks](https://contrib.rocks)

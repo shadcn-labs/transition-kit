@@ -1,63 +1,2605 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "transition-kit",
   "homepage": "https://transition-kit.space",
   "items": [
     {
-      "name": "animated-theme-toggler",
+      "name": "theme/theme-transition",
       "type": "registry:component",
-      "title": "Animated Theme Toggler",
-      "description": "A shape-based theme toggler using clip-path transitions (circle, square, triangle, diamond, hexagon, rectangle, star) with the View Transitions API.",
-      "dependencies": [],
+      "title": "Theme Transition",
+      "description": "ThemeTransitionProvider and useThemeTransition: theme state animated by React's <ViewTransition>.",
       "files": [
         {
-          "path": "animated-theme-toggler.tsx",
-          "type": "registry:component",
-          "target": "@ui/animated-theme-toggler.tsx"
+          "path": ".registry-build/registry/theme/theme-transition.tsx",
+          "target": "components/transitions/theme-transition.tsx",
+          "type": "registry:component"
         }
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme), ::view-transition-new(.tk-theme)": {
+          "mix-blend-mode": "normal"
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          "::view-transition-group(.tk-theme), ::view-transition-old(.tk-theme), ::view-transition-new(.tk-theme)": {
+            "animation": "none !important"
+          }
+        }
+      },
+      "categories": [
+        "theme"
       ]
     },
     {
-      "name": "theme-toggle-button",
+      "name": "theme/theme-toggle-button",
       "type": "registry:component",
       "title": "Theme Toggle Button",
-      "description": "A button with text cycling (Light/Dark) that supports multiple transition animations (fade, slide, scale, blur, flip) via the View Transitions API.",
-      "dependencies": [],
+      "description": "A sun and moon icon button that toggles the theme with any transition style.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
       "files": [
         {
-          "path": "theme-toggle-button.tsx",
-          "type": "registry:component",
-          "target": "@ui/theme-toggle-button.tsx"
+          "path": ".registry-build/registry/theme/theme-toggle-button.tsx",
+          "target": "components/transitions/theme-toggle-button.tsx",
+          "type": "registry:component"
         }
+      ],
+      "categories": [
+        "theme"
       ]
     },
     {
-      "name": "theme-toggle-switch",
+      "name": "theme/theme-toggle-switch",
       "type": "registry:component",
       "title": "Theme Toggle Switch",
-      "description": "An iOS-style toggle switch for theme switching with multiple transition animations (fade, slide, scale, blur, flip) via the View Transitions API.",
-      "dependencies": [],
+      "description": "A switch that flips between light and dark with any transition style.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
       "files": [
         {
-          "path": "theme-toggle-switch.tsx",
-          "type": "registry:component",
-          "target": "@ui/theme-toggle-switch.tsx"
+          "path": ".registry-build/registry/theme/theme-toggle-switch.tsx",
+          "target": "components/transitions/theme-toggle-switch.tsx",
+          "type": "registry:component"
         }
+      ],
+      "categories": [
+        "theme"
       ]
     },
     {
-      "name": "theme-switcher",
+      "name": "theme/theme-switcher",
       "type": "registry:component",
       "title": "Theme Switcher",
-      "description": "A segmented System/Light/Dark theme switcher with a sliding indicator and multiple transition animations via the View Transitions API.",
-      "dependencies": [],
+      "description": "A light, dark and system segmented control with any transition style.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
       "files": [
         {
-          "path": "theme-switcher.tsx",
-          "type": "registry:component",
-          "target": "@ui/theme-switcher.tsx"
+          "path": ".registry-build/registry/theme/theme-switcher.tsx",
+          "target": "components/transitions/theme-switcher.tsx",
+          "type": "registry:component"
         }
+      ],
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/animated-theme-toggler",
+      "type": "registry:component",
+      "title": "Animated Theme Toggler",
+      "description": "An icon button whose sun and moon morph while the theme transitions.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/theme/animated-theme-toggler.tsx",
+          "target": "components/transitions/animated-theme-toggler.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/circle-reveal",
+      "type": "registry:item",
+      "title": "Circle Reveal",
+      "description": "An expanding circle reveals the new theme from the click point.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-circle-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-circle-reveal)": {
+          "animation": "tk-theme-circle-reveal var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-circle-reveal": {
+          "from": {
+            "clip-path": "circle(0 at var(--tk-x) var(--tk-y))"
+          },
+          "to": {
+            "clip-path": "circle(var(--tk-r) at var(--tk-x) var(--tk-y))"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/circle-blur",
+      "type": "registry:item",
+      "title": "Circle Blur",
+      "description": "A soft, blurred circle expands from the click point.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-circle-blur)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-circle-blur)": {
+          "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><defs><filter id=\"blur\"><feGaussianBlur stdDeviation=\"2\"/></filter></defs><circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"white\" filter=\"url(%23blur)\"/></svg>')",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-circle-blur var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-circle-blur": {
+          "from": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "to": {
+            "mask-size": "calc(var(--tk-r) * 3.5)",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 1.75) calc(var(--tk-y) - var(--tk-r) * 1.75)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/polygon-reveal",
+      "type": "registry:item",
+      "title": "Polygon Reveal",
+      "description": "A clip-path polygon sweeps a geometric wipe across the page.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-polygon-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-polygon-reveal)": {
+          "animation": "tk-theme-polygon-reveal-light var(--tk-theme-duration, 700ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        ".dark::view-transition-new(.tk-theme-polygon-reveal)": {
+          "animation": "tk-theme-polygon-reveal-dark var(--tk-theme-duration, 700ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-polygon-reveal-light": {
+          "from": {
+            "clip-path": "polygon( calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh), calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh) )"
+          },
+          "to": {
+            "clip-path": "polygon( calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh), calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh) )"
+          }
+        },
+        "@keyframes tk-theme-polygon-reveal-dark": {
+          "from": {
+            "clip-path": "polygon( calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh), calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh), calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh) )"
+          },
+          "to": {
+            "clip-path": "polygon( calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -71vh), calc(var(--tk-left) + -50vw) calc(var(--tk-top) + 71vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 171vh), calc(var(--tk-left) + 171vw) calc(var(--tk-top) + 50vh) )"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/star-reveal",
+      "type": "registry:item",
+      "title": "Star Reveal",
+      "description": "An expanding star-shaped mask reveals the new theme.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-star-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-star-reveal)": {
+          "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><polygon points=\"20,2 24.5,15 38,15 27,23 31,36 20,28 9,36 13,23 2,15 15.5,15\" fill=\"white\"/></svg>')",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-star-reveal var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, ease-in) both"
+        },
+        "@keyframes tk-theme-star-reveal": {
+          "from": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "to": {
+            "mask-size": "calc(var(--tk-r) * 6.5)",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 3.25) calc(var(--tk-y) - var(--tk-r) * 3.25)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/heart-reveal",
+      "type": "registry:item",
+      "title": "Heart Reveal",
+      "description": "An expanding heart-shaped mask reveals the new theme.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-heart-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-heart-reveal)": {
+          "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><path d=\"M20 34 C10 26 2 19 2 12 C2 6 7 2 12 2 C16 2 19 4 20 8 C21 4 24 2 28 2 C33 2 38 6 38 12 C38 19 30 26 20 34 Z\" fill=\"white\"/></svg>')",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-heart-reveal var(--tk-theme-duration, 1200ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-heart-reveal": {
+          "from": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "to": {
+            "mask-size": "calc(var(--tk-r) * 4.5)",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 2.25) calc(var(--tk-y) - var(--tk-r) * 2.25)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/diagonal-wipe",
+      "type": "registry:item",
+      "title": "Diagonal Wipe",
+      "description": "A diagonal band sweeps across the viewport.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-diagonal-wipe)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-diagonal-wipe)": {
+          "animation": "tk-theme-diagonal-wipe-light var(--tk-theme-duration, 600ms) var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+        },
+        ".dark::view-transition-new(.tk-theme-diagonal-wipe)": {
+          "animation": "tk-theme-diagonal-wipe-dark var(--tk-theme-duration, 600ms) var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+        },
+        "@keyframes tk-theme-diagonal-wipe-light": {
+          "from": {
+            "clip-path": "polygon( calc(var(--tk-left) + 120vw) var(--tk-top), calc(var(--tk-left) + 140vw) var(--tk-top), calc(var(--tk-left) + 120vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 120vh) )"
+          },
+          "to": {
+            "clip-path": "polygon( calc(var(--tk-left) + 120vw) var(--tk-top), calc(var(--tk-left) + -20vw) var(--tk-top), calc(var(--tk-left) + -40vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 120vh) )"
+          }
+        },
+        "@keyframes tk-theme-diagonal-wipe-dark": {
+          "from": {
+            "clip-path": "polygon( calc(var(--tk-left) + -20vw) var(--tk-top), var(--tk-left) var(--tk-top), calc(var(--tk-left) + -20vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + -40vw) calc(var(--tk-top) + 120vh) )"
+          },
+          "to": {
+            "clip-path": "polygon( calc(var(--tk-left) + -20vw) var(--tk-top), calc(var(--tk-left) + 120vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 120vh), calc(var(--tk-left) + -40vw) calc(var(--tk-top) + 120vh) )"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/checkerboard-reveal",
+      "type": "registry:item",
+      "title": "Checkerboard Reveal",
+      "description": "A checkerboard of tiles grows to reveal the new theme.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-checkerboard-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-checkerboard-reveal)": {
+          "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><rect width=\"10\" height=\"10\" fill=\"white\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"white\"/><rect x=\"20\" width=\"10\" height=\"10\" fill=\"white\"/><rect x=\"20\" y=\"20\" width=\"10\" height=\"10\" fill=\"white\"/><rect x=\"30\" y=\"10\" width=\"10\" height=\"10\" fill=\"white\"/><rect x=\"30\" y=\"30\" width=\"10\" height=\"10\" fill=\"white\"/><rect y=\"20\" width=\"10\" height=\"10\" fill=\"white\"/><rect x=\"10\" y=\"30\" width=\"10\" height=\"10\" fill=\"white\"/></svg>'), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><circle cx=\"20\" cy=\"20\" r=\"20\" fill=\"white\"/></svg>')",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y), var(--tk-x) var(--tk-y)",
+          "mask-size": "0, 0",
+          "animation": "tk-theme-checkerboard-reveal var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-checkerboard-reveal": {
+          "0%": {
+            "mask-size": "0, 0",
+            "mask-position": "var(--tk-x) var(--tk-y), var(--tk-x) var(--tk-y)"
+          },
+          "40%": {
+            "mask-size": "calc(var(--tk-r) * 1.4), 0",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 0.7) calc(var(--tk-y) - var(--tk-r) * 0.7), var(--tk-x) var(--tk-y)"
+          },
+          "100%": {
+            "mask-size": "calc(var(--tk-r) * 3.5), calc(var(--tk-r) * 2)",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 1.75) calc(var(--tk-y) - var(--tk-r) * 1.75), calc(var(--tk-x) - var(--tk-r) * 1) calc(var(--tk-y) - var(--tk-r) * 1)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/ripple-reveal",
+      "type": "registry:item",
+      "title": "Ripple Reveal",
+      "description": "Concentric rings ripple outward from the click point.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-ripple-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-ripple-reveal)": {
+          "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"none\" stroke=\"white\" stroke-width=\"4\"/><circle cx=\"20\" cy=\"20\" r=\"10\" fill=\"none\" stroke=\"white\" stroke-width=\"4\"/><circle cx=\"20\" cy=\"20\" r=\"2\" fill=\"white\"/></svg>'), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><circle cx=\"20\" cy=\"20\" r=\"20\" fill=\"white\"/></svg>')",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y), var(--tk-x) var(--tk-y)",
+          "mask-size": "0, 0",
+          "animation": "tk-theme-ripple-reveal var(--tk-theme-duration, 1100ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-ripple-reveal": {
+          "0%": {
+            "mask-size": "0, 0",
+            "mask-position": "var(--tk-x) var(--tk-y), var(--tk-x) var(--tk-y)"
+          },
+          "40%": {
+            "mask-size": "calc(var(--tk-r) * 1.52), 0",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 0.76) calc(var(--tk-y) - var(--tk-r) * 0.76), var(--tk-x) var(--tk-y)"
+          },
+          "100%": {
+            "mask-size": "calc(var(--tk-r) * 3.8), calc(var(--tk-r) * 2)",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 1.9) calc(var(--tk-y) - var(--tk-r) * 1.9), calc(var(--tk-x) - var(--tk-r) * 1) calc(var(--tk-y) - var(--tk-r) * 1)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/venetian-blinds",
+      "type": "registry:item",
+      "title": "Venetian Blinds",
+      "description": "Horizontal slats open one by one, like blinds.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-venetian-blinds)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-venetian-blinds)": {
+          "animation": "tk-theme-venetian-blinds var(--tk-theme-duration, 700ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-venetian-blinds": {
+          "from": {
+            "clip-path": "polygon( var(--tk-left) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 2vh), var(--tk-left) calc(var(--tk-top) + 2vh), var(--tk-left) calc(var(--tk-top) + 12vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 12vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 14vh), var(--tk-left) calc(var(--tk-top) + 14vh), var(--tk-left) calc(var(--tk-top) + 24vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 24vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 26vh), var(--tk-left) calc(var(--tk-top) + 26vh), var(--tk-left) calc(var(--tk-top) + 36vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 36vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 38vh), var(--tk-left) calc(var(--tk-top) + 38vh), var(--tk-left) calc(var(--tk-top) + 48vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 48vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 50vh), var(--tk-left) calc(var(--tk-top) + 50vh), var(--tk-left) calc(var(--tk-top) + 60vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 60vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 62vh), var(--tk-left) calc(var(--tk-top) + 62vh), var(--tk-left) calc(var(--tk-top) + 72vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 72vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 74vh), var(--tk-left) calc(var(--tk-top) + 74vh), var(--tk-left) calc(var(--tk-top) + 84vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 84vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 86vh), var(--tk-left) calc(var(--tk-top) + 86vh), var(--tk-left) calc(var(--tk-top) + 96vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 96vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 98vh), var(--tk-left) calc(var(--tk-top) + 98vh) )"
+          },
+          "to": {
+            "clip-path": "polygon( var(--tk-left) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 10vh), var(--tk-left) calc(var(--tk-top) + 10vh), var(--tk-left) calc(var(--tk-top) + 10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 22vh), var(--tk-left) calc(var(--tk-top) + 22vh), var(--tk-left) calc(var(--tk-top) + 22vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 22vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 34vh), var(--tk-left) calc(var(--tk-top) + 34vh), var(--tk-left) calc(var(--tk-top) + 34vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 34vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 46vh), var(--tk-left) calc(var(--tk-top) + 46vh), var(--tk-left) calc(var(--tk-top) + 46vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 46vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 58vh), var(--tk-left) calc(var(--tk-top) + 58vh), var(--tk-left) calc(var(--tk-top) + 58vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 58vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 70vh), var(--tk-left) calc(var(--tk-top) + 70vh), var(--tk-left) calc(var(--tk-top) + 70vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 70vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 82vh), var(--tk-left) calc(var(--tk-top) + 82vh), var(--tk-left) calc(var(--tk-top) + 82vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 82vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 94vh), var(--tk-left) calc(var(--tk-top) + 94vh), var(--tk-left) calc(var(--tk-top) + 94vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 94vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh) )"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/spiral-reveal",
+      "type": "registry:item",
+      "title": "Spiral Reveal",
+      "description": "A spiral-shaped mask winds outward.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-spiral-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-spiral-reveal)": {
+          "mask-image": "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><path d=\"M20 20 m0 -16 a16 16 0 1 1 -11.3 27.3 a11 11 0 1 1 7.8 -18.8 a6 6 0 1 1 -4.2 10.2\" fill=\"none\" stroke=\"white\" stroke-width=\"4\" stroke-linecap=\"round\"/></svg>'), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\"><circle cx=\"20\" cy=\"20\" r=\"20\" fill=\"white\"/></svg>')",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y), var(--tk-x) var(--tk-y)",
+          "mask-size": "0, 0",
+          "animation": "tk-theme-spiral-reveal var(--tk-theme-duration, 1300ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-spiral-reveal": {
+          "0%": {
+            "mask-size": "0, 0",
+            "mask-position": "var(--tk-x) var(--tk-y), var(--tk-x) var(--tk-y)"
+          },
+          "40%": {
+            "mask-size": "calc(var(--tk-r) * 1.52), 0",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 0.76) calc(var(--tk-y) - var(--tk-r) * 0.76), var(--tk-x) var(--tk-y)"
+          },
+          "100%": {
+            "mask-size": "calc(var(--tk-r) * 3.8), calc(var(--tk-r) * 2)",
+            "mask-position": "calc(var(--tk-x) - var(--tk-r) * 1.9) calc(var(--tk-y) - var(--tk-r) * 1.9), calc(var(--tk-x) - var(--tk-r) * 1) calc(var(--tk-y) - var(--tk-r) * 1)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/wave-reveal",
+      "type": "registry:item",
+      "title": "Wave Reveal",
+      "description": "A wavy edge sweeps across the viewport.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-wave-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-wave-reveal)": {
+          "animation": "tk-theme-wave-reveal var(--tk-theme-duration, 800ms) var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+        },
+        "@keyframes tk-theme-wave-reveal": {
+          "from": {
+            "clip-path": "polygon( var(--tk-left) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 97.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 95vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 92.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 90vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 87.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 85vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 82.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 80vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 77.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 75vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 72.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 70vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 67.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 65vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 62.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 60vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 57.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 55vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 52.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 47.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 45vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 42.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 40vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 37.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 35vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 32.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 30vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 27.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 25vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 22.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 20vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 17.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 15vw) calc(var(--tk-top) + -9vh), calc(var(--tk-left) + 12.5vw) calc(var(--tk-top) + -8.121vh), calc(var(--tk-left) + 10vw) calc(var(--tk-top) + -6vh), calc(var(--tk-left) + 7.5vw) calc(var(--tk-top) + -3.879vh), calc(var(--tk-left) + 5vw) calc(var(--tk-top) + -3vh), calc(var(--tk-left) + 2.5vw) calc(var(--tk-top) + -3.879vh), var(--tk-left) calc(var(--tk-top) + -6vh) )"
+          },
+          "to": {
+            "clip-path": "polygon( var(--tk-left) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + -10vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 97.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 95vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 92.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 90vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 87.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 85vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 82.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 80vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 77.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 75vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 72.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 70vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 67.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 65vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 62.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 60vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 57.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 55vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 52.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 50vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 47.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 45vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 42.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 40vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 37.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 35vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 32.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 30vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 27.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 25vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 22.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 20vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 17.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 15vw) calc(var(--tk-top) + 103vh), calc(var(--tk-left) + 12.5vw) calc(var(--tk-top) + 103.879vh), calc(var(--tk-left) + 10vw) calc(var(--tk-top) + 106vh), calc(var(--tk-left) + 7.5vw) calc(var(--tk-top) + 108.121vh), calc(var(--tk-left) + 5vw) calc(var(--tk-top) + 109vh), calc(var(--tk-left) + 2.5vw) calc(var(--tk-top) + 108.121vh), var(--tk-left) calc(var(--tk-top) + 106vh) )"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/clock-wipe",
+      "type": "registry:item",
+      "title": "Clock Wipe",
+      "description": "A wedge sweeps clockwise around the viewport centre, like a clock hand.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-clock-wipe)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-clock-wipe)": {
+          "animation": "tk-theme-clock-wipe var(--tk-theme-duration, 1100ms) var(--tk-theme-easing, linear) both"
+        },
+        "@keyframes tk-theme-clock-wipe": {
+          "0%": {
+            "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top) )"
+          },
+          "12.5%": {
+            "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top) )"
+          },
+          "37.5%": {
+            "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh) )"
+          },
+          "62.5%": {
+            "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh) )"
+          },
+          "87.5%": {
+            "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) var(--tk-top), var(--tk-left) var(--tk-top) )"
+          },
+          "100%": {
+            "clip-path": "polygon( var(--tk-cx) var(--tk-cy), calc(var(--tk-left) + 50vw) var(--tk-top), calc(var(--tk-left) + 100vw) var(--tk-top), calc(var(--tk-left) + 100vw) calc(var(--tk-top) + 100vh), var(--tk-left) calc(var(--tk-top) + 100vh), var(--tk-left) var(--tk-top), calc(var(--tk-left) + 50vw) var(--tk-top) )"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-frog",
+      "type": "registry:item",
+      "title": "GIF Frog",
+      "description": "A dancing frog reveals the new theme through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-frog)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-frog)": {
+          "mask-image": "url(\"https://media.tenor.com/jNj-TzGDB9YAAAAm/cute-frog.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-frog var(--tk-theme-duration, 1500ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-frog": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 0.535 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 0.535 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-penguin",
+      "type": "registry:item",
+      "title": "GIF Penguin",
+      "description": "A dancing penguin reveals the new theme through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-penguin)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-penguin)": {
+          "mask-image": "url(\"https://media.tenor.com/tGCwmrNRc9wAAAAi/dance-dancer.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-penguin var(--tk-theme-duration, 1500ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-penguin": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 1 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 1 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-cat",
+      "type": "registry:item",
+      "title": "GIF Cat",
+      "description": "A dancing cat reveals the new theme through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-cat)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-cat)": {
+          "mask-image": "url(\"https://media.tenor.com/GQAsycjoZG8AAAAi/scuba-scuba-cat.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-cat var(--tk-theme-duration, 1500ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-cat": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 1 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 1 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-michael-jackson",
+      "type": "registry:item",
+      "title": "GIF Michael Jackson",
+      "description": "A moonwalk reveals the new theme through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-michael-jackson)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-michael-jackson)": {
+          "mask-image": "url(\"https://media.tenor.com/MdlKGirpTAQAAAAi/michael-jackson-moon-walk.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-michael-jackson var(--tk-theme-duration, 1700ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-michael-jackson": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 1 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 1 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-deadpool",
+      "type": "registry:item",
+      "title": "GIF Deadpool",
+      "description": "Deadpool breaks in through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-deadpool)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-deadpool)": {
+          "mask-image": "url(\"https://media.tenor.com/VJlZzo7UdagAAAAi/deadpool-marvel.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-deadpool var(--tk-theme-duration, 1900ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-deadpool": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 0.8675 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 0.8675 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-chika",
+      "type": "registry:item",
+      "title": "GIF Chika",
+      "description": "Chika's dance reveals the new theme through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-chika)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-chika)": {
+          "mask-image": "url(\"https://media.tenor.com/gVPazpEOQ3kAAAAi/chika.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-chika var(--tk-theme-duration, 1700ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-chika": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 1.2604 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 1.2604 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "theme/gif-hakari-dance",
+      "type": "registry:item",
+      "title": "GIF Hakari Dance",
+      "description": "Hakari dances in through an expanding mask.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme/theme-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-theme-gif-hakari-dance)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-gif-hakari-dance)": {
+          "mask-image": "url(\"https://media.tenor.com/uRlxzRNgp2MAAAAi/anime-girl.gif\")",
+          "mask-repeat": "no-repeat",
+          "mask-position": "var(--tk-x) var(--tk-y)",
+          "mask-size": "0",
+          "animation": "tk-theme-gif-hakari-dance var(--tk-theme-duration, 1500ms) var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-theme-gif-hakari-dance": {
+          "0%": {
+            "mask-size": "0",
+            "mask-position": "var(--tk-x) var(--tk-y)"
+          },
+          "10%, 90%": {
+            "mask-size": "50vmax",
+            "mask-position": "calc(var(--tk-x) - 50vmax / 2) calc(var(--tk-y) - 50vmax * 0.9125 / 2)"
+          },
+          "100%": {
+            "mask-size": "2000vmax",
+            "mask-position": "calc(var(--tk-x) - 2000vmax / 2) calc(var(--tk-y) - 2000vmax * 0.9125 / 2)"
+          }
+        }
+      },
+      "categories": [
+        "theme"
+      ]
+    },
+    {
+      "name": "page/page-transition",
+      "type": "registry:component",
+      "title": "Page Transition",
+      "description": "PageTransition and navigateWithTransition: route changes animated by React's <ViewTransition>.",
+      "files": [
+        {
+          "path": ".registry-build/registry/page/page-transition.tsx",
+          "target": "components/transitions/page-transition.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-old(.tk-page), ::view-transition-new(.tk-page)": {
+          "mix-blend-mode": "normal"
+        },
+        "::view-transition-image-pair(.tk-page)": {
+          "overflow": "clip"
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          "::view-transition-old(.tk-page), ::view-transition-new(.tk-page)": {
+            "animation": "none !important"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/fade",
+      "type": "registry:item",
+      "title": "Fade",
+      "description": "The old page fades out as the new one fades in.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-page-fade)": {
+          "animation": "tk-page-fade-out var(--tk-page-duration, 300ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-fade)": {
+          "animation": "tk-page-fade-in var(--tk-page-duration, 300ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "@keyframes tk-page-fade-out": {
+          "from": {
+            "opacity": "1"
+          },
+          "to": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-fade-in": {
+          "from": {
+            "opacity": "0"
+          },
+          "to": {
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/slide",
+      "type": "registry:item",
+      "title": "Slide",
+      "description": "Pages slide past each other; backward navigations reverse.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-page-slide), ::view-transition-new(.tk-page-slide)": {
+          "--tk-page-dir": "1"
+        },
+        "::view-transition-old(.tk-page-slide.tk-page-back), ::view-transition-new(.tk-page-slide.tk-page-back)": {
+          "--tk-page-dir": "-1"
+        },
+        "::view-transition-old(.tk-page-slide)": {
+          "animation": "tk-page-slide-out var(--tk-page-duration, 400ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "::view-transition-new(.tk-page-slide)": {
+          "animation": "tk-page-slide-in var(--tk-page-duration, 400ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "@keyframes tk-page-slide-out": {
+          "from": {
+            "transform": "translateX(0)"
+          },
+          "to": {
+            "transform": "translateX(calc(-100% * var(--tk-page-dir)))"
+          }
+        },
+        "@keyframes tk-page-slide-in": {
+          "from": {
+            "transform": "translateX(calc(100% * var(--tk-page-dir)))"
+          },
+          "to": {
+            "transform": "translateX(0)"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/scale",
+      "type": "registry:item",
+      "title": "Scale",
+      "description": "The new page scales up while the old one fades out.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-scale.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-scale.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-scale), ::view-transition-new(.tk-page-scale)": {
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-scale)": {
+          "animation": "tk-page-scale-out var(--tk-page-duration, 500ms) var(--tk-page-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "::view-transition-new(.tk-page-scale)": {
+          "animation": "tk-page-scale-in var(--tk-page-duration, 500ms) var(--tk-page-easing, cubic-bezier(0.16, 1, 0.3, 1)) both"
+        },
+        "@keyframes tk-page-scale-out": {
+          "from": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "scale(0.8)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-scale-in": {
+          "from": {
+            "transform": "scale(1.2)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/flip",
+      "type": "registry:item",
+      "title": "Flip",
+      "description": "A 3D card flip around the vertical axis.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-flip.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-exit-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-exit-cx) + 50vw)"
+        },
+        "::view-transition-image-pair(.tk-page-flip.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-enter-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-enter-cx) + 50vw)"
+        },
+        "::view-transition-image-pair(.tk-page-flip)": {
+          "perspective": "1200px",
+          "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-flip), ::view-transition-new(.tk-page-flip)": {
+          "--tk-page-dir": "1",
+          "backface-visibility": "hidden"
+        },
+        "::view-transition-old(.tk-page-flip)": {
+          "transform-origin": "var(--tk-page-left) var(--tk-page-y)",
+          "animation": "tk-page-flip-out var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-flip)": {
+          "transform-origin": "var(--tk-page-right) var(--tk-page-y)",
+          "animation": "tk-page-flip-in var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-old(.tk-page-flip.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-right) var(--tk-page-y)"
+        },
+        "::view-transition-new(.tk-page-flip.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-left) var(--tk-page-y)"
+        },
+        "@keyframes tk-page-flip-out": {
+          "from": {
+            "transform": "rotateY(0deg)"
+          },
+          "to": {
+            "transform": "rotateY(calc(-90deg * var(--tk-page-dir)))"
+          }
+        },
+        "@keyframes tk-page-flip-in": {
+          "from": {
+            "transform": "rotateY(calc(90deg * var(--tk-page-dir)))"
+          },
+          "to": {
+            "transform": "rotateY(0deg)"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/blur",
+      "type": "registry:item",
+      "title": "Blur",
+      "description": "The old page blurs away while the new one sharpens in.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-blur.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-blur.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-blur), ::view-transition-new(.tk-page-blur)": {
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-blur)": {
+          "animation": "tk-page-blur-out var(--tk-page-duration, 500ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-blur)": {
+          "animation": "tk-page-blur-in var(--tk-page-duration, 500ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "@keyframes tk-page-blur-out": {
+          "from": {
+            "filter": "blur(0)",
+            "opacity": "1",
+            "transform": "scale(1)"
+          },
+          "to": {
+            "filter": "blur(12px)",
+            "opacity": "0",
+            "transform": "scale(1.02)"
+          }
+        },
+        "@keyframes tk-page-blur-in": {
+          "from": {
+            "filter": "blur(12px)",
+            "opacity": "0",
+            "transform": "scale(0.98)"
+          },
+          "to": {
+            "filter": "blur(0)",
+            "opacity": "1",
+            "transform": "scale(1)"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/rotate",
+      "type": "registry:item",
+      "title": "Rotate",
+      "description": "The new page rotates in while the old one fades out.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-rotate.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-rotate.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-rotate), ::view-transition-new(.tk-page-rotate)": {
+          "--tk-page-dir": "1",
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-rotate.tk-page-back), ::view-transition-new(.tk-page-rotate.tk-page-back)": {
+          "--tk-page-dir": "-1"
+        },
+        "::view-transition-old(.tk-page-rotate)": {
+          "animation": "tk-page-rotate-out var(--tk-page-duration, 500ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "::view-transition-new(.tk-page-rotate)": {
+          "animation": "tk-page-rotate-in var(--tk-page-duration, 500ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "@keyframes tk-page-rotate-out": {
+          "from": {
+            "transform": "rotate(0deg) scale(1)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "rotate(calc(-10deg * var(--tk-page-dir))) scale(0.9)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-rotate-in": {
+          "from": {
+            "transform": "rotate(calc(10deg * var(--tk-page-dir))) scale(0.9)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "rotate(0deg) scale(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/zoom",
+      "type": "registry:item",
+      "title": "Zoom",
+      "description": "The old page zooms out as the new one zooms in.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-zoom.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-zoom.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-zoom), ::view-transition-new(.tk-page-zoom)": {
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-zoom)": {
+          "animation": "tk-page-zoom-out var(--tk-page-duration, 400ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "::view-transition-new(.tk-page-zoom)": {
+          "animation": "tk-page-zoom-in var(--tk-page-duration, 400ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "@keyframes tk-page-zoom-out": {
+          "from": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "scale(0.5)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-zoom-in": {
+          "from": {
+            "transform": "scale(2)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/curtain",
+      "type": "registry:item",
+      "title": "Curtain",
+      "description": "The new page opens out of a centre strip as the old one closes into it.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-curtain.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-curtain.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-curtain)": {
+          "animation": "tk-page-curtain-out var(--tk-page-duration, 600ms) var(--tk-page-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+        },
+        "::view-transition-new(.tk-page-curtain)": {
+          "animation": "tk-page-curtain-in var(--tk-page-duration, 600ms) var(--tk-page-easing, cubic-bezier(0.65, 0, 0.35, 1)) both"
+        },
+        "@keyframes tk-page-curtain-out": {
+          "from": {
+            "clip-path": "inset(0 0 0 0)",
+            "opacity": "1"
+          },
+          "to": {
+            "clip-path": "inset(0 calc(100% - var(--tk-page-x)) 0 var(--tk-page-x))",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-curtain-in": {
+          "from": {
+            "clip-path": "inset(0 calc(100% - var(--tk-page-x)) 0 var(--tk-page-x))"
+          },
+          "to": {
+            "clip-path": "inset(0 0 0 0)"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/cube",
+      "type": "registry:item",
+      "title": "Cube",
+      "description": "Pages turn around the faces of a 3D cube.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-cube.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-exit-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-exit-cx) + 50vw)"
+        },
+        "::view-transition-image-pair(.tk-page-cube.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-enter-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-enter-cx) + 50vw)"
+        },
+        "::view-transition-image-pair(.tk-page-cube)": {
+          "perspective": "1500px",
+          "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-cube), ::view-transition-new(.tk-page-cube)": {
+          "--tk-page-dir": "1"
+        },
+        "::view-transition-old(.tk-page-cube)": {
+          "transform-origin": "var(--tk-page-right) var(--tk-page-y)",
+          "animation": "tk-page-cube-out var(--tk-page-duration, 700ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-cube)": {
+          "transform-origin": "var(--tk-page-left) var(--tk-page-y)",
+          "animation": "tk-page-cube-in var(--tk-page-duration, 700ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-old(.tk-page-cube.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-left) var(--tk-page-y)"
+        },
+        "::view-transition-new(.tk-page-cube.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-right) var(--tk-page-y)"
+        },
+        "@keyframes tk-page-cube-out": {
+          "from": {
+            "transform": "rotateY(0deg) translateZ(0)"
+          },
+          "to": {
+            "transform": "rotateY(calc(-90deg * var(--tk-page-dir))) translateZ(-200px)"
+          }
+        },
+        "@keyframes tk-page-cube-in": {
+          "from": {
+            "transform": "rotateY(calc(90deg * var(--tk-page-dir))) translateZ(-200px)"
+          },
+          "to": {
+            "transform": "rotateY(0deg) translateZ(0)"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/skew-slide",
+      "type": "registry:item",
+      "title": "Skew Slide",
+      "description": "Pages skew as they slide past each other.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-skew-slide.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-skew-slide.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-skew-slide), ::view-transition-new(.tk-page-skew-slide)": {
+          "--tk-page-dir": "1",
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-skew-slide.tk-page-back), ::view-transition-new(.tk-page-skew-slide.tk-page-back)": {
+          "--tk-page-dir": "-1"
+        },
+        "::view-transition-old(.tk-page-skew-slide)": {
+          "animation": "tk-page-skew-slide-out var(--tk-page-duration, 450ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "::view-transition-new(.tk-page-skew-slide)": {
+          "animation": "tk-page-skew-slide-in var(--tk-page-duration, 450ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "@keyframes tk-page-skew-slide-out": {
+          "from": {
+            "transform": "skewX(0deg) translateX(0)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "skewX(calc(-8deg * var(--tk-page-dir))) translateX(calc(-100% * var(--tk-page-dir)))",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-skew-slide-in": {
+          "from": {
+            "transform": "skewX(calc(8deg * var(--tk-page-dir))) translateX(calc(100% * var(--tk-page-dir)))",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "skewX(0deg) translateX(0)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/page-curl",
+      "type": "registry:item",
+      "title": "Page Curl",
+      "description": "The old page curls up from the corner like a book page.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-page-curl.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-exit-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-exit-cx) + 50vw)",
+          "--tk-page-bottom": "min(100%, var(--tk-exit-cy) + 50vh)"
+        },
+        "::view-transition-image-pair(.tk-page-page-curl.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-enter-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-enter-cx) + 50vw)",
+          "--tk-page-bottom": "min(100%, var(--tk-enter-cy) + 50vh)"
+        },
+        "::view-transition-group(.tk-page-page-curl.tk-page-exit)": {
+          "z-index": "1"
+        },
+        "::view-transition-image-pair(.tk-page-page-curl)": {
+          "perspective": "1400px",
+          "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-page-curl)": {
+          "--tk-page-dir": "1",
+          "transform-origin": "var(--tk-page-right) var(--tk-page-bottom)",
+          "animation": "tk-page-page-curl-out var(--tk-page-duration, 650ms) var(--tk-page-easing, ease-in) both"
+        },
+        "::view-transition-old(.tk-page-page-curl.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-left) var(--tk-page-bottom)"
+        },
+        "::view-transition-new(.tk-page-page-curl)": {
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)",
+          "animation": "tk-page-page-curl-in var(--tk-page-duration, 650ms) var(--tk-page-easing, ease-out) both"
+        },
+        "@keyframes tk-page-page-curl-out": {
+          "from": {
+            "transform": "rotateX(0deg) rotateY(0deg)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "rotateX(20deg) rotateY(calc(-70deg * var(--tk-page-dir)))",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-page-curl-in": {
+          "from": {
+            "transform": "scale(0.96)",
+            "opacity": "0.4"
+          },
+          "to": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/accordion",
+      "type": "registry:item",
+      "title": "Accordion",
+      "description": "The old page folds shut towards one edge as the new one unfolds from it.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-accordion.tk-page-exit)": {
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-exit-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-exit-cx) + 50vw)"
+        },
+        "::view-transition-image-pair(.tk-page-accordion.tk-page-enter)": {
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-enter-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-enter-cx) + 50vw)"
+        },
+        "::view-transition-old(.tk-page-accordion), ::view-transition-new(.tk-page-accordion)": {
+          "transform-origin": "var(--tk-page-left) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-accordion.tk-page-back), ::view-transition-new(.tk-page-accordion.tk-page-back)": {
+          "transform-origin": "var(--tk-page-right) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-accordion)": {
+          "animation": "tk-page-accordion-out var(--tk-page-duration, 550ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-accordion)": {
+          "animation": "tk-page-accordion-in var(--tk-page-duration, 550ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "@keyframes tk-page-accordion-out": {
+          "from": {
+            "transform": "scaleX(1)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "scaleX(0)",
+            "opacity": "0.4"
+          }
+        },
+        "@keyframes tk-page-accordion-in": {
+          "from": {
+            "transform": "scaleX(0)",
+            "opacity": "0.4"
+          },
+          "to": {
+            "transform": "scaleX(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/doorway",
+      "type": "registry:item",
+      "title": "Doorway",
+      "description": "The old page swings away on a hinge, revealing the new one.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-doorway.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-exit-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-exit-cx) + 50vw)"
+        },
+        "::view-transition-image-pair(.tk-page-doorway.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )",
+          "--tk-page-left": "max(0px, var(--tk-enter-cx) - 50vw)",
+          "--tk-page-right": "min(100%, var(--tk-enter-cx) + 50vw)"
+        },
+        "::view-transition-group(.tk-page-doorway.tk-page-exit)": {
+          "z-index": "1"
+        },
+        "::view-transition-image-pair(.tk-page-doorway)": {
+          "perspective": "1200px",
+          "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-doorway)": {
+          "--tk-page-dir": "1",
+          "transform-origin": "var(--tk-page-left) var(--tk-page-y)",
+          "animation": "tk-page-doorway-out var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in) both"
+        },
+        "::view-transition-old(.tk-page-doorway.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-right) var(--tk-page-y)"
+        },
+        "::view-transition-new(.tk-page-doorway)": {
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)",
+          "animation": "tk-page-doorway-in var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-out) both"
+        },
+        "@keyframes tk-page-doorway-out": {
+          "from": {
+            "transform": "rotateY(0deg)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "rotateY(calc(-110deg * var(--tk-page-dir)))",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-doorway-in": {
+          "from": {
+            "transform": "scale(1.05)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/book-flip",
+      "type": "registry:item",
+      "title": "Book Flip",
+      "description": "The new page turns over the old one around a central spine.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-book-flip.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-book-flip.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-book-flip)": {
+          "perspective": "1600px",
+          "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-book-flip), ::view-transition-new(.tk-page-book-flip)": {
+          "--tk-page-dir": "1",
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-book-flip.tk-page-back), ::view-transition-new(.tk-page-book-flip.tk-page-back)": {
+          "--tk-page-dir": "-1"
+        },
+        "::view-transition-old(.tk-page-book-flip)": {
+          "animation": "tk-page-book-flip-out var(--tk-page-duration, 700ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-book-flip)": {
+          "animation": "tk-page-book-flip-in var(--tk-page-duration, 700ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "@keyframes tk-page-book-flip-out": {
+          "from": {
+            "transform": "rotateX(0deg)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "rotateX(calc(90deg * var(--tk-page-dir)))",
+            "opacity": "0.3"
+          }
+        },
+        "@keyframes tk-page-book-flip-in": {
+          "from": {
+            "transform": "rotateX(calc(-90deg * var(--tk-page-dir)))",
+            "opacity": "0.3"
+          },
+          "to": {
+            "transform": "rotateX(0deg)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/roll",
+      "type": "registry:item",
+      "title": "Roll",
+      "description": "The old page rolls away like a scroll as the new one unrolls.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-roll.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-top": "max(0px, var(--tk-exit-cy) - 50vh)",
+          "--tk-page-bottom": "min(100%, var(--tk-exit-cy) + 50vh)"
+        },
+        "::view-transition-image-pair(.tk-page-roll.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-top": "max(0px, var(--tk-enter-cy) - 50vh)",
+          "--tk-page-bottom": "min(100%, var(--tk-enter-cy) + 50vh)"
+        },
+        "::view-transition-old(.tk-page-roll), ::view-transition-new(.tk-page-roll)": {
+          "--tk-page-dir": "1",
+          "--tk-page-shift": "calc((var(--tk-page-bottom) - var(--tk-page-top)) / -5)",
+          "transform-origin": "var(--tk-page-x) var(--tk-page-top)"
+        },
+        "::view-transition-old(.tk-page-roll.tk-page-back), ::view-transition-new(.tk-page-roll.tk-page-back)": {
+          "--tk-page-dir": "-1",
+          "transform-origin": "var(--tk-page-x) var(--tk-page-bottom)"
+        },
+        "::view-transition-old(.tk-page-roll)": {
+          "animation": "tk-page-roll-out var(--tk-page-duration, 550ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "::view-transition-new(.tk-page-roll)": {
+          "animation": "tk-page-roll-in var(--tk-page-duration, 550ms) var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1)) both"
+        },
+        "@keyframes tk-page-roll-out": {
+          "from": {
+            "transform": "scaleY(1) translateY(0)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "scaleY(0) translateY(calc(var(--tk-page-shift) * var(--tk-page-dir)))",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-roll-in": {
+          "from": {
+            "transform": "scaleY(0) translateY(calc(var(--tk-page-shift) * var(--tk-page-dir)))",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "scaleY(1) translateY(0)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/fold",
+      "type": "registry:item",
+      "title": "Fold",
+      "description": "The old page folds inward along its centre as the new one emerges.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-fold.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-fold.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-group(.tk-page-fold.tk-page-exit)": {
+          "z-index": "1"
+        },
+        "::view-transition-image-pair(.tk-page-fold)": {
+          "perspective": "1200px",
+          "perspective-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-fold), ::view-transition-new(.tk-page-fold)": {
+          "transform-origin": "var(--tk-page-x) var(--tk-page-y)"
+        },
+        "::view-transition-old(.tk-page-fold)": {
+          "animation": "tk-page-fold-out var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-fold)": {
+          "animation": "tk-page-fold-in var(--tk-page-duration, 600ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "@keyframes tk-page-fold-out": {
+          "from": {
+            "transform": "rotateY(0deg) scaleX(1)",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "rotateY(90deg) scaleX(0.3)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-fold-in": {
+          "from": {
+            "transform": "scale(0.9)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "scale(1)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/glitch",
+      "type": "registry:item",
+      "title": "Glitch",
+      "description": "The old page jitters out in stepped frames before the new one snaps in.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-old(.tk-page-glitch)": {
+          "animation": "tk-page-glitch-out var(--tk-page-duration, 400ms) var(--tk-page-easing, steps(6, end)) both"
+        },
+        "::view-transition-new(.tk-page-glitch)": {
+          "animation": "tk-page-glitch-in var(--tk-page-duration, 400ms) var(--tk-page-easing, steps(6, end)) both"
+        },
+        "@keyframes tk-page-glitch-out": {
+          "0%": {
+            "transform": "translate(0, 0)",
+            "opacity": "1"
+          },
+          "20%": {
+            "transform": "translate(-6px, 2px)",
+            "opacity": "0.9"
+          },
+          "40%": {
+            "transform": "translate(6px, -2px)",
+            "opacity": "0.7"
+          },
+          "60%": {
+            "transform": "translate(-4px, 0)",
+            "opacity": "0.5"
+          },
+          "80%": {
+            "transform": "translate(4px, 2px)",
+            "opacity": "0.2"
+          },
+          "100%": {
+            "transform": "translate(0, 0)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-glitch-in": {
+          "0%": {
+            "transform": "translate(4px, -2px)",
+            "opacity": "0"
+          },
+          "30%": {
+            "transform": "translate(-6px, 2px)",
+            "opacity": "0.4"
+          },
+          "60%": {
+            "transform": "translate(6px, 0)",
+            "opacity": "0.8"
+          },
+          "100%": {
+            "transform": "translate(0, 0)",
+            "opacity": "1"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "page/iris-wipe",
+      "type": "registry:item",
+      "title": "Iris Wipe",
+      "description": "An iris closes on the old page and opens on the new one.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/page/page-transition.json"
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-page-iris-wipe.tk-page-exit)": {
+          "--tk-page-x": "calc( (max(0px, var(--tk-exit-cx) - 50vw) + min(100%, var(--tk-exit-cx) + 50vw)) / 2 )",
+          "--tk-page-y": "calc( (max(0px, var(--tk-exit-cy) - 50vh) + min(100%, var(--tk-exit-cy) + 50vh)) / 2 )"
+        },
+        "::view-transition-image-pair(.tk-page-iris-wipe.tk-page-enter)": {
+          "--tk-page-x": "calc( ( max(0px, var(--tk-enter-cx) - 50vw) + min(100%, var(--tk-enter-cx) + 50vw) ) / 2 )",
+          "--tk-page-y": "calc( ( max(0px, var(--tk-enter-cy) - 50vh) + min(100%, var(--tk-enter-cy) + 50vh) ) / 2 )"
+        },
+        "::view-transition-old(.tk-page-iris-wipe), ::view-transition-new(.tk-page-iris-wipe)": {
+          "--tk-page-r": "min(71%, hypot(50vw, 50vh))"
+        },
+        "::view-transition-old(.tk-page-iris-wipe)": {
+          "animation": "tk-page-iris-wipe-close calc(var(--tk-page-duration, 700ms) / 2) var(--tk-page-easing, ease-in) both"
+        },
+        "::view-transition-new(.tk-page-iris-wipe)": {
+          "animation": "tk-page-iris-wipe-open calc(var(--tk-page-duration, 700ms) / 2) var(--tk-page-easing, ease-out) calc(var(--tk-page-duration, 700ms) / 2) both"
+        },
+        "@keyframes tk-page-iris-wipe-close": {
+          "from": {
+            "clip-path": "circle(var(--tk-page-r) at var(--tk-page-x) var(--tk-page-y))"
+          },
+          "to": {
+            "clip-path": "circle(0 at var(--tk-page-x) var(--tk-page-y))"
+          }
+        },
+        "@keyframes tk-page-iris-wipe-open": {
+          "from": {
+            "clip-path": "circle(0 at var(--tk-page-x) var(--tk-page-y))"
+          },
+          "to": {
+            "clip-path": "circle(var(--tk-page-r) at var(--tk-page-x) var(--tk-page-y))"
+          }
+        }
+      },
+      "categories": [
+        "page"
+      ]
+    },
+    {
+      "name": "ui/ui-transition",
+      "type": "registry:component",
+      "title": "UI Transition",
+      "description": "The tk() class helper, useTransitionNames and the tk-* View Transition Classes every UI component composes with React's <ViewTransition>.",
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/ui-transition.ts",
+          "target": "components/transitions/ui-transition.ts",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "@property --tk-ui-exit": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "150ms"
+        },
+        "@property --tk-ui-enter": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "220ms"
+        },
+        "@property --tk-ui-move": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "380ms"
+        },
+        "@property --tk-ui-slow": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "520ms"
+        },
+        "@property --tk-ui-stagger": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "30ms"
+        },
+        "@property --tk-ui-distance": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "1.5rem"
+        },
+        "@property --tk-ui-ease": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "cubic-bezier(0.32, 0.72, 0, 1)"
+        },
+        "@property --tk-ui-ease-out": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "cubic-bezier(0.22, 1, 0.36, 1)"
+        },
+        "@property --tk-ui-spring": {
+          "syntax": "\"*\"",
+          "inherits": "true",
+          "initial-value": "linear( 0, 0.22 8%, 0.6 18%, 0.94 30%, 1.06 40%, 1.04 48%, 1 60%, 0.995 74%, 1 )"
+        },
+        "::view-transition": {
+          "pointer-events": "none"
+        },
+        "::view-transition-group(.tk-morph)": {
+          "animation-duration": "var(--tk-ui-move)",
+          "animation-timing-function": "var(--tk-ui-ease)",
+          "animation-delay": "var(--tk-ui-delay, 0s)"
+        },
+        "::view-transition-old(.tk-morph), ::view-transition-new(.tk-morph)": {
+          "animation-duration": "var(--tk-ui-move)",
+          "animation-timing-function": "var(--tk-ui-ease-out)",
+          "animation-delay": "var(--tk-ui-delay, 0s)"
+        },
+        "::view-transition-old(.tk-text), ::view-transition-new(.tk-text)": {
+          "inline-size": "auto",
+          "block-size": "auto"
+        },
+        "::view-transition-image-pair(.tk-clip)": {
+          "overflow": "clip",
+          "border-radius": "var(--tk-ui-radius, 0)"
+        },
+        "::view-transition-group(.tk-spring)": {
+          "animation-timing-function": "var(--tk-ui-spring)"
+        },
+        "::view-transition-group(.tk-slow)": {
+          "animation-duration": "var(--tk-ui-slow)"
+        },
+        "::view-transition-group(.tk-top)": {
+          "z-index": "10"
+        },
+        "::view-transition-group(.tk-instant)": {
+          "animation": "none"
+        },
+        "::view-transition-old(.tk-fade):only-child": {
+          "animation": "var(--tk-ui-exit) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s) both tk-fade-out"
+        },
+        "::view-transition-new(.tk-fade):only-child": {
+          "animation": "var(--tk-ui-enter) var(--tk-ui-ease-out) calc(var(--tk-ui-delay, 0s) + var(--tk-ui-exit) / 2) both tk-fade-in"
+        },
+        "::view-transition-old(.tk-pop):only-child": {
+          "animation": "var(--tk-ui-exit) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s) both tk-pop-out"
+        },
+        "::view-transition-new(.tk-pop):only-child": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-spring) var(--tk-ui-delay, 0s) both tk-pop-in"
+        },
+        "::view-transition-old(.tk-blur)": {
+          "animation": "var(--tk-ui-enter) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s) both tk-blur-out"
+        },
+        "::view-transition-new(.tk-blur)": {
+          "animation": "var(--tk-ui-enter) var(--tk-ui-ease-out) var(--tk-ui-delay, 0s) both tk-blur-in"
+        },
+        "::view-transition-group(.tk-forward), ::view-transition-group(.tk-up)": {
+          "--tk-ui-dir": "1"
+        },
+        "::view-transition-group(.tk-back), ::view-transition-group(.tk-down)": {
+          "--tk-ui-dir": "-1"
+        },
+        "::view-transition-old(.tk-slide)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-slide-out"
+        },
+        "::view-transition-new(.tk-slide)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-slide-in"
+        },
+        "::view-transition-old(.tk-push)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-push-out"
+        },
+        "::view-transition-new(.tk-push)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-push-in"
+        },
+        "::view-transition-old(.tk-roll)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-roll-out"
+        },
+        "::view-transition-new(.tk-roll)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-roll-in"
+        },
+        "::view-transition-image-pair(.tk-slide), ::view-transition-image-pair(.tk-push), ::view-transition-image-pair(.tk-roll)": {
+          "isolation": "auto"
+        },
+        "::view-transition-old(.tk-slide), ::view-transition-new(.tk-slide), ::view-transition-old(.tk-push), ::view-transition-new(.tk-push), ::view-transition-old(.tk-roll), ::view-transition-new(.tk-roll)": {
+          "mix-blend-mode": "normal"
+        },
+        "::view-transition-group(.tk-delay-1)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 1)"
+        },
+        "::view-transition-group(.tk-delay-2)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 2)"
+        },
+        "::view-transition-group(.tk-delay-3)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 3)"
+        },
+        "::view-transition-group(.tk-delay-4)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 4)"
+        },
+        "::view-transition-group(.tk-delay-5)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 5)"
+        },
+        "::view-transition-group(.tk-delay-6)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 6)"
+        },
+        "::view-transition-group(.tk-delay-7)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 7)"
+        },
+        "::view-transition-group(.tk-delay-8)": {
+          "--tk-ui-delay": "calc(var(--tk-ui-stagger) * 8)"
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          "::view-transition-group(.tk-ui)": {
+            "animation": "none !important"
+          },
+          "::view-transition-old(.tk-ui)": {
+            "animation": "150ms linear both tk-fade-out !important"
+          },
+          "::view-transition-new(.tk-ui)": {
+            "animation": "150ms linear both tk-fade-in !important"
+          }
+        },
+        "@supports (font: -apple-system-body)": {
+          "::view-transition-old(.tk-blur)": {
+            "animation-name": "tk-fade-out"
+          },
+          "::view-transition-new(.tk-blur)": {
+            "animation-name": "tk-fade-in"
+          }
+        },
+        "@keyframes tk-fade-out": {
+          "to": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-fade-in": {
+          "from": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-pop-out": {
+          "to": {
+            "opacity": "0",
+            "scale": "0.92"
+          }
+        },
+        "@keyframes tk-pop-in": {
+          "from": {
+            "opacity": "0",
+            "scale": "0.92"
+          }
+        },
+        "@keyframes tk-blur-out": {
+          "to": {
+            "opacity": "0",
+            "filter": "blur(6px)"
+          }
+        },
+        "@keyframes tk-blur-in": {
+          "from": {
+            "opacity": "0",
+            "filter": "blur(6px)"
+          }
+        },
+        "@keyframes tk-slide-out": {
+          "to": {
+            "opacity": "0",
+            "translate": "calc(var(--tk-ui-distance) * var(--tk-ui-dir, 1) * -1) 0"
+          }
+        },
+        "@keyframes tk-slide-in": {
+          "from": {
+            "opacity": "0",
+            "translate": "calc(var(--tk-ui-distance) * var(--tk-ui-dir, 1)) 0"
+          }
+        },
+        "@keyframes tk-push-out": {
+          "to": {
+            "translate": "calc(-30% * var(--tk-ui-dir, 1)) 0",
+            "opacity": "0.6"
+          }
+        },
+        "@keyframes tk-push-in": {
+          "from": {
+            "translate": "calc(100% * var(--tk-ui-dir, 1)) 0"
+          }
+        },
+        "@keyframes tk-roll-out": {
+          "to": {
+            "opacity": "0",
+            "translate": "0 calc(-100% * var(--tk-ui-dir, 1))"
+          }
+        },
+        "@keyframes tk-roll-in": {
+          "from": {
+            "opacity": "0",
+            "translate": "0 calc(100% * var(--tk-ui-dir, 1))"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "The active pill glides to the selected tab and the panel slides in the direction you moved.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/tabs.tsx",
+          "target": "components/transitions/tabs.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/segmented-control",
+      "type": "registry:component",
+      "title": "Segmented Control",
+      "description": "An iOS-style segmented control whose thumb glides to the chosen option with a slight spring.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/segmented-control.tsx",
+          "target": "components/transitions/segmented-control.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/accordion",
+      "type": "registry:component",
+      "title": "Accordion",
+      "description": "Opening a panel grows its item and the items below glide down, with no height measured in JavaScript.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/accordion.tsx",
+          "target": "components/transitions/accordion.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/carousel",
+      "type": "registry:component",
+      "title": "Carousel",
+      "description": "Slides push in like a track from the side you moved toward, with arrows, dots, swipe, keyboard and optional autoplay.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/carousel.tsx",
+          "target": "components/transitions/carousel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-carousel-slide)": {
+          "--tk-ui-radius": "calc(var(--radius, 0.625rem) + 4px)"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/stack-navigator",
+      "type": "registry:component",
+      "title": "Stack Navigator",
+      "description": "iOS-style push and pop screens in a fixed frame. Screens slide in the direction you travel and the title glides into the back button.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/stack-navigator.tsx",
+          "target": "components/transitions/stack-navigator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/step-wizard",
+      "type": "registry:component",
+      "title": "Step Wizard",
+      "description": "A multi-step form whose panels slide in the direction you move and whose progress indicator glides between steps.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/step-wizard.tsx",
+          "target": "components/transitions/step-wizard.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-old(.tk-step-wizard-fill), ::view-transition-new(.tk-step-wizard-fill)": {
+          "block-size": "100%"
+        },
+        "::view-transition-image-pair(.tk-step-wizard-viewport)": {
+          "clip-path": "inset(0 -100vw)"
+        },
+        "::view-transition-group(.tk-step-wizard-dot)": {
+          "z-index": "1"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/dynamic-island",
+      "type": "registry:component",
+      "title": "Dynamic Island",
+      "description": "A pill that springs between sizes as its state changes, with the content blurring across inside it.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/dynamic-island.tsx",
+          "target": "components/transitions/dynamic-island.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-dynamic-island-surface), ::view-transition-image-pair(.tk-dynamic-island-content)": {
+          "--tk-ui-radius": "var(--tk-ui-dynamic-island-radius, 2rem)"
+        },
+        "::view-transition-old(.tk-dynamic-island-surface), ::view-transition-new(.tk-dynamic-island-surface)": {
+          "block-size": "100%"
+        },
+        "::view-transition-old(.tk-dynamic-island-content), ::view-transition-new(.tk-dynamic-island-content)": {
+          "inline-size": "auto",
+          "block-size": "auto",
+          "inset-block-start": "50%",
+          "inset-inline-start": "50%",
+          "translate": "-50% -50%"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/status-button",
+      "type": "registry:component",
+      "title": "Status Button",
+      "description": "A button that morphs from idle to loading to success or error, resizing smoothly while its label and icon crossfade.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json",
+        "button"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/status-button.tsx",
+          "target": "components/transitions/status-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-old(.tk-status-button-surface), ::view-transition-new(.tk-status-button-surface)": {
+          "block-size": "100%"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/number-flip",
+      "type": "registry:component",
+      "title": "Number Flip",
+      "description": "Changed digits roll up when the number grows and down when it shrinks. Separators and unchanged digits stay put.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/number-flip.tsx",
+          "target": "components/transitions/number-flip.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/add-to-cart",
+      "type": "registry:component",
+      "title": "Add to Cart",
+      "description": "The product image flies into the cart button, the badge count rolls up and the button label morphs to \"Added\".",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/add-to-cart.tsx",
+          "target": "components/transitions/add-to-cart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-add-to-cart-flight)": {
+          "animation": "var(--tk-ui-slow) ease-in-out both tk-add-to-cart-arc"
+        },
+        "::view-transition-old(.tk-add-to-cart-flight)": {
+          "animation": "var(--tk-ui-slow) linear both tk-add-to-cart-land"
+        },
+        "::view-transition-new(.tk-add-to-cart-flight)": {
+          "animation": "none",
+          "opacity": "0"
+        },
+        "::view-transition-old(.tk-add-to-cart-bump)": {
+          "animation": "none",
+          "opacity": "0"
+        },
+        "::view-transition-new(.tk-add-to-cart-bump)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease-out) calc(var(--tk-ui-slow) * 0.8) both tk-add-to-cart-bump"
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          "::view-transition-image-pair(.tk-add-to-cart-flight)": {
+            "animation": "none"
+          }
+        },
+        "@keyframes tk-add-to-cart-arc": {
+          "50%": {
+            "translate": "0 var(--tk-ui-add-to-cart-lift, -2.5rem)"
+          }
+        },
+        "@keyframes tk-add-to-cart-land": {
+          "0%, 70%": {
+            "opacity": "1"
+          },
+          "to": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-add-to-cart-bump": {
+          "35%": {
+            "scale": "1.25"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/morphing-popover",
+      "type": "registry:component",
+      "title": "Morphing Popover",
+      "description": "A trigger that morphs into its popover surface and back.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/morphing-popover.tsx",
+          "target": "components/transitions/morphing-popover.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-morphing-popover-surface)": {
+          "border-radius": "var( --tk-ui-morphing-popover-radius, calc(var(--radius) + 4px) )",
+          "background": "var(--popover)"
+        },
+        "::view-transition-image-pair(.tk-morphing-popover-surface)": {
+          "overflow": "clip",
+          "border-radius": "inherit",
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) both tk-morphing-popover-lift"
+        },
+        "::view-transition-image-pair(.tk-morphing-popover-surface.tk-down)": {
+          "animation-direction": "reverse"
+        },
+        "::view-transition-old(.tk-morphing-popover-surface), ::view-transition-new(.tk-morphing-popover-surface)": {
+          "inline-size": "auto",
+          "block-size": "auto"
+        },
+        "::view-transition-old(.tk-morphing-popover-center), ::view-transition-new(.tk-morphing-popover-center)": {
+          "inset-inline": "0",
+          "margin-inline": "auto"
+        },
+        "::view-transition-old(.tk-morphing-popover-end), ::view-transition-new(.tk-morphing-popover-end)": {
+          "inset-inline": "auto 0"
+        },
+        "::view-transition-old(.tk-morphing-popover-top), ::view-transition-new(.tk-morphing-popover-top)": {
+          "inset-block": "auto 0"
+        },
+        "::view-transition-old(.tk-morphing-popover-surface.tk-down)": {
+          "animation-duration": "var(--tk-ui-exit)"
+        },
+        "@keyframes tk-morphing-popover-lift": {
+          "from": {
+            "box-shadow": "0 0 0 1px var(--border), 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 0 0 0 transparent"
+          },
+          "to": {
+            "box-shadow": "0 0 0 1px var(--border), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/product-gallery",
+      "type": "registry:component",
+      "title": "Product Gallery",
+      "description": "A hero image with a thumbnail strip. The chosen thumbnail grows into the hero while the old hero shrinks back into its slot.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/product-gallery.tsx",
+          "target": "components/transitions/product-gallery.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        ":root": {
+          "--tk-ui-product-gallery-radius": "calc(var(--radius) + 4px)",
+          "--tk-ui-product-gallery-thumb-radius": "var(--radius)"
+        },
+        "::view-transition-old(.tk-product-gallery-image), ::view-transition-new(.tk-product-gallery-image)": {
+          "block-size": "100%",
+          "object-fit": "cover",
+          "object-position": "center"
+        },
+        "::view-transition-group(.tk-product-gallery-hero)": {
+          "--tk-ui-radius": "var(--tk-ui-product-gallery-radius)",
+          "--tk-ui-product-gallery-from": "var(--tk-ui-product-gallery-thumb-radius)"
+        },
+        "::view-transition-group(.tk-product-gallery-leaving)": {
+          "--tk-ui-radius": "var(--tk-ui-product-gallery-thumb-radius)",
+          "--tk-ui-product-gallery-from": "var(--tk-ui-product-gallery-radius)"
+        },
+        "::view-transition-image-pair(.tk-product-gallery-hero), ::view-transition-image-pair(.tk-product-gallery-leaving)": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease) var(--tk-ui-delay, 0s) both tk-product-gallery-radius"
+        },
+        "::view-transition-group(.tk-product-gallery-control)": {
+          "z-index": "20"
+        },
+        "@keyframes tk-product-gallery-radius": {
+          "from": {
+            "border-radius": "var(--tk-ui-product-gallery-from)"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/layout-switcher",
+      "type": "registry:component",
+      "title": "Layout Switcher",
+      "description": "Toggle a collection between grid and list. Every card, avatar, name and stat glides to its new spot.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/layout-switcher.tsx",
+          "target": "components/transitions/layout-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-layout-switcher-surface)": {
+          "border-radius": "var(--tk-ui-layout-switcher-radius, calc(var(--radius) + 4px))",
+          "background": "var(--tk-ui-layout-switcher-background, var(--card))",
+          "box-shadow": "inset 0 0 0 1px var(--tk-ui-layout-switcher-border, var(--border))"
+        },
+        "::view-transition-old(.tk-layout-switcher-surface), ::view-transition-new(.tk-layout-switcher-surface)": {
+          "display": "none"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/animated-list",
+      "type": "registry:component",
+      "title": "Animated List",
+      "description": "A list whose items pop in, fade out and glide into place as they change.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/animated-list.tsx",
+          "target": "components/transitions/animated-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-animated-list-viewport)": {
+          "overflow": "clip"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/filter-grid",
+      "type": "registry:component",
+      "title": "Filter Grid",
+      "description": "Filter a grid with chips and search. Matches reflow into place, the rest pop out, and new items pop in one after another.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json",
+        "input"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/filter-grid.tsx",
+          "target": "components/transitions/filter-grid.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/sortable-table",
+      "type": "registry:component",
+      "title": "Sortable Table",
+      "description": "Click a column header to sort and the rows glide to their new positions. Filtered rows fade out while the rest close the gap.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json",
+        "input"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/sortable-table.tsx",
+          "target": "components/transitions/sortable-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "ui/kanban-board",
+      "type": "registry:component",
+      "title": "Kanban Board",
+      "description": "Drag cards between columns, or move them with the keyboard. The card glides into place, its neighbours make room and the column counts roll.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/kanban-board.tsx",
+          "target": "components/transitions/kanban-board.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
       ]
     }
-  ]
+  ],
+  "name": "transition-kit"
 }

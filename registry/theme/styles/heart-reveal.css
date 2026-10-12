@@ -1,0 +1,25 @@
+/* Heart Reveal: an expanding heart-shaped mask reveals the new theme. */
+::view-transition-old(.tk-theme-heart-reveal) {
+  animation: none;
+}
+
+::view-transition-new(.tk-theme-heart-reveal) {
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20 34 C10 26 2 19 2 12 C2 6 7 2 12 2 C16 2 19 4 20 8 C21 4 24 2 28 2 C33 2 38 6 38 12 C38 19 30 26 20 34 Z" fill="white"/></svg>');
+  mask-repeat: no-repeat;
+  mask-position: var(--tk-x) var(--tk-y);
+  mask-size: 0;
+  animation: tk-theme-heart-reveal var(--tk-theme-duration, 1200ms)
+    var(--tk-theme-easing, ease-in-out) both;
+}
+
+@keyframes tk-theme-heart-reveal {
+  from {
+    mask-size: 0;
+    mask-position: var(--tk-x) var(--tk-y);
+  }
+  to {
+    mask-size: calc(var(--tk-r) * 4.5);
+    mask-position: calc(var(--tk-x) - var(--tk-r) * 2.25)
+      calc(var(--tk-y) - var(--tk-r) * 2.25);
+  }
+}
