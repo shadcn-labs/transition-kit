@@ -1,24 +1,19 @@
 import { createProcessor } from "@mdx-js/mdx";
 
 import type {
+  ComponentSourceData,
   ComponentSourceRequest,
   ComponentSources,
 } from "@/lib/component-sources";
 import { componentSourceKey } from "@/lib/component-sources";
-import { highlightCode } from "@/lib/highlight-code";
 import { getItem } from "@/registry/items";
 
-const sourceFiles = import.meta.glob<string>(
+// Highlighted at build time by the `highlight-sources` plugin in vite.config.ts;
+// Shiki at request time exceeds the Worker CPU limit.
+const sourceFiles = import.meta.glob<ComponentSourceData>(
   ["/examples/**/*.{ts,tsx,css}", "/registry/**/*.{ts,tsx,css}"],
-  { eager: true, import: "default", query: "?raw" }
+  { import: "default", query: "?highlight" }
 );
-
-/** Shows registry sources as installed: `@/registry/<group>/x` → `@/components/transitions/x`. */
-export const toInstalledImports = (code: string) =>
-  code.replaceAll(
-    /@\/registry\/(?:theme|page|ui)\//g,
-    "@/components/transitions/"
-  );
 
 /** An item's shipped source: the TSX for cores and components, the CSS for styles. */
 const itemSourcePath = (name: string) => {
@@ -99,18 +94,8 @@ export const loadComponentSources = async (
       const path =
         request.src?.replace(/^\.?\//, "") ??
         (request.name ? itemSourcePath(request.name) : undefined);
-      const raw = path ? sourceFiles[`/${path}`] : undefined;
-      if (!path || raw === undefined) {
-        sources[key] = null;
-        return;
-      }
-      const code = toInstalledImports(raw);
-      const language = request.language ?? path.split(".").pop() ?? "tsx";
-      sources[key] = {
-        code,
-        highlightedCode: await highlightCode(code, language),
-        language,
-      };
+      const load = path ? sourceFiles[`/${path}`] : undefined;
+      sources[key] = load ? await load() : null;
     })
   );
   return sources;

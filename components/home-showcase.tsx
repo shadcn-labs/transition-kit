@@ -8,7 +8,7 @@ import {
   FileIcon,
   LoaderCircleIcon,
 } from "lucide-react";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, use, useState } from "react";
 import type { ComponentType, LazyExoticComponent } from "react";
 
 import { CodeBlockCommand } from "@/components/code-block-command";
@@ -26,15 +26,39 @@ import { Toggle } from "@/components/ui/toggle";
 import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
 import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
 import { PACKAGE_RUNNERS } from "@/hooks/use-package-manager";
+import type { ComponentSourceData } from "@/lib/component-sources";
 import { cn } from "@/lib/utils";
 import { items } from "@/registry/items";
 import type { ItemGroup, ItemSource } from "@/registry/items";
 
-/** Highlighted style CSS and UI component TSX keyed by item name, e.g. `theme/circle-reveal`. */
-export type ShowcaseSources = Record<
-  string,
-  { code: string; highlightedCode: string }
->;
+/**
+ * Style CSS and UI component TSX, highlighted at build time (see vite.config.ts) and
+ * loaded on demand, keyed by item name: `/registry/theme/styles/circle-reveal.css` ->
+ * `theme/circle-reveal`, `/registry/ui/tabs.tsx` -> `ui/tabs`.
+ */
+const sourceLoaders = new Map<string, () => Promise<ComponentSourceData>>(
+  Object.entries(
+    import.meta.glob<ComponentSourceData>(
+      ["/registry/*/styles/*.css", "/registry/ui/*.tsx"],
+      { import: "default", query: "?highlight" }
+    )
+  ).map(([path, load]) => {
+    const segments = path.split("/");
+    const [slug] = (segments.at(-1) ?? "").split(".");
+    return [`${segments[2]}/${slug}`, load] as const;
+  })
+);
+
+const sourcePromises = new Map<string, Promise<ComponentSourceData>>();
+
+const loadSource = (name: string, load: () => Promise<ComponentSourceData>) => {
+  let promise = sourcePromises.get(name);
+  if (!promise) {
+    promise = load();
+    sourcePromises.set(name, promise);
+  }
+  return promise;
+};
 
 type WorkspaceTab = "preview" | "code";
 
@@ -91,32 +115,55 @@ const uiDemos: Record<
   })
 );
 
-const CodeViewer = ({
-  source,
+const LoadedSource = ({
+  load,
+  name,
 }: {
-  source: ShowcaseSources[string] | undefined;
-}) => (
-  <div className="relative h-140 overflow-hidden bg-code text-code-foreground lg:h-full">
-    {source ? (
-      <figure
-        data-rehype-pretty-code-figure=""
-        className="no-scrollbar mt-0! h-full overflow-auto rounded-none"
-      >
-        <CopyButton value={source.code} className="right-4" />
-        <div dangerouslySetInnerHTML={{ __html: source.highlightedCode }} />
-      </figure>
-    ) : (
-      <div
-        className="flex h-full items-center justify-center px-6 text-center text-sm text-code-foreground/60"
-        role="status"
-      >
-        Source not available yet.
-      </div>
-    )}
-  </div>
-);
+  load: () => Promise<ComponentSourceData>;
+  name: string;
+}) => {
+  const source = use(loadSource(name, load));
+  return (
+    <figure
+      data-rehype-pretty-code-figure=""
+      className="no-scrollbar mt-0! h-full overflow-auto rounded-none"
+    >
+      <CopyButton value={source.code} className="right-4" />
+      <div dangerouslySetInnerHTML={{ __html: source.highlightedCode }} />
+    </figure>
+  );
+};
 
-export const HomeShowcase = ({ sources }: { sources: ShowcaseSources }) => {
+const CodeViewer = ({ name }: { name: string }) => {
+  const load = sourceLoaders.get(name);
+  return (
+    <div className="relative h-140 overflow-hidden bg-code text-code-foreground lg:h-full">
+      {load ? (
+        <Suspense
+          fallback={
+            <div className="flex h-full items-center justify-center">
+              <LoaderCircleIcon
+                className="size-5 animate-spin text-code-foreground/60"
+                aria-label="Loading source"
+              />
+            </div>
+          }
+        >
+          <LoadedSource key={name} load={load} name={name} />
+        </Suspense>
+      ) : (
+        <div
+          className="flex h-full items-center justify-center px-6 text-center text-sm text-code-foreground/60"
+          role="status"
+        >
+          Source not available yet.
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const HomeShowcase = () => {
   const [group, setGroup] = useState<ItemGroup>("theme");
   const [selectedByGroup, setSelectedByGroup] = useState<
     Record<ItemGroup, string>
@@ -354,7 +401,7 @@ export const HomeShowcase = ({ sources }: { sources: ShowcaseSources }) => {
               </TabsContent>
 
               <TabsContent value="code" className="min-h-0">
-                <CodeViewer source={sources[selectedEntry.name]} />
+                <CodeViewer name={selectedEntry.name} />
               </TabsContent>
             </Tabs>
 
