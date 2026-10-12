@@ -25,6 +25,7 @@ export default defineConfig({
     "dist/**",
     ".source/**",
     "src/routeTree.gen.ts",
+    "registry.json",
   ],
   jsxSingleQuote: false,
   printWidth: 80,
