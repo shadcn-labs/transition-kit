@@ -87,10 +87,3 @@ const [price, setPrice] = useState(1299);
 | `locales`   | `Intl.LocalesArgument`     | `"en-US"` | Locale used for formatting. Fixed by default so server and client render the same string; pass the user's locale to change it. |
 | `stagger`   | `boolean`                  | `false`   | Staggers the rolls of changed digits.                                                                                          |
 | `className` | `string`                   | -         | Applied to the root `<span>`. Other props are spread onto it.                                                                  |
-
-## Accessibility
-
-- The full formatted number (for example `$48,219.50`) is rendered as visually hidden text, so screen readers read one number instead of single characters. The rolling characters are `aria-hidden`.
-- The hidden text updates immediately; it doesn't wait for the animation.
-- The number isn't a live region. If changes should be announced, wrap it in an element with `aria-live="polite"`.
-- With `prefers-reduced-motion`, digits don't travel; the old and new digits crossfade briefly.

@@ -78,9 +78,3 @@ import { ThemeModeSwitch } from "@/components/transitions/theme-mode-switch";
 | ------------ | ----------------------- | --------------------------- | -------------------------------------------------------------- |
 | `transition` | `string`                | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first. |
 | `...props`   | `ComponentProps<"div">` | -                           | Spread onto the radiogroup.                                    |
-
-## Accessibility
-
-- A `role="radiogroup"` labelled "Theme" with one `role="radio"` button per option and `aria-checked` on the active one.
-- Roving focus: <kbd>Tab</kbd> lands on the checked option. <kbd>←</kbd> <kbd>↑</kbd> and <kbd>→</kbd> <kbd>↓</kbd> move to the previous and next option and select it, wrapping at the ends; <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last option.
-- The stored theme is unknown on the server, so no option is checked until hydration; the first option is focusable meanwhile.

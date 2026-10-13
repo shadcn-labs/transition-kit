@@ -128,11 +128,3 @@ const { step, count, next, previous, goTo, isFirst, isLast } = useStepWizard();
 | `previous` | `() => void`             | Moves back one step.                         |
 | `isFirst`  | `boolean`                | Whether the first step is active.            |
 | `isLast`   | `boolean`                | Whether the last step is active.             |
-
-## Accessibility
-
-- The indicator is a `nav` with an ordered list. The current step has `aria-current="step"`, completed steps read "(completed)", and upcoming steps are disabled buttons.
-- Each step is a `role="group"` named after its label and position, for example "Plan (2 of 4)". Inactive steps are `hidden`, so they are skipped by the keyboard and screen readers.
-- After a step change, focus moves to the new step's `StepWizardTitle` (or the step itself), so the next <kbd>Tab</kbd> continues inside it.
-- A blocked Continue uses `aria-disabled` instead of `disabled`, so it stays in the tab order and screen readers can say why nothing happened.
-- With `prefers-reduced-motion`, nothing slides or glides; steps crossfade briefly.

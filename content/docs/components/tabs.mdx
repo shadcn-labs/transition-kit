@@ -91,11 +91,3 @@ import {
 | Prop    | Type     | Default | Description                                                                |
 | ------- | -------- | ------- | -------------------------------------------------------------------------- |
 | `value` | `string` | -       | Identifies the trigger and its panel; selecting a trigger shows its panel. |
-
-## Accessibility
-
-- Implements the WAI-ARIA tabs pattern: `tablist`, `tab` and `tabpanel` roles with `aria-selected`, `aria-controls` and `aria-labelledby`.
-- <kbd>←</kbd> / <kbd>→</kbd> move between tabs and select them, <kbd>Home</kbd>
-  / <kbd>End</kbd> jump to the first and last tab. Only the active tab is in the
-  tab order, and the panel itself is focusable.
-- With `prefers-reduced-motion`, nothing travels; the indicator and panel crossfade briefly.

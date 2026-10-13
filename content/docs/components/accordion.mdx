@@ -101,13 +101,3 @@ import {
 | ---------- | --------- | ------- | ------------------------------- |
 | `value`    | `string`  | -       | Unique identifier for the item. |
 | `disabled` | `boolean` | `false` | Disables the item's trigger.    |
-
-## Accessibility
-
-- Implements the WAI-ARIA accordion pattern: each trigger is a `<button>` inside a heading with `aria-expanded` and `aria-controls`, and each panel is a `region` labelled by its trigger.
-- <kbd>Enter</kbd> / <kbd>Space</kbd> toggle the focused item. <kbd>↑</kbd> /
-  <kbd>↓</kbd> move between triggers and wrap, <kbd>Home</kbd> / <kbd>End</kbd>
-  jump to the first and last. Disabled items are skipped.
-- Focus stays on the trigger when a panel opens or closes, as the pattern expects; the panel's links and controls follow it in the tab order.
-- Closed panels stay in the DOM with `hidden="until-found"` where the browser supports it. Find-in-page can match text inside them, and the matching item opens on its own. Elsewhere they are plain `hidden`, so their text is not searchable until opened.
-- With `prefers-reduced-motion`, nothing travels; the items and the chevron crossfade briefly.

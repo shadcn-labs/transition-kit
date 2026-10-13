@@ -114,13 +114,3 @@ import {
 | `value`    | `string`          | -       | Option value selected by this item. |
 | `icon`     | `React.ReactNode` | -       | Content rendered before the label.  |
 | `disabled` | `boolean`         | `false` | Disables this item.                 |
-
-## Accessibility
-
-- Implements the WAI-ARIA radio group pattern: a `radiogroup` of `radio` buttons with `aria-checked`. Label the group with `aria-label` or `aria-labelledby`.
-- Only one item is in the tab order: the checked one, or the first enabled item when nothing is checked.
-- <kbd>←</kbd> / <kbd>→</kbd> (and <kbd>↑</kbd> / <kbd>↓</kbd>) move to the
-  previous or next option and select it, wrapping at the ends and skipping
-  disabled items. <kbd>Home</kbd> / <kbd>End</kbd> jump to the first and last
-  option. Arrow keys follow the reading direction in right-to-left layouts.
-- With `prefers-reduced-motion`, the thumb doesn't travel; the change is a short crossfade.

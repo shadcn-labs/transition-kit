@@ -133,10 +133,3 @@ const columns: SortableTableColumn<Member>[] = [
 | ----------- | ----------------- | ------------------------------- |
 | `key`       | `string`          | Key of the column being sorted. |
 | `direction` | `"asc" \| "desc"` | Sort direction for that column. |
-
-## Accessibility
-
-- Renders a real `<table>` with `<thead>`, `<tbody>` and `scope="col"` headers. `caption` becomes a visually hidden `<caption>` that names the table.
-- Each sortable header holds a `<button type="button">`, reachable with <kbd>Tab</kbd> and activated with <kbd>Enter</kbd> or <kbd>Space</kbd>. Focus stays on the button after sorting.
-- The sorted header has `aria-sort="ascending"` or `"descending"`. A polite live region announces the row count and the current order after each change.
-- The search field has a label, and with `prefers-reduced-motion` rows don't travel; they crossfade briefly into place.

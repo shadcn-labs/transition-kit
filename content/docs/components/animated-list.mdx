@@ -117,10 +117,3 @@ const { items, add, remove, move, sort, set } = useAnimatedList(initial, {
   getId,
 });
 ```
-
-## Accessibility
-
-- A real list (`ul` / `li`); name it with `aria-label` or `aria-labelledby`.
-- Removing the focused row moves focus to the matching control in the next row instead of dropping it to the page.
-- The list doesn't announce changes by itself, so pair it with a polite live region for changes the user didn't make (the demo announces new notifications with `role="status"`).
-- With `prefers-reduced-motion`, rows don't travel or scale; they crossfade briefly.

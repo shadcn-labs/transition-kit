@@ -72,9 +72,3 @@ import { ThemeMorphButton } from "@/components/transitions/theme-morph-button";
 | ------------ | -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
 | `transition` | `string`                   | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first.                                    |
 | `...props`   | `ComponentProps<"button">` | -                           | Spread onto the `<button>`. Calling `event.preventDefault()` in `onClick` skips the theme change. |
-
-## Accessibility
-
-- A native `<button type="button">` whose `aria-label` describes the action: "Switch to dark theme" or "Switch to light theme" ("Toggle theme" until hydration).
-- The icon is decorative (`aria-hidden`).
-- The morph is disabled when the user prefers reduced motion; the core already skips the theme transition in that case.

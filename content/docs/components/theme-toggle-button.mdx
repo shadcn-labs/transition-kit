@@ -78,9 +78,3 @@ import { ThemeToggleButton } from "@/components/transitions/theme-toggle-button"
 | ------------ | -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
 | `transition` | `string`                   | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first.                                    |
 | `...props`   | `ComponentProps<"button">` | -                           | Spread onto the `<button>`. Calling `event.preventDefault()` in `onClick` skips the theme change. |
-
-## Accessibility
-
-- A native `<button type="button">`, reachable with <kbd>Tab</kbd> and activated with <kbd>Enter</kbd> or <kbd>Space</kbd>.
-- `aria-label` describes the action: "Switch to dark theme" or "Switch to light theme". Until the theme is known after hydration it reads "Toggle theme".
-- The icons are decorative (`aria-hidden`) and follow the `dark` class on `<html>`, so they are correct before hydration.

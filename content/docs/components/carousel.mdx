@@ -137,14 +137,3 @@ const Counter = () => {
 | `goTo`        | `(index: number) => void` | Moves to the slide index.           |
 | `previous`    | `() => void`              | Moves one slide back.               |
 | `next`        | `() => void`              | Moves one slide forward.            |
-
-## Accessibility
-
-- Follows the WAI-ARIA carousel pattern: the root is a `region` with `aria-roledescription="carousel"` (give it an `aria-label`), and each slide is a `group` with `aria-roledescription="slide"` labelled "2 of 5".
-- The slide container is an `aria-live="polite"` region, so moving announces the new slide. While autoplay is running it switches to `off`, so screen readers aren't interrupted every few seconds.
-- <kbd>←</kbd> / <kbd>→</kbd> move between slides while focus is anywhere inside
-  the carousel, except in text fields.
-- The arrows use `aria-disabled` instead of `disabled` at the ends, so keyboard focus stays on them. Arrows and dots point at the slides with `aria-controls`.
-- Hidden slides are removed from the accessibility tree and the tab order.
-- A swipe that ends on a link or button inside a slide doesn't also click it.
-- With `prefers-reduced-motion`, slides crossfade instead of pushing and autoplay stays off.

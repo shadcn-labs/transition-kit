@@ -112,10 +112,3 @@ const DeclineButton = () => {
 | ---------- | ------------------------- | ------------------------------------------------ |
 | `state`    | `string`                  | The current island state.                        |
 | `setState` | `(state: string) => void` | Animates to the state and calls `onStateChange`. |
-
-## Accessibility
-
-- The island is a named `region` with `aria-live="polite"`, so screen readers announce new content when the state changes.
-- Put real `<button type="button">` elements with `aria-label`s inside content for actions such as accept, decline or pause.
-- If focus is inside content that goes away, it moves to the first focusable element of the new content, or to the island itself, instead of falling back to the page.
-- With `prefers-reduced-motion`, the surface doesn't resize or bounce. It jumps to the new size and the content crossfades briefly.

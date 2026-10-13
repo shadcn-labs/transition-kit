@@ -121,12 +121,3 @@ import {
 | Prop    | Type     | Default | Description                                                 |
 | ------- | -------- | ------- | ----------------------------------------------------------- |
 | `value` | `string` | -       | Unique, stable item id that pairs its parts across layouts. |
-
-## Accessibility
-
-- The toggle is a `radiogroup` labelled "Layout" with one `radio` per layout and `aria-checked` on the selected one.
-- <kbd>←</kbd> / <kbd>→</kbd> (or <kbd>↑</kbd> / <kbd>↓</kbd>) switch the layout
-  and move focus with it; <kbd>Home</kbd> / <kbd>End</kbd> jump to the first and
-  last option. Only the selected option is in the tab order.
-- Items are a real list, and the DOM order of the parts is the same in both layouts, so screen readers read each item the same way whatever the layout.
-- With `prefers-reduced-motion`, nothing travels; the parts crossfade briefly in their new places.

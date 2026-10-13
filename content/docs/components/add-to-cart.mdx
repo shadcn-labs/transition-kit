@@ -127,11 +127,3 @@ const { items, count, add, remove, clear } = useCart();
 | `add`    | `(id: string, quantity?: number) => void` | Adds a quantity of an item; the badge rolls with no flight.         |
 | `remove` | `(id: string) => void`                    | Removes the item with the given id; the badge rolls with no flight. |
 | `clear`  | `() => void`                              | Empties the cart; the badge rolls with no flight.                   |
-
-## Accessibility
-
-- Both parts are real `<button type="button">` elements; focus stays on the add button after a click.
-- `CartButton` is labelled with its count ("Cart, 3 items"); the badge itself is hidden from assistive technology.
-- A polite live region announces each add ("Added to cart. 3 items in cart.").
-- The flying image and its twin are `aria-hidden` and ignore the pointer, and the page stays interactive during the animation.
-- With `prefers-reduced-motion`, nothing flies; the badge and label crossfade briefly.

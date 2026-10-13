@@ -78,9 +78,3 @@ import { ThemeToggleSwitch } from "@/components/transitions/theme-toggle-switch"
 | ------------ | -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
 | `transition` | `string`                   | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first.                                    |
 | `...props`   | `ComponentProps<"button">` | -                           | Spread onto the `<button>`. Calling `event.preventDefault()` in `onClick` skips the theme change. |
-
-## Accessibility
-
-- A `<button role="switch">` labelled "Dark mode", with `aria-checked` set when the dark theme is active. Pass `aria-label` to change the label.
-- Toggles with <kbd>Space</kbd> or <kbd>Enter</kbd>; keyboard changes start the transition at the switch.
-- The thumb follows the `dark` class on `<html>`, so it is in the right place before hydration. `aria-checked` stays `false` until the theme is known.

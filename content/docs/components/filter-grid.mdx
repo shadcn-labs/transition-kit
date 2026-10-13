@@ -136,13 +136,3 @@ const [team, setTeam] = useState("all");
 | `children`     | `(item: T, index: number) => ReactNode` | -                    | Renders each visible item.                                |
 | `empty`        | `ReactNode`                             | `"Nothing matches."` | Shown when no item matches the filter and search.         |
 | `reserveSpace` | `boolean`                               | `true`               | Keeps the unfiltered grid height so the page never jumps. |
-
-## Accessibility
-
-- The chips follow the WAI-ARIA radio group pattern: `radiogroup` with `radio` buttons and `aria-checked`. Only the checked chip is in the tab order. Give `FilterGridFilters` an `aria-label` that names what it filters.
-- <kbd>←</kbd> / <kbd>→</kbd> (or <kbd>↑</kbd> / <kbd>↓</kbd>) select the
-  previous or next chip, <kbd>Home</kbd> / <kbd>End</kbd> the first or last.
-- The search is a labelled `type="search"` input. <kbd>Escape</kbd> clears it, and the clear button returns focus to the input.
-- A polite live region announces the result count after each change, for example "Showing 4 of 12".
-- The grid is a list (`ul` / `li`); the empty state is announced through the live region and shown in place of the items.
-- With `prefers-reduced-motion`, nothing travels; items crossfade briefly.

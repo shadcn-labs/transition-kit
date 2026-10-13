@@ -105,10 +105,3 @@ const [status, setStatus] = React.useState<StatusButtonStatus>("idle");
 | `variant`        | `"default" \| "destructive" \| "outline" \| "secondary" \| "ghost" \| "link"` | `"default"`                            | Base button variant when no per-status variant applies.                                                                                                                  |
 | `size`           | `"default" \| "sm" \| "lg" \| "icon" \| "icon-sm" \| "icon-lg"`               | `"default"`                            | Button size passed to the underlying button.                                                                                                                             |
 | `children`       | `ReactNode \| (status: StatusButtonStatus) => ReactNode`                      | -                                      | Idle label, and pending label unless `labels.pending` is set. As a function, returns the label for every status and `labels` is ignored.                                 |
-
-## Accessibility
-
-- A visually hidden `role="status"` region next to the button announces the pending, success and error labels politely.
-- While pending the button has `aria-disabled` and `aria-busy` instead of `disabled`, so it keeps keyboard focus. Clicks, <kbd>Enter</kbd> and <kbd>Space</kbd> are ignored, and a `type="submit"` button won't submit its form again.
-- The status icons are `aria-hidden`; the label carries the meaning.
-- With `prefers-reduced-motion`, nothing resizes or slides; the label and icon crossfade briefly.
