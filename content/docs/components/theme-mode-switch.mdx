@@ -1,0 +1,86 @@
+---
+title: "Theme Mode Switch"
+description: "A light, dark and system segmented control with any transition style."
+---
+
+import { ThemeModeSwitchDemo } from "@/examples/ui/theme-mode-switch-demo";
+
+<ComponentPreview name="theme-mode-switch">
+  <ThemeModeSwitchDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme-mode-switch" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/theme-mode-switch.tsx"
+  title="components/transitions/theme-mode-switch.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { ThemeModeSwitch } from "@/components/transitions/theme-mode-switch";
+```
+
+```tsx
+<ThemeModeSwitch />
+<ThemeModeSwitch transition="polygon-reveal" />
+```
+
+## API Reference
+
+### ThemeModeSwitch
+
+| Prop         | Type                    | Default                     | Description                                                    |
+| ------------ | ----------------------- | --------------------------- | -------------------------------------------------------------- |
+| `transition` | `string`                | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first. |
+| `...props`   | `ComponentProps<"div">` | -                           | Spread onto the radiogroup.                                    |
+
+## Accessibility
+
+- A `role="radiogroup"` labelled "Theme" with one `role="radio"` button per option and `aria-checked` on the active one.
+- Roving focus: <kbd>Tab</kbd> lands on the checked option. <kbd>←</kbd> <kbd>↑</kbd> and <kbd>→</kbd> <kbd>↓</kbd> move to the previous and next option and select it, wrapping at the ends; <kbd>Home</kbd> and <kbd>End</kbd> jump to the first and last option.
+- The stored theme is unknown on the server, so no option is checked until hydration; the first option is focusable meanwhile.

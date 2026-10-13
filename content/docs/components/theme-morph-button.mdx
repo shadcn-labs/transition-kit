@@ -1,0 +1,80 @@
+---
+title: "Theme Morph Button"
+description: "An icon button whose sun and moon morph while the theme transitions."
+---
+
+import { ThemeMorphButtonDemo } from "@/examples/ui/theme-morph-button-demo";
+
+<ComponentPreview name="theme-morph-button">
+  <ThemeMorphButtonDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme-morph-button" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/theme-morph-button.tsx"
+  title="components/transitions/theme-morph-button.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { ThemeMorphButton } from "@/components/transitions/theme-morph-button";
+```
+
+```tsx
+<ThemeMorphButton />
+<ThemeMorphButton transition="circle-reveal" />
+```
+
+## API Reference
+
+### ThemeMorphButton
+
+| Prop         | Type                       | Default                     | Description                                                                                       |
+| ------------ | -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
+| `transition` | `string`                   | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first.                                    |
+| `...props`   | `ComponentProps<"button">` | -                           | Spread onto the `<button>`. Calling `event.preventDefault()` in `onClick` skips the theme change. |
+
+## Accessibility
+
+- A native `<button type="button">` whose `aria-label` describes the action: "Switch to dark theme" or "Switch to light theme" ("Toggle theme" until hydration).
+- The icon is decorative (`aria-hidden`).
+- The morph is disabled when the user prefers reduced motion; the core already skips the theme transition in that case.

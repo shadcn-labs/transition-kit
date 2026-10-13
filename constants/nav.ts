@@ -58,10 +58,7 @@ export const TOP_LEVEL_SECTIONS = [
   { href: ROUTES.DOCS, name: "Introduction" },
   { href: ROUTES.DOCS_INSTALLATION, name: "Installation" },
   { href: ROUTES.DOCS_COMPONENTS, name: "Components" },
-  { href: ROUTES.DOCS_THEME, name: "Theme" },
-  { href: ROUTES.DOCS_PAGE, name: "Page" },
-  { href: ROUTES.DOCS_UI, name: "UI" },
   { href: ROUTES.DOCS_REGISTRY, name: "Registry" },
-  { href: ROUTES.DOCS_BROWSER_SUPPORT, name: "Browser Support" },
   { href: ROUTES.LLMS, name: "llms.txt" },
+  { href: ROUTES.DOCS_CHANGELOG, name: "Changelog" },
 ];

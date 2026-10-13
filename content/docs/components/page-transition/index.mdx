@@ -1,0 +1,234 @@
+---
+title: "Page Transition"
+description: "PageTransition and navigateWithTransition: route changes animated by React's <ViewTransition>."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview bare name="page-transition">
+  <PageTransitionDemo transition="slide" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page-transition" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Make sure your project uses React 19.3 or later.</Step>
+
+```bash
+npm install react@latest react-dom@latest
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.tsx"
+  title="components/transitions/page-transition.tsx"
+/>
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.css + registry/page/styles/fade.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Setup
+
+<Tabs defaultValue="next">
+
+<TabsList>
+  <TabsTrigger value="next">Next.js</TabsTrigger>
+  <TabsTrigger value="react-router">React Router</TabsTrigger>
+  <TabsTrigger value="state">State</TabsTrigger>
+</TabsList>
+
+<TabsContent value="next">
+
+```tsx title="components/page-transitions.tsx"
+"use client";
+
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+
+import { PageTransition } from "@/components/transitions/page-transition";
+
+export const PageTransitions = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname();
+
+  return (
+    <PageTransition id={pathname} transition="slide" className="bg-background">
+      {children}
+    </PageTransition>
+  );
+};
+```
+
+```tsx title="app/layout.tsx"
+import { PageTransitions } from "@/components/page-transitions";
+import { SiteHeader } from "@/components/site-header";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <SiteHeader />
+        <PageTransitions>{children}</PageTransitions>
+      </body>
+    </html>
+  );
+}
+```
+
+```tsx
+<Link href="/" transitionTypes={["page-back"]}>
+  Back
+</Link>
+```
+
+```tsx
+router.push("/", { transitionTypes: ["page-back"] });
+```
+
+</TabsContent>
+
+<TabsContent value="react-router">
+
+```tsx title="app/layout.tsx"
+import { Outlet, useLocation } from "react-router";
+
+import { PageTransition } from "@/components/transitions/page-transition";
+
+export const Layout = () => {
+  const { pathname } = useLocation();
+
+  return (
+    <PageTransition id={pathname} transition="slide" className="bg-background">
+      <Outlet />
+    </PageTransition>
+  );
+};
+```
+
+```tsx
+const navigate = useNavigate();
+
+<button
+  type="button"
+  onClick={() =>
+    navigateWithTransition(() => navigate("/"), { direction: "back" })
+  }
+>
+  Back
+</button>;
+```
+
+</TabsContent>
+
+<TabsContent value="state">
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+import {
+  navigateWithTransition,
+  PageTransition,
+} from "@/components/transitions/page-transition";
+
+const TABS = ["overview", "activity", "settings"];
+
+export const Tabs = () => {
+  const [tab, setTab] = useState("overview");
+
+  return (
+    <>
+      <nav>
+        {TABS.map((next) => (
+          <button
+            key={next}
+            type="button"
+            onClick={() =>
+              navigateWithTransition(() => setTab(next), {
+                direction:
+                  TABS.indexOf(next) < TABS.indexOf(tab) ? "back" : "forward",
+              })
+            }
+          >
+            {next}
+          </button>
+        ))}
+      </nav>
+      <PageTransition id={tab} transition="slide" className="bg-background">
+        <TabPanel tab={tab} />
+      </PageTransition>
+    </>
+  );
+};
+```
+
+</TabsContent>
+
+</Tabs>
+
+## API Reference
+
+### PageTransition
+
+| Prop         | Type                    | Default  | Description                                                                                                                       |
+| ------------ | ----------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `id`         | `string`                | -        | Identifies the current page, usually the pathname. The old page exits and the new one enters when it changes inside a Transition. |
+| `transition` | `string`                | `"fade"` | Style slug. Fade ships with the core.                                                                                             |
+| `duration`   | `number`                | -        | Milliseconds. Overrides the style's timing.                                                                                       |
+| `easing`     | `string`                | -        | Overrides the style's easing.                                                                                                     |
+| `children`   | `ReactNode`             | -        | The routed content.                                                                                                               |
+| `...props`   | `ComponentProps<"div">` | -        | Spread onto the `<div data-slot="page-transition">` that wraps each page and is snapshotted.                                      |
+
+### navigateWithTransition
+
+```ts
+navigateWithTransition(navigate: () => void, options?: { direction?: "forward" | "back" }): void
+```
+
+| Param               | Type                  | Default     | Description                                                                                                                          |
+| ------------------- | --------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `navigate`          | `() => void`          | -           | Anything updating the state `id` comes from: `router.push`, React Router's `navigate`, or `setState`. Runs inside `startTransition`. |
+| `options.direction` | `"forward" \| "back"` | `"forward"` | `"back"` plays directional styles in reverse.                                                                                        |
+
+### PAGE_BACK_TYPE
+
+| Field            | Type          | Description                                                                            |
+| ---------------- | ------------- | -------------------------------------------------------------------------------------- |
+| `PAGE_BACK_TYPE` | `"page-back"` | Pass it to your router's own transition types API instead of `navigateWithTransition`. |
+
+## Styles
+
+<ItemGrid group="page" kind="style" />

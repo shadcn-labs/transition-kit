@@ -1,0 +1,86 @@
+---
+title: "Theme Toggle Button"
+description: "A sun and moon icon button that toggles the theme with any transition style."
+---
+
+import { ThemeToggleButtonDemo } from "@/examples/ui/theme-toggle-button-demo";
+
+<ComponentPreview name="theme-toggle-button">
+  <ThemeToggleButtonDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme-toggle-button" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/theme-toggle-button.tsx"
+  title="components/transitions/theme-toggle-button.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { ThemeToggleButton } from "@/components/transitions/theme-toggle-button";
+```
+
+```tsx
+<ThemeToggleButton />
+<ThemeToggleButton transition="circle-blur" />
+```
+
+## API Reference
+
+### ThemeToggleButton
+
+| Prop         | Type                       | Default                     | Description                                                                                       |
+| ------------ | -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
+| `transition` | `string`                   | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first.                                    |
+| `...props`   | `ComponentProps<"button">` | -                           | Spread onto the `<button>`. Calling `event.preventDefault()` in `onClick` skips the theme change. |
+
+## Accessibility
+
+- A native `<button type="button">`, reachable with <kbd>Tab</kbd> and activated with <kbd>Enter</kbd> or <kbd>Space</kbd>.
+- `aria-label` describes the action: "Switch to dark theme" or "Switch to light theme". Until the theme is known after hydration it reads "Toggle theme".
+- The icons are decorative (`aria-hidden`) and follow the `dark` class on `<html>`, so they are correct before hydration.

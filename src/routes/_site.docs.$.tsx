@@ -217,7 +217,7 @@ const DocPage = () => {
                   </div>
                 ) : null}
               </div>
-              <div className="w-full flex-1 *:data-[slot=alert]:first:mt-0">
+              <div className="w-full flex-1 *:data-[slot=component-preview]:first:mt-0">
                 <ComponentSourceProvider sources={sources}>
                   <MdxContent />
                 </ComponentSourceProvider>

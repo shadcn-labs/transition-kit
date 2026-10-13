@@ -24,29 +24,30 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { docsPathForItem } from "@/lib/docs";
 import { cn } from "@/lib/utils";
 import { items } from "@/registry/items";
 import type { ItemGroup, ItemKind } from "@/registry/items";
 
 /** Icons for the preview tile of UI components, which have no video. */
 const UI_ICONS: Record<string, LucideIcon> = {
-  "ui/accordion": ListCollapseIcon,
-  "ui/add-to-cart": ShoppingCartIcon,
-  "ui/animated-list": ListIcon,
-  "ui/carousel": GalleryHorizontalIcon,
-  "ui/dynamic-island": PillIcon,
-  "ui/filter-grid": FilterIcon,
-  "ui/kanban-board": KanbanIcon,
-  "ui/layout-switcher": LayoutGridIcon,
-  "ui/morphing-popover": MessageSquareIcon,
-  "ui/number-flip": HashIcon,
-  "ui/product-gallery": GalleryThumbnailsIcon,
-  "ui/segmented-control": SlidersHorizontalIcon,
-  "ui/sortable-table": ArrowDownUpIcon,
-  "ui/stack-navigator": LayersIcon,
-  "ui/status-button": CircleCheckIcon,
-  "ui/step-wizard": ListOrderedIcon,
-  "ui/tabs": PanelTopIcon,
+  accordion: ListCollapseIcon,
+  "add-to-cart": ShoppingCartIcon,
+  "animated-list": ListIcon,
+  carousel: GalleryHorizontalIcon,
+  "dynamic-island": PillIcon,
+  "filter-grid": FilterIcon,
+  "kanban-board": KanbanIcon,
+  "layout-switcher": LayoutGridIcon,
+  "morphing-popover": MessageSquareIcon,
+  "number-flip": HashIcon,
+  "product-gallery": GalleryThumbnailsIcon,
+  "segmented-control": SlidersHorizontalIcon,
+  "sortable-table": ArrowDownUpIcon,
+  "stack-navigator": LayersIcon,
+  "status-button": CircleCheckIcon,
+  "step-wizard": ListOrderedIcon,
+  tabs: PanelTopIcon,
 };
 
 /** Plays a preview while it is hovered or focused. */
@@ -84,7 +85,7 @@ export const ItemGrid = ({
           <Link
             key={item.name}
             to="/docs/$"
-            params={{ _splat: `components/${item.name}` }}
+            params={{ _splat: `components/${docsPathForItem(item.name)}` }}
             viewTransition={{ types: ["nav-forward"] }}
             className="group/item bg-card hover:bg-accent/40 focus-visible:ring-ring/50 flex flex-col overflow-hidden rounded-xl border transition-colors outline-none focus-visible:ring-[3px]"
             onMouseEnter={playPreview}

@@ -1,0 +1,101 @@
+---
+title: "Tabs"
+description: "The active pill glides to the selected tab and the panel slides in the direction you moved."
+---
+
+import { TabsDemo } from "@/examples/ui/tabs-demo";
+
+<ComponentPreview name="tabs" src="examples/ui/tabs-demo.tsx">
+  <TabsDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="tabs" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/tabs.tsx"
+  title="components/transitions/tabs.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/transitions/tabs";
+```
+
+```tsx
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Account settings.</TabsContent>
+  <TabsContent value="password">Change your password.</TabsContent>
+</Tabs>
+```
+
+## API Reference
+
+### Tabs
+
+| Prop            | Type                      | Default  | Description                                    |
+| --------------- | ------------------------- | -------- | ---------------------------------------------- |
+| `value`         | `string`                  | -        | Controlled active tab value.                   |
+| `defaultValue`  | `string`                  | `""`     | Initial active tab when uncontrolled.          |
+| `onValueChange` | `(value: string) => void` | -        | Called with the next value after a tab change. |
+| `variant`       | `"pill" \| "underline"`   | `"pill"` | Indicator style for the tab list.              |
+
+### TabsTrigger / TabsContent
+
+| Prop    | Type     | Default | Description                                                                |
+| ------- | -------- | ------- | -------------------------------------------------------------------------- |
+| `value` | `string` | -       | Identifies the trigger and its panel; selecting a trigger shows its panel. |
+
+## Accessibility
+
+- Implements the WAI-ARIA tabs pattern: `tablist`, `tab` and `tabpanel` roles with `aria-selected`, `aria-controls` and `aria-labelledby`.
+- <kbd>←</kbd> / <kbd>→</kbd> move between tabs and select them, <kbd>Home</kbd>
+  / <kbd>End</kbd> jump to the first and last tab. Only the active tab is in the
+  tab order, and the panel itself is focusable.
+- With `prefers-reduced-motion`, nothing travels; the indicator and panel crossfade briefly.

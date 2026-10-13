@@ -16,8 +16,8 @@ export const SITE = {
     TWITTER: "@shadcnlabs",
   },
   DESCRIPTION: {
-    LONG: "Theme, page and UI transitions for React, built on the React 19.3 <ViewTransition> API. Copy-paste CSS animations and animated components installed with the shadcn CLI, no animation library.",
-    SHORT: "Theme, page and UI transitions, made simple",
+    LONG: "Beautiful UI transitions for React, built on the React 19.3 <ViewTransition> API. Copy-paste animated components installed with the shadcn CLI, no animation library.",
+    SHORT: "Beautiful UI transitions, made simple",
   },
   KEYWORDS: [
     "view transitions",

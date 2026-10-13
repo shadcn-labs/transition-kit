@@ -4,7 +4,7 @@
   "title": "GIF Deadpool",
   "description": "Deadpool breaks in through an expanding mask.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-gif-deadpool)": {

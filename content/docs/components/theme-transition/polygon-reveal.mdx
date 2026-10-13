@@ -1,0 +1,79 @@
+---
+title: "Polygon Reveal"
+description: "A geometric wipe sweeps across the viewport."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/polygon-reveal">
+  <ThemeTransitionDemo transition="polygon-reveal" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/polygon-reveal" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css + registry/theme/styles/polygon-reveal.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<ThemeTransitionProvider transition="polygon-reveal">
+  {children}
+</ThemeTransitionProvider>
+```
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "polygon-reveal", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## API Reference
+
+| Prop         | Type                                              | Default                         | Description                                                                                                                                                       |
+| ------------ | ------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transition` | `string`                                          | The provider's `transition`     | `"polygon-reveal"` for this style: on the provider for every change, or per change with `setTheme` / `toggleTheme`.                                               |
+| `duration`   | `number`                                          | `700`                           | Milliseconds on the provider. Overrides this style's `700ms` timing. Edit `var(--tk-theme-duration, 700ms)` in the style's CSS to change only this style.         |
+| `easing`     | `string`                                          | `cubic-bezier(0.16, 1, 0.3, 1)` | Easing on the provider. Overrides this style's easing. Edit `var(--tk-theme-easing, cubic-bezier(0.16, 1, 0.3, 1))` in the style's CSS to change only this style. |
+| `origin`     | `{ clientX: number; clientY: number } \| Element` | -                               | This style is anchored to the viewport and ignores `origin`.                                                                                                      |

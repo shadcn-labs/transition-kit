@@ -1,0 +1,137 @@
+---
+title: "Add to Cart"
+description: 'The product image flies into the cart button, the badge count rolls up and the button label morphs to "Added".'
+---
+
+import { AddToCartDemo } from "@/examples/ui/add-to-cart-demo";
+
+<ComponentPreview name="add-to-cart" src="examples/ui/add-to-cart-demo.tsx">
+  <AddToCartDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="add-to-cart" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/add-to-cart.tsx"
+  title="components/transitions/add-to-cart.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/add-to-cart.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  AddToCartButton,
+  CartButton,
+  CartProvider,
+  useCart,
+} from "@/components/transitions/add-to-cart";
+```
+
+```tsx
+const ProductCard = ({ product }) => {
+  const imageRef = React.useRef<HTMLImageElement>(null);
+  return (
+    <div>
+      <img ref={imageRef} src={product.image} alt={product.name} />
+      <AddToCartButton
+        productId={product.id}
+        src={product.image}
+        source={imageRef}
+      />
+    </div>
+  );
+};
+
+<CartProvider>
+  <CartButton />
+  <ProductCard product={product} />
+</CartProvider>;
+```
+
+```tsx
+const { items, count, add, remove, clear } = useCart();
+```
+
+## API Reference
+
+### CartProvider
+
+| Prop            | Type                          | Default | Description                                                                       |
+| --------------- | ----------------------------- | ------- | --------------------------------------------------------------------------------- |
+| `items`         | `CartItem[]`                  | -       | Controlled cart contents, where `CartItem` is `{ id: string; quantity: number }`. |
+| `defaultItems`  | `CartItem[]`                  | `[]`    | Initial cart contents when uncontrolled.                                          |
+| `onItemsChange` | `(items: CartItem[]) => void` | -       | Called with the new items after each change.                                      |
+
+### AddToCartButton
+
+| Prop         | Type                             | Default         | Description                                                                                          |
+| ------------ | -------------------------------- | --------------- | ---------------------------------------------------------------------------------------------------- |
+| `productId`  | `string`                         | -               | Id added to the cart on click.                                                                       |
+| `quantity`   | `number`                         | `1`             | Amount added per click.                                                                              |
+| `image`      | `ReactNode`                      | -               | Custom artwork that flies into the cart; without `image` or `src`, the item is added with no flight. |
+| `src`        | `string`                         | -               | Image URL used to build the flying `<img>` when `image` is not given.                                |
+| `source`     | `RefObject<HTMLElement \| null>` | the button      | Element the product image flies from.                                                                |
+| `children`   | `ReactNode`                      | `"Add to cart"` | Idle button label.                                                                                   |
+| `addedLabel` | `ReactNode`                      | `"Added"`       | Label shown after adding.                                                                            |
+| `resetAfter` | `number`                         | `1500`          | Milliseconds before the label returns to its idle text.                                              |
+
+### useCart
+
+| Field    | Type                                      | Description                                                         |
+| -------- | ----------------------------------------- | ------------------------------------------------------------------- |
+| `items`  | `CartItem[]`                              | Current cart contents.                                              |
+| `count`  | `number`                                  | Total quantity across items.                                        |
+| `add`    | `(id: string, quantity?: number) => void` | Adds a quantity of an item; the badge rolls with no flight.         |
+| `remove` | `(id: string) => void`                    | Removes the item with the given id; the badge rolls with no flight. |
+| `clear`  | `() => void`                              | Empties the cart; the badge rolls with no flight.                   |
+
+## Accessibility
+
+- Both parts are real `<button type="button">` elements; focus stays on the add button after a click.
+- `CartButton` is labelled with its count ("Cart, 3 items"); the badge itself is hidden from assistive technology.
+- A polite live region announces each add ("Added to cart. 3 items in cart.").
+- The flying image and its twin are `aria-hidden` and ignore the pointer, and the page stays interactive during the animation.
+- With `prefers-reduced-motion`, nothing flies; the badge and label crossfade briefly.

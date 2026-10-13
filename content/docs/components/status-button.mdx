@@ -1,0 +1,114 @@
+---
+title: "Status Button"
+description: "A button that morphs from idle to loading to success or error, resizing smoothly while its label and icon crossfade."
+---
+
+import { StatusButtonDemo } from "@/examples/ui/status-button-demo";
+
+<ComponentPreview name="status-button" src="examples/ui/status-button-demo.tsx">
+  <StatusButtonDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="status-button" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/status-button.tsx"
+  title="components/transitions/status-button.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/status-button.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { StatusButton } from "@/components/transitions/status-button";
+```
+
+```tsx
+<StatusButton
+  onClick={() => saveProfile(values)}
+  labels={{ pending: "Saving…", success: "Saved", error: "Couldn't save" }}
+>
+  Save changes
+</StatusButton>
+```
+
+```tsx
+<StatusButton onClick={subscribe} icons={{ idle: <BellIcon /> }}>
+  {(status) => (status === "success" ? "Subscribed" : "Subscribe")}
+</StatusButton>
+```
+
+```tsx
+const [status, setStatus] = React.useState<StatusButtonStatus>("idle");
+
+<StatusButton status={status} onStatusChange={setStatus} onClick={publish}>
+  Publish
+</StatusButton>;
+```
+
+## API Reference
+
+### StatusButton
+
+| Prop             | Type                                                                          | Default                                | Description                                                                                                                                                              |
+| ---------------- | ----------------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `status`         | `"idle" \| "pending" \| "success" \| "error"`                                 | -                                      | Controlled status to show. Sets `data-status` for styling each state, e.g. `data-[status=success]:`.                                                                     |
+| `defaultStatus`  | `"idle" \| "pending" \| "success" \| "error"`                                 | `"idle"`                               | Initial status when uncontrolled.                                                                                                                                        |
+| `onStatusChange` | `(status: StatusButtonStatus) => void`                                        | -                                      | Called with every status change.                                                                                                                                         |
+| `onClick`        | `(event) => void \| PromiseLike<unknown>`                                     | -                                      | Returning a promise moves the status to `pending`, then `success` on resolve or `error` on reject. The rejection is caught; handle or report the error inside `onClick`. |
+| `resetAfter`     | `number \| false`                                                             | `2000`                                 | Milliseconds before success and error return to idle. `false` keeps the final status until you change it.                                                                |
+| `labels`         | `Partial<Record<StatusButtonStatus, ReactNode>>`                              | `{ success: "Done", error: "Failed" }` | Per-status labels merged over the defaults; ignored when `children` is a function.                                                                                       |
+| `icons`          | `Partial<Record<StatusButtonStatus, ReactNode>>`                              | spinner, check and x icons             | Per-status icons merged over the defaults. Pass `null` to remove a default icon, e.g. `icons={{ pending: null }}`.                                                       |
+| `variants`       | `Partial<Record<StatusButtonStatus, ButtonVariant>>`                          | `{ error: "destructive" }`             | Per-status button variants merged over the defaults.                                                                                                                     |
+| `variant`        | `"default" \| "destructive" \| "outline" \| "secondary" \| "ghost" \| "link"` | `"default"`                            | Base button variant when no per-status variant applies.                                                                                                                  |
+| `size`           | `"default" \| "sm" \| "lg" \| "icon" \| "icon-sm" \| "icon-lg"`               | `"default"`                            | Button size passed to the underlying button.                                                                                                                             |
+| `children`       | `ReactNode \| (status: StatusButtonStatus) => ReactNode`                      | -                                      | Idle label, and pending label unless `labels.pending` is set. As a function, returns the label for every status and `labels` is ignored.                                 |
+
+## Accessibility
+
+- A visually hidden `role="status"` region next to the button announces the pending, success and error labels politely.
+- While pending the button has `aria-disabled` and `aria-busy` instead of `disabled`, so it keeps keyboard focus. Clicks, <kbd>Enter</kbd> and <kbd>Space</kbd> are ignored, and a `type="submit"` button won't submit its form again.
+- The status icons are `aria-hidden`; the label carries the meaning.
+- With `prefers-reduced-motion`, nothing resizes or slides; the label and icon crossfade briefly.

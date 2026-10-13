@@ -1,0 +1,70 @@
+---
+title: "Glitch"
+description: "The old page jitters out in stepped frames before the new one snaps in."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview bare name="page/glitch">
+  <PageTransitionDemo transition="glitch" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/glitch" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.tsx"
+  title="components/transitions/page-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/page/page-transition.css + registry/page/styles/glitch.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="glitch">
+  {children}
+</PageTransition>
+```
+
+```tsx
+navigateWithTransition(() => navigate("/"));
+```
+
+## API Reference
+
+| Prop         | Type                  | Default                     | Description                                                                                                                                                    |
+| ------------ | --------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transition` | `string`              | The boundary's `transition` | `"glitch"` for this style, on `<PageTransition>` for every navigation.                                                                                         |
+| `duration`   | `number`              | `400`                       | Milliseconds on `<PageTransition>`. Overrides this style's `400ms` timing. Edit `var(--tk-page-duration, 400ms)` in the style's CSS to change only this style. |
+| `easing`     | `string`              | `steps(6, end)`             | Easing on `<PageTransition>`. Overrides this style's easing. Edit `var(--tk-page-easing, steps(6, end))` in the style's CSS to change only this style.         |
+| `direction`  | `"forward" \| "back"` | `"forward"`                 | This style looks the same in both directions.                                                                                                                  |

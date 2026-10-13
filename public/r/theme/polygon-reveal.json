@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "theme/polygon-reveal",
   "title": "Polygon Reveal",
-  "description": "A clip-path polygon sweeps a geometric wipe across the page.",
+  "description": "A geometric wipe sweeps across the viewport.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-polygon-reveal)": {

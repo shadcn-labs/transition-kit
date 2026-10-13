@@ -1,0 +1,128 @@
+---
+title: "Product Gallery"
+description: "A hero image with a thumbnail strip. The chosen thumbnail grows into the hero while the old hero shrinks back into its slot."
+---
+
+import { ProductGalleryDemo } from "@/examples/ui/product-gallery-demo";
+
+<ComponentPreview
+  name="product-gallery"
+  src="examples/ui/product-gallery-demo.tsx"
+>
+  <ProductGalleryDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="product-gallery" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/product-gallery.tsx"
+  title="components/transitions/product-gallery.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/product-gallery.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  ProductGallery,
+  ProductGalleryMain,
+  ProductGalleryThumbnails,
+} from "@/components/transitions/product-gallery";
+```
+
+```tsx
+const images = [
+  { id: "front", src: "/shoe-front.jpg", alt: "Front view" },
+  { id: "side", src: "/shoe-side.jpg", alt: "Side view" },
+  { id: "sole", src: "/shoe-sole.jpg", alt: "Sole detail" },
+];
+
+<ProductGallery images={images} className="max-w-sm">
+  <ProductGalleryMain />
+  <ProductGalleryThumbnails />
+</ProductGallery>;
+```
+
+```tsx
+const [index, setIndex] = useState(0);
+
+<ProductGallery images={images} index={index} onIndexChange={setIndex}>
+  <ProductGalleryMain />
+  <ProductGalleryThumbnails />
+</ProductGallery>;
+```
+
+## API Reference
+
+### ProductGallery
+
+| Prop            | Type                      | Default | Description                                               |
+| --------------- | ------------------------- | ------- | --------------------------------------------------------- |
+| `images`        | `ProductGalleryImage[]`   | -       | Images available in the gallery.                          |
+| `index`         | `number`                  | -       | Controlled selected image index.                          |
+| `defaultIndex`  | `number`                  | `0`     | Initial selected index when uncontrolled.                 |
+| `onIndexChange` | `(index: number) => void` | -       | Called with the target index after the new image decodes. |
+
+### ProductGalleryImage
+
+| Field  | Type              | Default | Description                                                               |
+| ------ | ----------------- | ------- | ------------------------------------------------------------------------- |
+| `id`   | `string`          | -       | Stable identity that pairs the hero and thumbnail images.                 |
+| `alt`  | `string`          | -       | Image label used for the thumbnail name and the live-region announcement. |
+| `src`  | `string`          | -       | Image URL rendered as an `<img>` with `object-fit: cover`.                |
+| `node` | `React.ReactNode` | -       | Custom content rendered instead of `src`; it should fill its box.         |
+
+### ProductGalleryMain
+
+| Prop       | Type      | Default | Description                                 |
+| ---------- | --------- | ------- | ------------------------------------------- |
+| `controls` | `boolean` | `true`  | Shows previous/next buttons over the image. |
+
+## Accessibility
+
+- The thumbnails follow the WAI-ARIA radio group pattern: a `radiogroup` of `radio` buttons with `aria-checked`, labelled by each image's `alt`. Only the selected thumbnail is in the tab order.
+- In the strip, <kbd>←</kbd> / <kbd>↑</kbd> and <kbd>→</kbd> / <kbd>↓</kbd> select the previous and next image and move focus with it; <kbd>Home</kbd> / <kbd>End</kbd> jump to the first and last. Selection wraps around.
+- The previous and next buttons have labels and respond to <kbd>←</kbd> / <kbd>→</kbd> while focused. A polite live region announces the new image and its position.
+- With `prefers-reduced-motion`, nothing travels; the images crossfade briefly.

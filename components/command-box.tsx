@@ -12,7 +12,7 @@ import {
 } from "@/hooks/use-package-manager";
 import { cn } from "@/lib/utils";
 
-const REGISTRY_ITEM = "@transition-kit/theme/circle-reveal";
+const REGISTRY_ITEM = "@transition-kit/theme-transition";
 
 export const CommandBox = ({ className }: { className?: string }) => {
   const [{ packageManager }, setPreferences] = usePackageManager();

@@ -4,7 +4,7 @@
   "title": "Scale",
   "description": "The new page scales up while the old one fades out.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-image-pair(.tk-page-scale.tk-page-exit)": {

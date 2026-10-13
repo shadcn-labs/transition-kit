@@ -13,6 +13,7 @@ import {
 import { TOP_LEVEL_SECTIONS } from "@/constants/nav";
 import { ROUTES } from "@/constants/routes";
 import { useFeedback } from "@/hooks/use-feedback";
+import { NEW_DOCS_URLS } from "@/lib/docs";
 import { getTreeGroups } from "@/lib/page-tree";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,12 @@ const MobileLink = ({
       {...props}
     >
       {children}
+      {NEW_DOCS_URLS.has(href) && (
+        <span
+          className="ml-2 inline-block size-2 rounded-full bg-blue-500"
+          title="New"
+        />
+      )}
     </Link>
   );
 };

@@ -1,0 +1,150 @@
+---
+title: "Carousel"
+description: "Slides push in like a track from the side you moved toward."
+---
+
+import { CarouselDemo } from "@/examples/ui/carousel-demo";
+
+<ComponentPreview name="carousel" src="examples/ui/carousel-demo.tsx">
+  <CarouselDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="carousel" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/carousel.tsx"
+  title="components/transitions/carousel.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/carousel.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/transitions/carousel";
+```
+
+```tsx
+<Carousel loop aria-label="Featured places">
+  <CarouselContent>
+    <CarouselItem className="border bg-card p-6">Aurora Ridge</CarouselItem>
+    <CarouselItem className="border bg-card p-6">Copper Dunes</CarouselItem>
+    <CarouselItem className="border bg-card p-6">Tide Pools</CarouselItem>
+  </CarouselContent>
+  <div className="flex items-center justify-between">
+    <CarouselPrevious />
+    <CarouselDots />
+    <CarouselNext />
+  </div>
+</Carousel>
+```
+
+```tsx
+<Carousel loop autoplay={5000} aria-label="Featured places">
+  ...
+</Carousel>
+```
+
+```tsx
+const [index, setIndex] = React.useState(0);
+
+<Carousel index={index} onIndexChange={setIndex} aria-label="Screenshots">
+  ...
+</Carousel>;
+```
+
+```tsx
+const Counter = () => {
+  const { count, index } = useCarousel();
+  return (
+    <span className="text-sm text-muted-foreground tabular-nums">
+      {index + 1} / {count}
+    </span>
+  );
+};
+```
+
+## API Reference
+
+### Carousel
+
+| Prop            | Type                      | Default | Description                                                                                                                                                                                                          |
+| --------------- | ------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index`         | `number`                  | -       | Controlled slide on screen.                                                                                                                                                                                          |
+| `defaultIndex`  | `number`                  | `0`     | Initial slide when uncontrolled.                                                                                                                                                                                     |
+| `onIndexChange` | `(index: number) => void` | -       | Called with the new slide index after each move.                                                                                                                                                                     |
+| `loop`          | `boolean`                 | `false` | Wraps from the last slide to the first and back.                                                                                                                                                                     |
+| `autoplay`      | `number` (ms)             | -       | Advances every N milliseconds. Pauses on hover, keyboard focus, a hidden tab and reduced motion; without `loop` it rewinds to the first slide after the last. The root gets `data-autoplay="playing"` or `"paused"`. |
+
+### useCarousel
+
+| Return        | Type                      | Description                         |
+| ------------- | ------------------------- | ----------------------------------- |
+| `index`       | `number`                  | The current slide index.            |
+| `count`       | `number`                  | The total number of slides.         |
+| `loop`        | `boolean`                 | Whether wrapping is on.             |
+| `playing`     | `boolean`                 | Whether autoplay is running.        |
+| `canPrevious` | `boolean`                 | Whether moving back is possible.    |
+| `canNext`     | `boolean`                 | Whether moving forward is possible. |
+| `goTo`        | `(index: number) => void` | Moves to the slide index.           |
+| `previous`    | `() => void`              | Moves one slide back.               |
+| `next`        | `() => void`              | Moves one slide forward.            |
+
+## Accessibility
+
+- Follows the WAI-ARIA carousel pattern: the root is a `region` with `aria-roledescription="carousel"` (give it an `aria-label`), and each slide is a `group` with `aria-roledescription="slide"` labelled "2 of 5".
+- The slide container is an `aria-live="polite"` region, so moving announces the new slide. While autoplay is running it switches to `off`, so screen readers aren't interrupted every few seconds.
+- <kbd>←</kbd> / <kbd>→</kbd> move between slides while focus is anywhere inside
+  the carousel, except in text fields.
+- The arrows use `aria-disabled` instead of `disabled` at the ends, so keyboard focus stays on them. Arrows and dots point at the slides with `aria-controls`.
+- Hidden slides are removed from the accessibility tree and the tab order.
+- A swipe that ends on a link or button inside a slide doesn't also click it.
+- With `prefers-reduced-motion`, slides crossfade instead of pushing and autoplay stays off.

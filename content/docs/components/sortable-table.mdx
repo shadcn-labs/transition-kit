@@ -1,0 +1,142 @@
+---
+title: "Sortable Table"
+description: "A data table with sortable columns and search. Rows glide to their new positions."
+---
+
+import { SortableTableDemo } from "@/examples/ui/sortable-table-demo";
+
+<ComponentPreview
+  name="sortable-table"
+  src="examples/ui/sortable-table-demo.tsx"
+>
+  <SortableTableDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="sortable-table" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/sortable-table.tsx"
+  title="components/transitions/sortable-table.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { SortableTable } from "@/components/transitions/sortable-table";
+import type { SortableTableColumn } from "@/components/transitions/sortable-table";
+```
+
+```tsx
+interface Member {
+  id: string;
+  name: string;
+  role: string;
+  commits: number;
+}
+
+const columns: SortableTableColumn<Member>[] = [
+  { key: "name", header: "Name", width: "40%" },
+  { key: "role", header: "Role" },
+  { key: "commits", header: "Commits", align: "right" },
+];
+
+<SortableTable
+  caption="Team members"
+  columns={columns}
+  rows={members}
+  defaultSort={{ key: "commits", direction: "desc" }}
+  searchable
+/>;
+```
+
+## API Reference
+
+### SortableTable
+
+| Prop                | Type                                               | Default         | Description                                                                   |
+| ------------------- | -------------------------------------------------- | --------------- | ----------------------------------------------------------------------------- |
+| `columns`           | `SortableTableColumn<Row>[]`                       | -               | Column definitions rendered in the header and cells.                          |
+| `rows`              | `Row[]` (each row needs an `id: string \| number`) | -               | Data rows, each with a unique `id` used as the transition key.                |
+| `sort`              | `SortableTableSort \| null`                        | -               | Controlled sort state, or `null` for the original order.                      |
+| `defaultSort`       | `SortableTableSort \| null`                        | `null`          | Initial sort state when uncontrolled.                                         |
+| `onSortChange`      | `(sort: SortableTableSort \| null) => void`        | -               | Called with the next sort after a header click.                               |
+| `searchable`        | `boolean`                                          | `false`         | Shows a search field above the table.                                         |
+| `query`             | `string`                                           | -               | Controlled search query.                                                      |
+| `defaultQuery`      | `string`                                           | `""`            | Initial query when uncontrolled.                                              |
+| `onQueryChange`     | `(query: string) => void`                          | -               | Called with the next query on every keystroke.                                |
+| `searchFn`          | `(row: Row, query: string) => boolean`             | any column      | Decides which rows match; defaults to a case-insensitive match on any column. |
+| `searchPlaceholder` | `string`                                           | `"Search…"`     | Placeholder and accessible label for the search field.                        |
+| `caption`           | `ReactNode`                                        | -               | Accessible table name, rendered as a visually hidden `<caption>`.             |
+| `emptyMessage`      | `ReactNode`                                        | `"No results."` | Content shown when no rows are visible.                                       |
+
+### SortableTableColumn
+
+| Field       | Type                                          | Default    | Description                                                                                                                                     |
+| ----------- | --------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `key`       | `string`                                      | -          | Unique column id, also the default field read from each row.                                                                                    |
+| `header`    | `ReactNode`                                   | -          | Content rendered in the column header button.                                                                                                   |
+| `label`     | `string`                                      | `header`   | Plain-text column name for announcements when `header` is not a string.                                                                         |
+| `accessor`  | `(row: Row) => string \| number \| Date \| …` | `row[key]` | Value used to sort and search. Numbers and dates compare numerically, strings with a locale-aware natural collator, and empty values sort last. |
+| `cell`      | `(row: Row) => ReactNode`                     | value      | Custom cell content; defaults to the accessor value.                                                                                            |
+| `sortFn`    | `(a: Row, b: Row) => number`                  | -          | Custom comparator; should return the ascending order, descending reverses it.                                                                   |
+| `sortable`  | `boolean`                                     | `true`     | Whether the column header shows a sort button.                                                                                                  |
+| `align`     | `"left" \| "center" \| "right"`               | `"left"`   | Text alignment for the header and cells.                                                                                                        |
+| `width`     | `number \| string`                            | -          | Column width; columns without one share the rest.                                                                                               |
+| `className` | `string`                                      | -          | Applied to the header and every cell of the column.                                                                                             |
+
+### SortableTableSort
+
+| Field       | Type              | Description                     |
+| ----------- | ----------------- | ------------------------------- |
+| `key`       | `string`          | Key of the column being sorted. |
+| `direction` | `"asc" \| "desc"` | Sort direction for that column. |
+
+## Accessibility
+
+- Renders a real `<table>` with `<thead>`, `<tbody>` and `scope="col"` headers. `caption` becomes a visually hidden `<caption>` that names the table.
+- Each sortable header holds a `<button type="button">`, reachable with <kbd>Tab</kbd> and activated with <kbd>Enter</kbd> or <kbd>Space</kbd>. Focus stays on the button after sorting.
+- The sorted header has `aria-sort="ascending"` or `"descending"`. A polite live region announces the row count and the current order after each change.
+- The search field has a label, and with `prefers-reduced-motion` rows don't travel; they crossfade briefly into place.

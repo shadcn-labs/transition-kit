@@ -1,0 +1,126 @@
+---
+title: "Animated List"
+description: "A list whose items pop in, fade out and glide into place as they change."
+---
+
+import { AnimatedListDemo } from "@/examples/ui/animated-list-demo";
+
+<ComponentPreview name="animated-list" src="examples/ui/animated-list-demo.tsx">
+  <AnimatedListDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="animated-list" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/animated-list.tsx"
+  title="components/transitions/animated-list.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/animated-list.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  AnimatedList,
+  AnimatedListItem,
+  useAnimatedList,
+} from "@/components/transitions/animated-list";
+```
+
+```tsx
+const { items, add, remove, move, sort, set } = useAnimatedList([
+  { id: 1, title: "Deploy finished" },
+  { id: 2, title: "Payment received" },
+]);
+
+<AnimatedList aria-label="Notifications">
+  {items.map((item) => (
+    <AnimatedListItem key={item.id} id={item.id}>
+      {item.title}
+      <button type="button" onClick={() => remove(item.id)}>
+        Dismiss
+      </button>
+    </AnimatedListItem>
+  ))}
+</AnimatedList>;
+```
+
+```tsx
+add({ id: 3, title: "New comment" }, 0); // insert at index 0 (default: end)
+remove(2); // by id
+move(1, 0); // move id 1 to index 0
+sort((a, b) => a.title.localeCompare(b.title));
+set((items) => items.filter((item) => !item.read)); // any update
+```
+
+```tsx
+startTransition(() => setItems((items) => items.slice(1)));
+```
+
+## API Reference
+
+### AnimatedListItem
+
+| Prop | Type               | Default | Description                                                                         |
+| ---- | ------------------ | ------- | ----------------------------------------------------------------------------------- |
+| `id` | `string \| number` | -       | Unique identity for the row, stable between renders. Render it with the same `key`. |
+
+### useAnimatedList
+
+| Return   | Type                                            | Description                                          |
+| -------- | ----------------------------------------------- | ---------------------------------------------------- |
+| `items`  | `T[]`                                           | Current list contents.                               |
+| `add`    | `(item: T, index?: number) => void`             | Inserts an item at the index (default: end).         |
+| `remove` | `(id: string \| number) => void`                | Removes the item with the given id.                  |
+| `move`   | `(id: string \| number, index: number) => void` | Moves the item with the given id to an index.        |
+| `sort`   | `(compare: (a: T, b: T) => number) => void`     | Reorders items with a compare function.              |
+| `set`    | `(items: T[] \| ((items: T[]) => T[])) => void` | Replaces items with an array or an updater function. |
+
+```ts
+const { items, add, remove, move, sort, set } = useAnimatedList(initial, {
+  getId,
+});
+```
+
+## Accessibility
+
+- A real list (`ul` / `li`); name it with `aria-label` or `aria-labelledby`.
+- Removing the focused row moves focus to the matching control in the next row instead of dropping it to the page.
+- The list doesn't announce changes by itself, so pair it with a polite live region for changes the user didn't make (the demo announces new notifications with `role="status"`).
+- With `prefers-reduced-motion`, rows don't travel or scale; they crossfade briefly.

@@ -1,0 +1,96 @@
+---
+title: "Number Flip"
+description: "Changed digits roll up when the number grows and down when it shrinks. Separators and unchanged digits stay put."
+---
+
+import { NumberFlipDemo } from "@/examples/ui/number-flip-demo";
+
+<ComponentPreview name="number-flip" src="examples/ui/number-flip-demo.tsx">
+  <NumberFlipDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="number-flip" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/number-flip.tsx"
+  title="components/transitions/number-flip.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { NumberFlip } from "@/components/transitions/number-flip";
+```
+
+```tsx
+const [price, setPrice] = useState(1299);
+
+<NumberFlip value={price} format={{ style: "currency", currency: "EUR" }} />
+<button type="button" onClick={() => setPrice((p) => p + 100)}>
+  Add seat
+</button>
+```
+
+```tsx
+<NumberFlip
+  value={2_480_000}
+  format={{ notation: "compact", maximumFractionDigits: 1 }}
+  stagger
+/>
+```
+
+## API Reference
+
+### NumberFlip
+
+| Prop        | Type                       | Default   | Description                                                                                                                    |
+| ----------- | -------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `value`     | `number`                   | -         | Number to display.                                                                                                             |
+| `format`    | `Intl.NumberFormatOptions` | -         | `Intl.NumberFormat` options used to format the number.                                                                         |
+| `locales`   | `Intl.LocalesArgument`     | `"en-US"` | Locale used for formatting. Fixed by default so server and client render the same string; pass the user's locale to change it. |
+| `stagger`   | `boolean`                  | `false`   | Staggers the rolls of changed digits.                                                                                          |
+| `className` | `string`                   | -         | Applied to the root `<span>`. Other props are spread onto it.                                                                  |
+
+## Accessibility
+
+- The full formatted number (for example `$48,219.50`) is rendered as visually hidden text, so screen readers read one number instead of single characters. The rolling characters are `aria-hidden`.
+- The hidden text updates immediately; it doesn't wait for the animation.
+- The number isn't a live region. If changes should be announced, wrap it in an element with `aria-live="polite"`.
+- With `prefers-reduced-motion`, digits don't travel; the old and new digits crossfade briefly.

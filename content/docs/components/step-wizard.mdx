@@ -1,0 +1,138 @@
+---
+title: "Step Wizard"
+description: "A multi-step form whose panels slide in the direction you move and whose progress indicator glides between steps."
+---
+
+import { StepWizardDemo } from "@/examples/ui/step-wizard-demo";
+
+<ComponentPreview name="step-wizard" src="examples/ui/step-wizard-demo.tsx">
+  <StepWizardDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="step-wizard" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/step-wizard.tsx"
+  title="components/transitions/step-wizard.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/step-wizard.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  StepWizard,
+  StepWizardContent,
+  StepWizardDescription,
+  StepWizardIndicator,
+  StepWizardNext,
+  StepWizardPrevious,
+  StepWizardStep,
+  StepWizardTitle,
+} from "@/components/transitions/step-wizard";
+```
+
+```tsx
+<StepWizard>
+  <StepWizardIndicator />
+  <StepWizardContent>
+    <StepWizardStep label="Account" canAdvance={email !== ""}>
+      <StepWizardTitle>Create your account</StepWizardTitle>
+      <StepWizardDescription>
+        We'll send a confirmation link.
+      </StepWizardDescription>
+      <Input value={email} onChange={(event) => setEmail(event.target.value)} />
+    </StepWizardStep>
+    <StepWizardStep label="Plan">…</StepWizardStep>
+    <StepWizardStep label="Review">…</StepWizardStep>
+  </StepWizardContent>
+  <div className="flex justify-between">
+    <StepWizardPrevious />
+    <StepWizardNext />
+  </div>
+</StepWizard>
+```
+
+```tsx
+const { step, count, next, previous, goTo, isFirst, isLast } = useStepWizard();
+```
+
+## API Reference
+
+### StepWizard
+
+| Prop           | Type                     | Default | Description                                   |
+| -------------- | ------------------------ | ------- | --------------------------------------------- |
+| `step`         | `number`                 | -       | Controlled step index.                        |
+| `defaultStep`  | `number`                 | `0`     | Initial step index when uncontrolled.         |
+| `onStepChange` | `(step: number) => void` | -       | Called with the target step after navigation. |
+
+### StepWizardStep
+
+| Prop         | Type                         | Default              | Description                                                                                   |
+| ------------ | ---------------------------- | -------------------- | --------------------------------------------------------------------------------------------- |
+| `label`      | `string`                     | `"Step <n>"`         | Shown in the indicator and used as the step's accessible name.                                |
+| `canAdvance` | `boolean \| (() => boolean)` | `true`               | `false` blocks Next; a function runs when Next is pressed and blocks it by returning `false`. |
+| `aria-label` | `string`                     | `"<label> (n of N)"` | Accessible name override for the step group.                                                  |
+
+### useStepWizard
+
+| Return     | Type                     | Description                                  |
+| ---------- | ------------------------ | -------------------------------------------- |
+| `step`     | `number`                 | The current step index.                      |
+| `count`    | `number`                 | The total number of steps.                   |
+| `goTo`     | `(step: number) => void` | Moves to the step index.                     |
+| `next`     | `() => void`             | Moves forward unless `canAdvance` blocks it. |
+| `previous` | `() => void`             | Moves back one step.                         |
+| `isFirst`  | `boolean`                | Whether the first step is active.            |
+| `isLast`   | `boolean`                | Whether the last step is active.             |
+
+## Accessibility
+
+- The indicator is a `nav` with an ordered list. The current step has `aria-current="step"`, completed steps read "(completed)", and upcoming steps are disabled buttons.
+- Each step is a `role="group"` named after its label and position, for example "Plan (2 of 4)". Inactive steps are `hidden`, so they are skipped by the keyboard and screen readers.
+- After a step change, focus moves to the new step's `StepWizardTitle` (or the step itself), so the next <kbd>Tab</kbd> continues inside it.
+- A blocked Continue uses `aria-disabled` instead of `disabled`, so it stays in the tab order and screen readers can say why nothing happened.
+- With `prefers-reduced-motion`, nothing slides or glides; steps crossfade briefly.
