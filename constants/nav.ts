@@ -7,21 +7,22 @@ export interface LabsNavLink {
 }
 
 export const LABS_LATEST = {
-  description: "Beautiful markdown UIs, made simple",
-  href: "https://mdxcn.dev",
-  name: "mdxcn",
+  description: "Beautiful product demo videos, made simple",
+  href: "https://snapcn.dev",
+  name: "snapcn",
 } as const satisfies LabsNavLink;
 
 export const LABS_REGISTRIES = [
-  { href: "https://pdfcn.dev", name: "pdfcn" },
   { href: "https://termcn.dev", name: "termcn" },
   { href: "https://emailcn.run", name: "emailcn" },
   { href: "https://framecn.dev", name: "framecn" },
   { href: "https://ogimagecn.com", name: "ogimagecn" },
   { href: "https://agentcn.run", name: "agentcn" },
   { href: "https://mcpcn.dev", name: "mcpcn" },
+  { href: "https://pdfcn.dev", name: "pdfcn" },
   { href: "https://editorcn.vercel.app", name: "editorcn" },
   { href: "https://shadercn.run", name: "shadercn" },
+  { href: "https://mdxcn.dev", name: "mdxcn" },
 ] as const satisfies readonly LabsNavLink[];
 
 export const LABS_TEMPLATES = [
