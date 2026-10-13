@@ -40,8 +40,8 @@ const STATS = [
 ];
 
 const HomePage = ({ onNavigate }: { onNavigate: (index: number) => void }) => (
-  <div className="flex h-full flex-col gap-6 p-6 @md:p-8">
-    <div className="flex flex-col gap-2">
+  <div className="flex h-full flex-col gap-5 p-5 @md:p-6">
+    <div className="flex flex-col gap-1.5">
       <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
         Studio
       </span>
@@ -147,9 +147,9 @@ export const PageTransitionDemo = ({ transition }: { transition: string }) => {
   return (
     <div
       data-slot="page-transition-demo"
-      className="bg-background @container flex h-[26rem] w-full max-w-2xl flex-col overflow-hidden rounded-xl border shadow-sm"
+      className="bg-background @container mx-auto flex h-96 w-full max-w-2xl flex-col overflow-hidden rounded-xl border shadow-sm"
     >
-      <div className="bg-muted/50 flex items-center gap-3 border-b px-3 py-2">
+      <div className="bg-muted/50 flex items-center gap-3 border-b px-3 py-1.5">
         <div className="flex gap-1.5" aria-hidden>
           <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
           <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
@@ -161,7 +161,7 @@ export const PageTransitionDemo = ({ transition }: { transition: string }) => {
       </div>
       <nav
         aria-label="Demo site"
-        className="flex items-center justify-between gap-2 border-b px-4 py-2"
+        className="flex items-center justify-between gap-2 border-b px-4 py-1.5"
       >
         <span className="text-sm font-semibold">Acme</span>
         <div className="flex gap-1">

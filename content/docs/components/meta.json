@@ -1,4 +1,29 @@
 {
   "title": "Components",
-  "pages": ["index", "theme", "page", "ui"]
+  "pages": [
+    "index",
+    "accordion",
+    "add-to-cart",
+    "animated-list",
+    "carousel",
+    "dynamic-island",
+    "filter-grid",
+    "kanban-board",
+    "layout-switcher",
+    "morphing-popover",
+    "number-flip",
+    "product-gallery",
+    "segmented-control",
+    "sortable-table",
+    "stack-navigator",
+    "status-button",
+    "step-wizard",
+    "tabs",
+    "theme-mode-switch",
+    "theme-morph-button",
+    "theme-toggle-button",
+    "theme-toggle-switch",
+    "theme-transition",
+    "page-transition"
+  ]
 }

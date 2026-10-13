@@ -9,7 +9,7 @@ import type { ThemeTransitionOptions } from "@/registry/theme/theme-transition";
 import { useThemeTransition } from "@/registry/theme/theme-transition";
 
 export const useThemeToggle = () => {
-  const { setTheme, resolvedTheme } = useThemeTransition();
+  const { toggleTheme: toggleSiteTheme, resolvedTheme } = useThemeTransition();
   const { setMetaColor, metaColor } = useMetaColor();
   const feedbackOn = useFeedback({ sound: "toggleOn" });
   const feedbackOff = useFeedback({ sound: "toggleOff" });
@@ -18,17 +18,17 @@ export const useThemeToggle = () => {
     setMetaColor(metaColor);
   }, [metaColor, setMetaColor]);
 
+  // One toggle implementation: the provider's, shared by every control.
   const toggleTheme = useCallback(
     (options?: ThemeTransitionOptions) => {
-      const next = resolvedTheme === "dark" ? "light" : "dark";
-      if (next === "dark") {
-        feedbackOff();
-      } else {
+      if (resolvedTheme === "dark") {
         feedbackOn();
+      } else {
+        feedbackOff();
       }
-      setTheme(next, options);
+      toggleSiteTheme(options);
     },
-    [resolvedTheme, setTheme, feedbackOn, feedbackOff]
+    [resolvedTheme, toggleSiteTheme, feedbackOn, feedbackOff]
   );
 
   useHotkeys(

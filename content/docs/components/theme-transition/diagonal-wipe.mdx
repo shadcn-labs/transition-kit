@@ -1,0 +1,79 @@
+---
+title: "Diagonal Wipe"
+description: "A diagonal band sweeps across the viewport."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/diagonal-wipe">
+  <ThemeTransitionDemo transition="diagonal-wipe" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/diagonal-wipe" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css + registry/theme/styles/diagonal-wipe.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<ThemeTransitionProvider transition="diagonal-wipe">
+  {children}
+</ThemeTransitionProvider>
+```
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "diagonal-wipe", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## API Reference
+
+| Prop         | Type                                              | Default                          | Description                                                                                                                                                        |
+| ------------ | ------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `transition` | `string`                                          | The provider's `transition`      | `"diagonal-wipe"` for this style: on the provider for every change, or per change with `setTheme` / `toggleTheme`.                                                 |
+| `duration`   | `number`                                          | `600`                            | Milliseconds on the provider. Overrides this style's `600ms` timing. Edit `var(--tk-theme-duration, 600ms)` in the style's CSS to change only this style.          |
+| `easing`     | `string`                                          | `cubic-bezier(0.65, 0, 0.35, 1)` | Easing on the provider. Overrides this style's easing. Edit `var(--tk-theme-easing, cubic-bezier(0.65, 0, 0.35, 1))` in the style's CSS to change only this style. |
+| `origin`     | `{ clientX: number; clientY: number } \| Element` | -                                | This style is anchored to the viewport and ignores `origin`.                                                                                                       |

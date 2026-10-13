@@ -4,7 +4,7 @@
   "title": "Circle Reveal",
   "description": "An expanding circle reveals the new theme from the click point.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-circle-reveal)": {

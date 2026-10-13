@@ -1,0 +1,123 @@
+---
+title: "Stack Navigator"
+description: "Push and pop screens like an iOS navigation stack. Screens slide in the direction you travel and the title glides into the back button."
+---
+
+import { StackNavigatorDemo } from "@/examples/ui/stack-navigator-demo";
+
+<ComponentPreview
+  name="stack-navigator"
+  src="examples/ui/stack-navigator-demo.tsx"
+>
+  <StackNavigatorDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="stack-navigator" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/stack-navigator.tsx"
+  title="components/transitions/stack-navigator.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  StackNavigator,
+  StackScreen,
+  useStack,
+} from "@/components/transitions/stack-navigator";
+```
+
+```tsx
+const Inbox = () => {
+  const { push } = useStack();
+  return (
+    <button type="button" onClick={() => push("chat", { id: "ava" })}>
+      Ava Chen
+    </button>
+  );
+};
+
+<StackNavigator initialScreen="inbox" className="h-96 max-w-sm">
+  <StackScreen name="inbox" title="Messages" render={() => <Inbox />} />
+  <StackScreen<{ id: string }>
+    name="chat"
+    title={({ id }) => getChat(id).name}
+    actions={({ id }) => <ContactButton id={id} />}
+    render={({ id }) => <Conversation id={id} />}
+  />
+</StackNavigator>;
+```
+
+## API Reference
+
+### StackNavigator
+
+| Prop            | Type                            | Default             | Description                                       |
+| --------------- | ------------------------------- | ------------------- | ------------------------------------------------- |
+| `initialScreen` | `string`                        | first `StackScreen` | Uncontrolled root screen.                         |
+| `initialParams` | `Record<string, unknown>`       | `{}`                | Params for the uncontrolled root entry.           |
+| `stack`         | `StackEntry[]`                  | -                   | Controlled stack, root first.                     |
+| `onStackChange` | `(stack: StackEntry[]) => void` | -                   | Called with the next stack after each navigation. |
+
+### StackScreen
+
+| Prop      | Type                                 | Default | Description                                                               |
+| --------- | ------------------------------------ | ------- | ------------------------------------------------------------------------- |
+| `name`    | `string`                             | -       | Unique screen name referenced by `initialScreen` and `push`.              |
+| `render`  | `(params) => ReactNode`              | -       | Screen content rendered for the entry's params.                           |
+| `title`   | `ReactNode \| (params) => ReactNode` | -       | Header title; morphs into the back button when a screen is pushed on top. |
+| `actions` | `ReactNode \| (params) => ReactNode` | -       | Trailing header content, e.g. an icon button.                             |
+
+### useStack
+
+| Return      | Type                                                         | Description                              |
+| ----------- | ------------------------------------------------------------ | ---------------------------------------- |
+| `push`      | `(screen: string, params?: Record<string, unknown>) => void` | Pushes a new entry onto the stack.       |
+| `pop`       | `() => void`                                                 | Goes back one screen; no-op at the root. |
+| `popToRoot` | `() => void`                                                 | Pops back to the root entry.             |
+| `stack`     | `StackEntry[]`                                               | Current stack, root first.               |

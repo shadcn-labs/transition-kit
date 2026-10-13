@@ -1,0 +1,116 @@
+---
+title: "Segmented Control"
+description: "An iOS-style segmented control whose thumb glides to the chosen option."
+---
+
+import { SegmentedControlDemo } from "@/examples/ui/segmented-control-demo";
+
+<ComponentPreview
+  name="segmented-control"
+  src="examples/ui/segmented-control-demo.tsx"
+>
+  <SegmentedControlDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="segmented-control" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/segmented-control.tsx"
+  title="components/transitions/segmented-control.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  SegmentedControl,
+  SegmentedControlItem,
+} from "@/components/transitions/segmented-control";
+```
+
+```tsx
+<SegmentedControl defaultValue="week" name="view" aria-label="Calendar view">
+  <SegmentedControlItem value="day">Day</SegmentedControlItem>
+  <SegmentedControlItem value="week">Week</SegmentedControlItem>
+  <SegmentedControlItem value="month">Month</SegmentedControlItem>
+</SegmentedControl>
+```
+
+```tsx
+<SegmentedControl defaultValue="left" size="sm" aria-label="Text alignment">
+  <SegmentedControlItem
+    value="left"
+    icon={<AlignLeft />}
+    aria-label="Align left"
+  />
+  <SegmentedControlItem
+    value="center"
+    icon={<AlignCenter />}
+    aria-label="Align center"
+  />
+  <SegmentedControlItem
+    value="right"
+    icon={<AlignRight />}
+    aria-label="Align right"
+  />
+</SegmentedControl>
+```
+
+## API Reference
+
+### SegmentedControl
+
+| Prop            | Type                      | Default | Description                                                            |
+| --------------- | ------------------------- | ------- | ---------------------------------------------------------------------- |
+| `value`         | `string`                  | -       | Controlled selected value.                                             |
+| `defaultValue`  | `string`                  | `""`    | Initial selected value when uncontrolled.                              |
+| `onValueChange` | `(value: string) => void` | -       | Called with the next value when it is selected.                        |
+| `name`          | `string`                  | -       | Submits the selected value with this field name in a surrounding form. |
+| `form`          | `string`                  | -       | Associates the hidden input with a form elsewhere in the document.     |
+| `size`          | `"sm" \| "md" \| "lg"`    | `"md"`  | Control size.                                                          |
+| `disabled`      | `boolean`                 | `false` | Disables the whole control.                                            |
+
+### SegmentedControlItem
+
+| Prop       | Type              | Default | Description                         |
+| ---------- | ----------------- | ------- | ----------------------------------- |
+| `value`    | `string`          | -       | Option value selected by this item. |
+| `icon`     | `React.ReactNode` | -       | Content rendered before the label.  |
+| `disabled` | `boolean`         | `false` | Disables this item.                 |

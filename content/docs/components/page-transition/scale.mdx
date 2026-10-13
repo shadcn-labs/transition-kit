@@ -1,0 +1,70 @@
+---
+title: "Scale"
+description: "The new page scales up while the old one fades out."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview bare name="page/scale">
+  <PageTransitionDemo transition="scale" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/scale" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.tsx"
+  title="components/transitions/page-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/page/page-transition.css + registry/page/styles/scale.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="scale">
+  {children}
+</PageTransition>
+```
+
+```tsx
+navigateWithTransition(() => navigate("/"));
+```
+
+## API Reference
+
+| Prop         | Type                  | Default                         | Description                                                                                                                                                            |
+| ------------ | --------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transition` | `string`              | The boundary's `transition`     | `"scale"` for this style, on `<PageTransition>` for every navigation.                                                                                                  |
+| `duration`   | `number`              | `500`                           | Milliseconds on `<PageTransition>`. Overrides this style's `500ms` timing. Edit `var(--tk-page-duration, 500ms)` in the style's CSS to change only this style.         |
+| `easing`     | `string`              | `cubic-bezier(0.16, 1, 0.3, 1)` | Easing on `<PageTransition>`. Overrides this style's easing. Edit `var(--tk-page-easing, cubic-bezier(0.16, 1, 0.3, 1))` in the style's CSS to change only this style. |
+| `direction`  | `"forward" \| "back"` | `"forward"`                     | This style looks the same in both directions.                                                                                                                          |

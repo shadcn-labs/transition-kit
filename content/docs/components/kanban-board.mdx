@@ -1,0 +1,114 @@
+---
+title: "Kanban Board"
+description: "Drag cards between columns. The card glides into place while its neighbours make room and the column counts roll."
+---
+
+import { KanbanBoardDemo } from "@/examples/ui/kanban-board-demo";
+
+<ComponentPreview name="kanban-board" src="examples/ui/kanban-board-demo.tsx">
+  <KanbanBoardDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="kanban-board" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/kanban-board.tsx"
+  title="components/transitions/kanban-board.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  KanbanBoard,
+  KanbanCard,
+  KanbanCardActions,
+  KanbanColumn,
+} from "@/components/transitions/kanban-board";
+```
+
+```tsx
+const columns = [
+  { id: "todo", title: "Todo" },
+  { id: "done", title: "Done" },
+];
+
+const [cards, setCards] = useState([
+  { id: "1", column: "todo", title: "Write the changelog" },
+  { id: "2", column: "done", title: "Ship the release" },
+]);
+
+<KanbanBoard columns={columns} cards={cards} onCardsChange={setCards}>
+  {columns.map((column) => (
+    <KanbanColumn key={column.id} value={column.id}>
+      {(card) => (
+        <KanbanCard>
+          {card.title}
+          <KanbanCardActions />
+        </KanbanCard>
+      )}
+    </KanbanColumn>
+  ))}
+</KanbanBoard>;
+```
+
+## API Reference
+
+### KanbanBoard
+
+| Prop            | Type                   | Default | Description                                                                                                                                                                                          |
+| --------------- | ---------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `columns`       | `KanbanColumnData[]`   | -       | Column definitions, where `KanbanColumnData` is `{ id: string; title: string }`.                                                                                                                     |
+| `cards`         | `T[]`                  | -       | Controlled card list, where `T` extends `KanbanCardData` (`{ id: string; column: string; title: string }`, plus any extra fields). Each card's `title` is its accessible name and announcement text. |
+| `defaultCards`  | `T[]`                  | `[]`    | Initial cards when uncontrolled.                                                                                                                                                                     |
+| `onCardsChange` | `(cards: T[]) => void` | -       | Called with the updated card list after a move.                                                                                                                                                      |
+
+### KanbanColumn
+
+| Prop       | Type                     | Default | Description                                                                               |
+| ---------- | ------------------------ | ------- | ----------------------------------------------------------------------------------------- |
+| `value`    | `string`                 | -       | A column `id` from `columns`. The column renders its title, the card count and an `<ul>`. |
+| `children` | `(card: T) => ReactNode` | -       | Render function for each card in the column. Return a `<KanbanCard>` from it.             |

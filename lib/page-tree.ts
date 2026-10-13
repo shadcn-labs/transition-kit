@@ -39,9 +39,16 @@ export const getAllPagesFromFolder = (
 const folderLabel = (folder: PageTreeFolder) =>
   typeof folder.name === "string" ? folder.name : String(folder.name);
 
+/** Sort pages by display label. */
+const byLabel = (a: PageTreePage, b: PageTreePage) =>
+  String(typeof a.name === "string" ? a.name : "").localeCompare(
+    String(typeof b.name === "string" ? b.name : "")
+  );
+
 /**
- * Sidebar groups below "Sections": one per component group (Theme, Page, UI),
- * without the group overview pages, which the sections already link to.
+ * Sidebar groups below "Sections": the flat Components group (UI pages plus
+ * the Theme/Page hub pages, sorted alphabetically), without the overview
+ * pages, which the sections already link to.
  */
 export const getTreeGroups = (tree: PageTreeRoot): TreeGroup[] => {
   const groups: TreeGroup[] = [];
@@ -52,18 +59,26 @@ export const getTreeGroups = (tree: PageTreeRoot): TreeGroup[] => {
     }
 
     if (isComponentsFolder(item)) {
+      const overviewUrl = `${ROUTES.DOCS}/${item.$id}`;
+      const rootPages = item.children.filter(
+        (child): child is PageTreePage =>
+          child.type === "page" && child.url !== overviewUrl
+      );
+      const hubPages: PageTreePage[] = [];
       for (const child of item.children) {
         if (child.type !== "folder") {
           continue;
         }
-        // The overview is the folder index, or a page when meta.json lists "index".
-        const overviewUrl = `${ROUTES.DOCS}/${child.$id}`;
-        const pages = getAllPagesFromFolder(child).filter(
-          (page) => page.url !== overviewUrl
+        const hub = getAllPagesFromFolder(child).find(
+          (page) => page.url === `${ROUTES.DOCS}/${child.$id}`
         );
-        if (pages.length > 0) {
-          groups.push({ label: folderLabel(child), pages });
+        if (hub) {
+          hubPages.push(hub);
         }
+      }
+      const pages = [...rootPages, ...hubPages].toSorted(byLabel);
+      if (pages.length > 0) {
+        groups.push({ label: folderLabel(item), pages });
       }
       continue;
     }

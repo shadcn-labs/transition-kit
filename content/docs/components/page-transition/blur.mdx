@@ -1,0 +1,70 @@
+---
+title: "Blur"
+description: "The old page blurs away while the new one sharpens in."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview bare name="page/blur">
+  <PageTransitionDemo transition="blur" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/blur" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.tsx"
+  title="components/transitions/page-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/page/page-transition.css + registry/page/styles/blur.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="blur">
+  {children}
+</PageTransition>
+```
+
+```tsx
+navigateWithTransition(() => navigate("/"));
+```
+
+## API Reference
+
+| Prop         | Type                  | Default                     | Description                                                                                                                                                    |
+| ------------ | --------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transition` | `string`              | The boundary's `transition` | `"blur"` for this style, on `<PageTransition>` for every navigation.                                                                                           |
+| `duration`   | `number`              | `500`                       | Milliseconds on `<PageTransition>`. Overrides this style's `500ms` timing. Edit `var(--tk-page-duration, 500ms)` in the style's CSS to change only this style. |
+| `easing`     | `string`              | `ease-in-out`               | Easing on `<PageTransition>`. Overrides this style's easing. Edit `var(--tk-page-easing, ease-in-out)` in the style's CSS to change only this style.           |
+| `direction`  | `"forward" \| "back"` | `"forward"`                 | This style looks the same in both directions.                                                                                                                  |
