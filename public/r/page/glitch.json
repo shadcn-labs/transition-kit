@@ -4,7 +4,7 @@
   "title": "Glitch",
   "description": "The old page jitters out in stepped frames before the new one snaps in.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-page-glitch)": {

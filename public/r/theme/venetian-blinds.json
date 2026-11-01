@@ -4,7 +4,7 @@
   "title": "Venetian Blinds",
   "description": "Horizontal slats open one by one, like blinds.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-venetian-blinds)": {

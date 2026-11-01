@@ -15,15 +15,11 @@ import {
 } from "@/components/ui/sidebar";
 import { TOP_LEVEL_SECTIONS } from "@/constants/nav";
 import { ROUTES } from "@/constants/routes";
+import { NEW_DOCS_URLS } from "@/lib/docs";
 import { getTreeGroups } from "@/lib/page-tree";
-import { items } from "@/registry/items";
 
-/** Docs URLs of items flagged `isNew`, marked with a dot in the sidebar. */
-const PAGES_NEW = new Set(
-  items
-    .filter((item) => item.isNew)
-    .map((item) => `${ROUTES.DOCS_COMPONENTS}/${item.name}`)
-);
+/** Docs URLs flagged as new, marked with a dot in the sidebar. */
+const PAGES_NEW = NEW_DOCS_URLS;
 
 /** The section whose URL is the longest prefix of the current path. */
 const activeSectionHref = (pathname: string) =>

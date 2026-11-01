@@ -1,0 +1,138 @@
+---
+title: "Filter Grid"
+description: "Filter a grid with chips and search. Matches reflow into place, the rest pop out, and new items pop in one after another."
+---
+
+import { FilterGridDemo } from "@/examples/ui/filter-grid-demo";
+
+<ComponentPreview name="filter-grid" src="examples/ui/filter-grid-demo.tsx">
+  <FilterGridDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="filter-grid" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/filter-grid.tsx"
+  title="components/transitions/filter-grid.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  FILTER_ALL,
+  FilterGrid,
+  FilterGridFilter,
+  FilterGridFilters,
+  FilterGridItems,
+  FilterGridSearch,
+} from "@/components/transitions/filter-grid";
+```
+
+```tsx
+const projects = [
+  { id: "brand", title: "Brand refresh", tags: ["Design"] },
+  { id: "api", title: "Public API v2", tags: ["Engineering"] },
+  { id: "pricing", title: "Pricing page", tags: ["Product"] },
+];
+
+<FilterGrid items={projects}>
+  <FilterGridFilters aria-label="Team">
+    <FilterGridFilter value={FILTER_ALL}>All</FilterGridFilter>
+    <FilterGridFilter value="Design">Design</FilterGridFilter>
+    <FilterGridFilter value="Engineering">Engineering</FilterGridFilter>
+    <FilterGridFilter value="Product">Product</FilterGridFilter>
+  </FilterGridFilters>
+  <FilterGridSearch placeholder="Search projects…" />
+  <FilterGridItems<(typeof projects)[number]>>
+    {(project) => <div className="rounded-lg border p-4">{project.title}</div>}
+  </FilterGridItems>
+</FilterGrid>;
+```
+
+```tsx
+const [team, setTeam] = useState("all");
+
+<FilterGrid items={projects} filter={team} onFilterChange={setTeam}>
+  …
+</FilterGrid>;
+```
+
+## API Reference
+
+### FilterGrid
+
+| Prop             | Type                                         | Default                      | Description                                                |
+| ---------------- | -------------------------------------------- | ---------------------------- | ---------------------------------------------------------- |
+| `items`          | `{ id: string \| number; tags: string[] }[]` | -                            | Full item list, each with an `id` and `tags`.              |
+| `filter`         | `string`                                     | -                            | Controlled active filter value.                            |
+| `defaultFilter`  | `string`                                     | `"all"`                      | Initial filter when uncontrolled.                          |
+| `onFilterChange` | `(filter: string) => void`                   | -                            | Called with the new filter after selection.                |
+| `query`          | `string`                                     | -                            | Controlled search text.                                    |
+| `defaultQuery`   | `string`                                     | `""`                         | Initial search text when uncontrolled.                     |
+| `onQueryChange`  | `(query: string) => void`                    | -                            | Called with the new query after typing settles.            |
+| `match`          | `(item: T, query: string) => boolean`        | words in string fields, tags | Tests an item against the query.                           |
+| `status`         | `(shown: number, total: number) => string`   | `"Showing 4 of 12"`          | Live-region message built from the shown and total counts. |
+
+### FilterGridFilter
+
+| Prop    | Type     | Default | Description                         |
+| ------- | -------- | ------- | ----------------------------------- |
+| `value` | `string` | -       | Filter value selected by this chip. |
+
+### FilterGridSearch
+
+| Prop       | Type     | Default | Description                                          |
+| ---------- | -------- | ------- | ---------------------------------------------------- |
+| `debounce` | `number` | `150`   | Milliseconds of idle typing before the grid filters. |
+
+### FilterGridItems
+
+| Prop           | Type                                    | Default              | Description                                               |
+| -------------- | --------------------------------------- | -------------------- | --------------------------------------------------------- |
+| `children`     | `(item: T, index: number) => ReactNode` | -                    | Renders each visible item.                                |
+| `empty`        | `ReactNode`                             | `"Nothing matches."` | Shown when no item matches the filter and search.         |
+| `reserveSpace` | `boolean`                               | `true`               | Keeps the unfiltered grid height so the page never jumps. |

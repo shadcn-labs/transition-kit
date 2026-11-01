@@ -4,7 +4,7 @@
   "title": "Wave Reveal",
   "description": "A wavy edge sweeps across the viewport.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-wave-reveal)": {

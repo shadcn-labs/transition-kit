@@ -1,0 +1,80 @@
+---
+title: "Theme Toggle Switch"
+description: "A switch that flips between light and dark with any transition style."
+---
+
+import { ThemeToggleSwitchDemo } from "@/examples/ui/theme-toggle-switch-demo";
+
+<ComponentPreview name="theme-toggle-switch">
+  <ThemeToggleSwitchDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme-toggle-switch" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/theme-toggle-switch.tsx"
+  title="components/transitions/theme-toggle-switch.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { ThemeToggleSwitch } from "@/components/transitions/theme-toggle-switch";
+```
+
+```tsx
+<ThemeToggleSwitch />
+<ThemeToggleSwitch transition="star-reveal" />
+```
+
+## API Reference
+
+### ThemeToggleSwitch
+
+| Prop         | Type                       | Default                     | Description                                                                                       |
+| ------------ | -------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------- |
+| `transition` | `string`                   | The provider's `transition` | Style slug such as `"circle-reveal"`. Install the style first.                                    |
+| `...props`   | `ComponentProps<"button">` | -                           | Spread onto the `<button>`. Calling `event.preventDefault()` in `onClick` skips the theme change. |

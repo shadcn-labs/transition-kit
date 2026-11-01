@@ -4,7 +4,7 @@
   "title": "Star Reveal",
   "description": "An expanding star-shaped mask reveals the new theme.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-star-reveal)": {

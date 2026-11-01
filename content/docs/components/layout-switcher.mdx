@@ -1,0 +1,123 @@
+---
+title: "Layout Switcher"
+description: "Toggle a collection between grid and list. Every card glides to its new spot."
+---
+
+import { LayoutSwitcherDemo } from "@/examples/ui/layout-switcher-demo";
+
+<ComponentPreview
+  name="layout-switcher"
+  src="examples/ui/layout-switcher-demo.tsx"
+>
+  <LayoutSwitcherDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="layout-switcher" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/layout-switcher.tsx"
+  title="components/transitions/layout-switcher.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/layout-switcher.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  LayoutSwitcher,
+  LayoutSwitcherItem,
+  LayoutSwitcherItemContent,
+  LayoutSwitcherItemDescription,
+  LayoutSwitcherItemMedia,
+  LayoutSwitcherItemMeta,
+  LayoutSwitcherItems,
+  LayoutSwitcherItemTitle,
+  LayoutSwitcherToggle,
+} from "@/components/transitions/layout-switcher";
+```
+
+```tsx
+<LayoutSwitcher defaultLayout="grid">
+  <LayoutSwitcherToggle />
+  <LayoutSwitcherItems>
+    {members.map((member) => (
+      <LayoutSwitcherItem key={member.id} value={member.id}>
+        <LayoutSwitcherItemMedia>
+          <img src={member.avatar} alt="" />
+        </LayoutSwitcherItemMedia>
+        <LayoutSwitcherItemContent>
+          <LayoutSwitcherItemTitle>{member.name}</LayoutSwitcherItemTitle>
+          <LayoutSwitcherItemDescription>
+            {member.role}
+          </LayoutSwitcherItemDescription>
+        </LayoutSwitcherItemContent>
+        <LayoutSwitcherItemMeta>{member.pulls} merged</LayoutSwitcherItemMeta>
+      </LayoutSwitcherItem>
+    ))}
+  </LayoutSwitcherItems>
+</LayoutSwitcher>
+```
+
+## API Reference
+
+### LayoutSwitcher
+
+| Prop             | Type                                 | Default  | Description                                  |
+| ---------------- | ------------------------------------ | -------- | -------------------------------------------- |
+| `layout`         | `"grid" \| "list"`                   | -        | Controlled layout.                           |
+| `defaultLayout`  | `"grid" \| "list"`                   | `"grid"` | Initial layout when uncontrolled.            |
+| `onLayoutChange` | `(layout: "grid" \| "list") => void` | -        | Called with the next layout when it changes. |
+
+### LayoutSwitcherToggle
+
+| Prop     | Type                             | Default                          | Description                                 |
+| -------- | -------------------------------- | -------------------------------- | ------------------------------------------- |
+| `labels` | `{ grid: string; list: string }` | `{ grid: "Grid", list: "List" }` | Accessible names of the two layout options. |
+
+### LayoutSwitcherItem
+
+| Prop    | Type     | Default | Description                                                 |
+| ------- | -------- | ------- | ----------------------------------------------------------- |
+| `value` | `string` | -       | Unique, stable item id that pairs its parts across layouts. |

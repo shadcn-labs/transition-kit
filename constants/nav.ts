@@ -7,21 +7,22 @@ export interface LabsNavLink {
 }
 
 export const LABS_LATEST = {
-  description: "Beautiful markdown UIs, made simple",
-  href: "https://mdxcn.dev",
-  name: "mdxcn",
+  description: "Beautiful product demo videos, made simple",
+  href: "https://snapcn.dev",
+  name: "snapcn",
 } as const satisfies LabsNavLink;
 
 export const LABS_REGISTRIES = [
-  { href: "https://pdfcn.dev", name: "pdfcn" },
   { href: "https://termcn.dev", name: "termcn" },
   { href: "https://emailcn.run", name: "emailcn" },
   { href: "https://framecn.dev", name: "framecn" },
   { href: "https://ogimagecn.com", name: "ogimagecn" },
   { href: "https://agentcn.run", name: "agentcn" },
   { href: "https://mcpcn.dev", name: "mcpcn" },
+  { href: "https://pdfcn.dev", name: "pdfcn" },
   { href: "https://editorcn.vercel.app", name: "editorcn" },
   { href: "https://shadercn.run", name: "shadercn" },
+  { href: "https://mdxcn.dev", name: "mdxcn" },
 ] as const satisfies readonly LabsNavLink[];
 
 export const LABS_TEMPLATES = [
@@ -58,10 +59,7 @@ export const TOP_LEVEL_SECTIONS = [
   { href: ROUTES.DOCS, name: "Introduction" },
   { href: ROUTES.DOCS_INSTALLATION, name: "Installation" },
   { href: ROUTES.DOCS_COMPONENTS, name: "Components" },
-  { href: ROUTES.DOCS_THEME, name: "Theme" },
-  { href: ROUTES.DOCS_PAGE, name: "Page" },
-  { href: ROUTES.DOCS_UI, name: "UI" },
   { href: ROUTES.DOCS_REGISTRY, name: "Registry" },
-  { href: ROUTES.DOCS_BROWSER_SUPPORT, name: "Browser Support" },
   { href: ROUTES.LLMS, name: "llms.txt" },
+  { href: ROUTES.DOCS_CHANGELOG, name: "Changelog" },
 ];

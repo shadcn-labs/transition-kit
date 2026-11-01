@@ -1,0 +1,103 @@
+---
+title: "Accordion"
+description: "Opening a panel grows its item and the items below glide down."
+---
+
+import { AccordionDemo } from "@/examples/ui/accordion-demo";
+
+<ComponentPreview name="accordion" src="examples/ui/accordion-demo.tsx">
+  <AccordionDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="accordion" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/accordion.tsx"
+  title="components/transitions/accordion.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/transitions/accordion";
+```
+
+```tsx
+<Accordion type="single" collapsible defaultValue="shipping">
+  <AccordionItem value="shipping">
+    <AccordionTrigger>How long does shipping take?</AccordionTrigger>
+    <AccordionContent>Orders ship within two business days.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="returns">
+    <AccordionTrigger>Can I return an order?</AccordionTrigger>
+    <AccordionContent>Yes, within 30 days of delivery.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+## API Reference
+
+### Accordion
+
+| Prop            | Type                                                    | Default | Description                                       |
+| --------------- | ------------------------------------------------------- | ------- | ------------------------------------------------- |
+| `type`          | `"single" \| "multiple"`                                | -       | Single-open or multi-open behavior.               |
+| `value`         | `string` (single) / `string[]` (multiple)               | -       | Controlled open item(s).                          |
+| `defaultValue`  | `string` (single) / `string[]` (multiple)               | -       | Initial open item(s) when uncontrolled.           |
+| `onValueChange` | `(value: string) => void` / `(value: string[]) => void` | -       | Called with the new open value when items toggle. |
+| `collapsible`   | `boolean` (single only)                                 | `false` | Lets the open item close, leaving none open.      |
+
+### AccordionItem
+
+| Prop       | Type      | Default | Description                     |
+| ---------- | --------- | ------- | ------------------------------- |
+| `value`    | `string`  | -       | Unique identifier for the item. |
+| `disabled` | `boolean` | `false` | Disables the item's trigger.    |

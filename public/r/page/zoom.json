@@ -4,7 +4,7 @@
   "title": "Zoom",
   "description": "The old page zooms out as the new one zooms in.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-image-pair(.tk-page-zoom.tk-page-exit)": {

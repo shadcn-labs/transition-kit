@@ -4,7 +4,7 @@
   "title": "Ripple Reveal",
   "description": "Concentric rings ripple outward from the click point.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-ripple-reveal)": {

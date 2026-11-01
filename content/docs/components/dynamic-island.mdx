@@ -1,0 +1,114 @@
+---
+title: "Dynamic Island"
+description: "A pill that springs between sizes as its state changes."
+---
+
+import { DynamicIslandDemo } from "@/examples/ui/dynamic-island-demo";
+
+<ComponentPreview
+  name="dynamic-island"
+  src="examples/ui/dynamic-island-demo.tsx"
+>
+  <DynamicIslandDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="dynamic-island" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/dynamic-island.tsx"
+  title="components/transitions/dynamic-island.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/dynamic-island.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  DynamicIsland,
+  DynamicIslandContent,
+  useDynamicIsland,
+} from "@/components/transitions/dynamic-island";
+```
+
+```tsx
+const [state, setState] = React.useState("idle");
+
+<DynamicIsland state={state} onStateChange={setState}>
+  <DynamicIslandContent state="idle" className="w-32 px-4 py-3">
+    Recording
+  </DynamicIslandContent>
+  <DynamicIslandContent state="timer" className="w-44 px-4 py-2.5">
+    04:59
+  </DynamicIslandContent>
+</DynamicIsland>;
+```
+
+```tsx
+const DeclineButton = () => {
+  const { setState } = useDynamicIsland();
+  return (
+    <button type="button" onClick={() => setState("idle")}>
+      Decline
+    </button>
+  );
+};
+```
+
+## API Reference
+
+### DynamicIsland
+
+| Prop            | Type                      | Default  | Description                                |
+| --------------- | ------------------------- | -------- | ------------------------------------------ |
+| `state`         | `string`                  | -        | Controlled island state.                   |
+| `defaultState`  | `string`                  | `"idle"` | Initial state when uncontrolled.           |
+| `onStateChange` | `(state: string) => void` | -        | Called with the new state when it changes. |
+
+### DynamicIslandContent
+
+| Prop    | Type     | Default | Description                                        |
+| ------- | -------- | ------- | -------------------------------------------------- |
+| `state` | `string` | -       | Only the content matching the shown state renders. |
+
+### useDynamicIsland
+
+| Return     | Type                      | Description                                      |
+| ---------- | ------------------------- | ------------------------------------------------ |
+| `state`    | `string`                  | The current island state.                        |
+| `setState` | `(state: string) => void` | Animates to the state and calls `onStateChange`. |

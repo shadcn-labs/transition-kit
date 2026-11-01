@@ -5,7 +5,10 @@ import type {
   ComponentSourceRequest,
   ComponentSources,
 } from "@/lib/component-sources";
-import { componentSourceKey } from "@/lib/component-sources";
+import {
+  componentSourceKey,
+  mergeComponentSources,
+} from "@/lib/component-sources";
 import { getItem } from "@/registry/items";
 
 // Highlighted at build time by the `highlight-sources` plugin in vite.config.ts;
@@ -18,7 +21,8 @@ const sourceFiles = import.meta.glob<ComponentSourceData>(
 /** An item's shipped source: the TSX for cores and components, the CSS for styles. */
 const itemSourcePath = (name: string) => {
   const item = getItem(name);
-  return item?.files[0] ?? item?.css;
+  const css = item?.css;
+  return item?.files[0] ?? (Array.isArray(css) ? css[0] : css);
 };
 
 interface MdxNode {
@@ -91,11 +95,25 @@ export const loadComponentSources = async (
   const sources: ComponentSources = {};
   await Promise.all(
     [...requests].map(async ([key, request]) => {
-      const path =
+      // `src` accepts `+`-joined paths, served as one merged block.
+      const rawPaths =
         request.src?.replace(/^\.?\//, "") ??
         (request.name ? itemSourcePath(request.name) : undefined);
-      const load = path ? sourceFiles[`/${path}`] : undefined;
-      sources[key] = load ? await load() : null;
+      const paths =
+        rawPaths
+          ?.split("+")
+          .map((part) => part.trim())
+          .filter(Boolean) ?? [];
+      const loaded: ComponentSourceData[] = [];
+      for (const path of paths) {
+        const load = sourceFiles[`/${path}`];
+        if (!load) {
+          sources[key] = null;
+          return;
+        }
+        loaded.push(await load());
+      }
+      sources[key] = loaded.length > 0 ? mergeComponentSources(loaded) : null;
     })
   );
   return sources;

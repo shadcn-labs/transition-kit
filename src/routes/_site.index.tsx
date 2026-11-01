@@ -18,11 +18,11 @@ const IndexPage = () => (
         <div className="container flex flex-col items-center gap-4 py-16 text-center md:py-20 lg:py-24">
           <PageHero
             showAnnouncement
-            title="Theme, page and UI transitions, made simple"
+            title="Beautiful UI transitions, made simple"
             titleClassName="max-w-7xl"
             description={
               <>
-                Ready to use theme, page and UI transitions for React.
+                Copy-paste UI transitions for React.
                 <br className="hidden sm:block" /> Built on React 19.3{" "}
                 <code className="font-mono text-[0.9em]">
                   &lt;ViewTransition&gt;

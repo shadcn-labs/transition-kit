@@ -1,0 +1,79 @@
+---
+title: "Ripple Reveal"
+description: "Concentric rings ripple outward from the click point."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme/ripple-reveal">
+  <ThemeTransitionDemo transition="ripple-reveal" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme/ripple-reveal" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css + registry/theme/styles/ripple-reveal.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<ThemeTransitionProvider transition="ripple-reveal">
+  {children}
+</ThemeTransitionProvider>
+```
+
+```tsx
+const { toggleTheme } = useThemeTransition();
+
+<button
+  type="button"
+  onClick={(event) =>
+    toggleTheme({ transition: "ripple-reveal", origin: event })
+  }
+>
+  Toggle theme
+</button>;
+```
+
+## API Reference
+
+| Prop         | Type                                              | Default                     | Description                                                                                                                                                 |
+| ------------ | ------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transition` | `string`                                          | The provider's `transition` | `"ripple-reveal"` for this style: on the provider for every change, or per change with `setTheme` / `toggleTheme`.                                          |
+| `duration`   | `number`                                          | `1100`                      | Milliseconds on the provider. Overrides this style's `1100ms` timing. Edit `var(--tk-theme-duration, 1100ms)` in the style's CSS to change only this style. |
+| `easing`     | `string`                                          | `ease-in-out`               | Easing on the provider. Overrides this style's easing. Edit `var(--tk-theme-easing, ease-in-out)` in the style's CSS to change only this style.             |
+| `origin`     | `{ clientX: number; clientY: number } \| Element` | The viewport centre         | Pass the click event to start at the pointer, or an element to start at its centre.                                                                         |

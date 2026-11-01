@@ -1,0 +1,127 @@
+---
+title: "Morphing Popover"
+description: "A trigger that morphs into its popover surface and back."
+---
+
+import { MorphingPopoverDemo } from "@/examples/ui/morphing-popover-demo";
+
+<ComponentPreview
+  name="morphing-popover"
+  src="examples/ui/morphing-popover-demo.tsx"
+>
+  <MorphingPopoverDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="morphing-popover" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/morphing-popover.tsx"
+  title="components/transitions/morphing-popover.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/morphing-popover.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  MorphingPopover,
+  MorphingPopoverClose,
+  MorphingPopoverContent,
+  MorphingPopoverTitle,
+  MorphingPopoverTrigger,
+} from "@/components/transitions/morphing-popover";
+```
+
+```tsx
+<MorphingPopover>
+  <MorphingPopoverTrigger>
+    <MessageSquareIcon />
+    Feedback
+  </MorphingPopoverTrigger>
+  <MorphingPopoverContent>
+    <MorphingPopoverTitle>
+      <MessageSquareIcon />
+      Feedback
+    </MorphingPopoverTitle>
+    <textarea aria-label="Your feedback" />
+    <MorphingPopoverClose>Cancel</MorphingPopoverClose>
+  </MorphingPopoverContent>
+</MorphingPopover>
+```
+
+```tsx
+<MorphingPopoverContent side="top" align="end">
+  …
+</MorphingPopoverContent>
+```
+
+```tsx
+const SendButton = () => {
+  const { setOpen } = useMorphingPopover();
+  return (
+    <button type="submit" onClick={() => setOpen(false)}>
+      Send
+    </button>
+  );
+};
+```
+
+## API Reference
+
+### MorphingPopover
+
+| Prop           | Type                      | Default | Description                                        |
+| -------------- | ------------------------- | ------- | -------------------------------------------------- |
+| `open`         | `boolean`                 | -       | Controlled open state.                             |
+| `defaultOpen`  | `boolean`                 | `false` | Initial open state when uncontrolled.              |
+| `onOpenChange` | `(open: boolean) => void` | -       | Called when the open state is requested to change. |
+
+### MorphingPopoverContent
+
+| Prop    | Type                           | Default    | Description                                 |
+| ------- | ------------------------------ | ---------- | ------------------------------------------- |
+| `side`  | `"bottom" \| "top"`            | `"bottom"` | Which way the panel grows.                  |
+| `align` | `"start" \| "center" \| "end"` | `"start"`  | Which trigger edge the panel lines up with. |
+
+### useMorphingPopover
+
+| Return    | Type                      | Description                                 |
+| --------- | ------------------------- | ------------------------------------------- |
+| `open`    | `boolean`                 | Whether the popover is open.                |
+| `setOpen` | `(open: boolean) => void` | Opens or closes with the trigger animation. |

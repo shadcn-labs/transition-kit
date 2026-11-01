@@ -1,6 +1,6 @@
 /**
  * Generates registry.json from registry/items.ts; `shadcn build` then turns it
- * into public/r/<group>/<slug>.json.
+ * into public/r/<name>.json.
  *
  * - Cores and components ship their .ts/.tsx to components/transitions/. Their
  *   `@/registry/<group>/<file>` imports are rewritten to
@@ -8,8 +8,9 @@
  *   is what `shadcn build` reads.
  * - CSS lives in real .css files and is converted to the shadcn `css` object,
  *   which the CLI merges into the user's global stylesheet.
- * - Styles and components depend on their group's core, and on every other
- *   item they import, through absolute URLs, so `shadcn add` pulls them in
+ * - Styles and components depend on their group's core (unless the item opts
+ *   out with `omitGroupCore`, e.g. the theme toggles, which live in `ui` but
+ *   are built on the `theme` core), and on every other item they import, through absolute URLs, so `shadcn add` pulls them in
  *   from any registry setup. `@/components/ui/<name>` imports depend on the
  *   shadcn primitive `<name>`.
  */
@@ -193,11 +194,15 @@ const coreOf = (group: ItemGroup) => {
 };
 
 const toRegistryItem = (item: ItemSource): RegistryItem => {
-  // Every style and component needs its group's core, even CSS-only styles.
+  // Every style and component needs a core: its group's core by default, or —
+  // for components built on another group's core — the core they import, which
+  // `buildFile` adds from their `@/registry/...` imports.
   const dependencies: ItemDependencies = {
     packages: new Set(),
     registry: new Set(
-      item.kind === "core" ? [] : [itemUrl(coreOf(item.group))]
+      item.kind === "core" || item.omitGroupCore
+        ? []
+        : [itemUrl(coreOf(item.group))]
     ),
   };
   const files = item.files.map((file) => buildFile(item, file, dependencies));
@@ -217,7 +222,14 @@ const toRegistryItem = (item: ItemSource): RegistryItem => {
     }),
     ...(files.length > 0 && { files }),
     ...(item.css && {
-      css: toCssObject(parse(readSource(item.css)), item.css),
+      css: toCssObject(
+        parse(
+          (Array.isArray(item.css) ? item.css : [item.css])
+            .map((file) => readSource(file))
+            .join("\n")
+        ),
+        Array.isArray(item.css) ? item.css.join(" + ") : item.css
+      ),
     }),
     categories: [item.group],
   };
@@ -232,10 +244,12 @@ const registry: Registry & { $schema: string } = {
 };
 
 // `shadcn build` writes public/r/<name>.json but only creates the output dir
-// itself; names are `<group>/<slug>`, so create (and clear) the group dirs.
+// itself; create (and clear) it plus the group dirs, so renamed items leave
+// no stale files behind.
+rmSync(path.join(root, OUTPUT_DIR), { force: true, recursive: true });
+mkdirSync(path.join(root, OUTPUT_DIR), { recursive: true });
 for (const group of new Set(items.map((item) => item.group))) {
   const dir = path.join(root, OUTPUT_DIR, group);
-  rmSync(dir, { force: true, recursive: true });
   mkdirSync(dir, { recursive: true });
 }
 

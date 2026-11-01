@@ -1,0 +1,241 @@
+---
+title: "Theme Transition"
+description: "ThemeTransitionProvider and useThemeTransition: theme state animated by React's <ViewTransition>."
+---
+
+import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
+
+<ComponentPreview name="theme-transition">
+  <ThemeTransitionDemo transition="circle-reveal" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="theme-transition" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Make sure your project uses React 19.3 or later.</Step>
+
+```bash
+npm install react@latest react-dom@latest
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.tsx"
+  title="components/transitions/theme-transition.tsx"
+/>
+
+<Step>Copy and paste the following CSS into your global stylesheet.</Step>
+
+<ComponentSource
+  src="registry/theme/theme-transition.css + registry/theme/styles/circle-reveal.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Setup
+
+<Tabs defaultValue="tanstack">
+
+<TabsList>
+  <TabsTrigger value="tanstack">TanStack Start</TabsTrigger>
+  <TabsTrigger value="next">Next.js</TabsTrigger>
+  <TabsTrigger value="vite">Vite</TabsTrigger>
+</TabsList>
+
+<TabsContent value="tanstack">
+
+```tsx title="src/routes/__root.tsx"
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
+
+import {
+  ThemeTransitionProvider,
+  ThemeTransitionScript,
+} from "@/components/transitions/theme-transition";
+
+const RootDocument = () => (
+  <html lang="en" suppressHydrationWarning>
+    <head>
+      <HeadContent />
+      <ThemeTransitionScript />
+    </head>
+    <body>
+      <ThemeTransitionProvider transition="circle-reveal">
+        <Outlet />
+      </ThemeTransitionProvider>
+      <Scripts />
+    </body>
+  </html>
+);
+
+export const Route = createRootRoute({ component: RootDocument });
+```
+
+</TabsContent>
+
+<TabsContent value="next">
+
+```tsx title="app/layout.tsx"
+import {
+  ThemeTransitionProvider,
+  ThemeTransitionScript,
+} from "@/components/transitions/theme-transition";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeTransitionScript />
+      </head>
+      <body>
+        <ThemeTransitionProvider transition="circle-reveal">
+          {children}
+        </ThemeTransitionProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+</TabsContent>
+
+<TabsContent value="vite">
+
+```tsx title="src/main.tsx"
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import { ThemeTransitionProvider } from "@/components/transitions/theme-transition";
+import { App } from "./app";
+import "./index.css";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <ThemeTransitionProvider transition="circle-reveal">
+      <App />
+    </ThemeTransitionProvider>
+  </StrictMode>
+);
+```
+
+```html title="index.html"
+<script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("theme") || "system";
+      var dark =
+        theme === "dark" ||
+        (theme === "system" &&
+          matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.classList.add(dark ? "dark" : "light");
+      document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    } catch (e) {}
+  })();
+</script>
+```
+
+</TabsContent>
+
+</Tabs>
+
+## Usage
+
+```tsx
+import { useThemeTransition } from "@/components/transitions/theme-transition";
+
+export const ThemeButton = () => {
+  const { resolvedTheme, setTheme, toggleTheme } = useThemeTransition();
+
+  return (
+    <>
+      {/* The provider's style, starting at the pointer. */}
+      <button type="button" onClick={(event) => toggleTheme({ origin: event })}>
+        {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+      </button>
+
+      {/* Another style for this change only. */}
+      <button
+        type="button"
+        onClick={() => setTheme("system", { transition: "diagonal-wipe" })}
+      >
+        System
+      </button>
+    </>
+  );
+};
+```
+
+## API Reference
+
+### ThemeTransitionProvider
+
+| Prop           | Type                            | Default           | Description                                                                                                  |
+| -------------- | ------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| `transition`   | `string`                        | `"circle-reveal"` | Style slug used when `setTheme` and `toggleTheme` are called without one. Circle Reveal ships with the core. |
+| `defaultTheme` | `"light" \| "dark" \| "system"` | `"system"`        | Theme used before the stored one loads.                                                                      |
+| `storageKey`   | `string`                        | `"theme"`         | `localStorage` key. Synced across tabs; `system` follows `prefers-color-scheme`.                             |
+| `duration`     | `number`                        | -                 | Milliseconds. Overrides every style's timing.                                                                |
+| `easing`       | `string`                        | -                 | Overrides every style's easing.                                                                              |
+| `children`     | `ReactNode`                     | -                 | Must cover everything the user sees; its element is snapshotted.                                             |
+| `...props`     | `ComponentProps<"div">`         | -                 | Spread onto the provider's element.                                                                          |
+
+### ThemeTransitionScript
+
+| Prop           | Type                            | Default    | Description                    |
+| -------------- | ------------------------------- | ---------- | ------------------------------ |
+| `storageKey`   | `string`                        | `"theme"`  | Must match the provider's.     |
+| `defaultTheme` | `"light" \| "dark" \| "system"` | `"system"` | Must match the provider's.     |
+| `nonce`        | `string`                        | -          | Content-Security-Policy nonce. |
+
+### useThemeTransition
+
+| Property        | Type                                                       | Description                                               |
+| --------------- | ---------------------------------------------------------- | --------------------------------------------------------- |
+| `mounted`       | `boolean`                                                  | `false` on the server and until the stored theme is read. |
+| `theme`         | `"light" \| "dark" \| "system"`                            | The selected theme.                                       |
+| `resolvedTheme` | `"light" \| "dark"`                                        | The active theme, with `system` resolved.                 |
+| `setTheme`      | `(theme: Theme, options?: ThemeTransitionOptions) => void` | Changes the theme, animated.                              |
+| `toggleTheme`   | `(options?: ThemeTransitionOptions) => void`               | Flips between light and dark, animated.                   |
+
+### ThemeTransitionOptions
+
+| Option       | Type                                              | Description                                                                              |
+| ------------ | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `transition` | `string`                                          | Style slug for this change only. Defaults to the provider's `transition`.                |
+| `origin`     | `{ clientX: number; clientY: number } \| Element` | The viewport centre. Click event starts at the pointer; an element starts at its centre. |
+
+## Styles
+
+<ItemGrid group="theme" kind="style" />

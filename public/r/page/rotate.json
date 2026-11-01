@@ -4,7 +4,7 @@
   "title": "Rotate",
   "description": "The new page rotates in while the old one fades out.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-image-pair(.tk-page-rotate.tk-page-exit)": {

@@ -1,0 +1,70 @@
+---
+title: "Skew Slide"
+description: "Pages skew as they slide past each other."
+---
+
+import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
+
+<ComponentPreview bare name="page/skew-slide">
+  <PageTransitionDemo transition="skew-slide" />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="page/skew-slide" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/page/page-transition.tsx"
+  title="components/transitions/page-transition.tsx"
+/>
+
+<ComponentSource
+  src="registry/page/page-transition.css + registry/page/styles/skew-slide.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+<PageTransition id={pathname} transition="skew-slide">
+  {children}
+</PageTransition>
+```
+
+```tsx
+navigateWithTransition(() => navigate("/"), { direction: "back" });
+```
+
+## API Reference
+
+| Prop         | Type                  | Default                        | Description                                                                                                                                                           |
+| ------------ | --------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `transition` | `string`              | The boundary's `transition`    | `"skew-slide"` for this style, on `<PageTransition>` for every navigation.                                                                                            |
+| `duration`   | `number`              | `450`                          | Milliseconds on `<PageTransition>`. Overrides this style's `450ms` timing. Edit `var(--tk-page-duration, 450ms)` in the style's CSS to change only this style.        |
+| `easing`     | `string`              | `cubic-bezier(0.4, 0, 0.2, 1)` | Easing on `<PageTransition>`. Overrides this style's easing. Edit `var(--tk-page-easing, cubic-bezier(0.4, 0, 0.2, 1))` in the style's CSS to change only this style. |
+| `direction`  | `"forward" \| "back"` | `"forward"`                    | Pass `{ direction: "back" }` to `navigateWithTransition` to run the style in reverse.                                                                                 |

@@ -115,19 +115,12 @@ export const buildOpenApiDocument = (
           summary: "shadcn registry index (every theme, page and UI item)",
         },
       },
-      "/r/{group}/{slug}.json": {
+      "/r/{name}.json": {
         get: {
           parameters: [
             {
               in: "path",
-              name: "group",
-              required: true,
-              schema: { enum: ["theme", "page", "ui"], type: "string" },
-            },
-            {
-              example: "circle-reveal",
-              in: "path",
-              name: "slug",
+              name: "name",
               required: true,
               schema: { type: "string" },
             },
@@ -144,7 +137,7 @@ export const buildOpenApiDocument = (
             "404": { description: "Unknown item" },
           },
           summary:
-            "Registry item, installed with `npx shadcn@latest add @transition-kit/{group}/{slug}`",
+            "Registry item, installed with `npx shadcn@latest add @transition-kit/{name}`",
         },
       },
       [ROUTES.DOCS]: {
@@ -159,7 +152,7 @@ export const buildOpenApiDocument = (
         get: {
           parameters: [
             {
-              example: "components/theme/circle-reveal",
+              example: "components/theme-transition/circle-reveal",
               in: "path",
               name: "path",
               required: true,
@@ -178,7 +171,7 @@ export const buildOpenApiDocument = (
         get: {
           parameters: [
             {
-              example: "components/theme/circle-reveal",
+              example: "components/theme-transition/circle-reveal",
               in: "path",
               name: "path",
               required: true,

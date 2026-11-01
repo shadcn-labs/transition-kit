@@ -3,7 +3,7 @@
   "homepage": "https://transition-kit.space",
   "items": [
     {
-      "name": "theme/theme-transition",
+      "name": "theme-transition",
       "type": "registry:component",
       "title": "Theme Transition",
       "description": "ThemeTransitionProvider and useThemeTransition: theme state animated by React's <ViewTransition>.",
@@ -22,93 +22,22 @@
           "::view-transition-group(.tk-theme), ::view-transition-old(.tk-theme), ::view-transition-new(.tk-theme)": {
             "animation": "none !important"
           }
+        },
+        "::view-transition-old(.tk-theme-circle-reveal)": {
+          "animation": "none"
+        },
+        "::view-transition-new(.tk-theme-circle-reveal)": {
+          "animation": "tk-theme-circle-reveal var(--tk-theme-duration, 1000ms) var(--tk-theme-easing, ease-in-out) both"
+        },
+        "@keyframes tk-theme-circle-reveal": {
+          "from": {
+            "clip-path": "circle(0 at var(--tk-x) var(--tk-y))"
+          },
+          "to": {
+            "clip-path": "circle(var(--tk-r) at var(--tk-x) var(--tk-y))"
+          }
         }
       },
-      "categories": [
-        "theme"
-      ]
-    },
-    {
-      "name": "theme/theme-toggle-button",
-      "type": "registry:component",
-      "title": "Theme Toggle Button",
-      "description": "A sun and moon icon button that toggles the theme with any transition style.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
-      ],
-      "files": [
-        {
-          "path": ".registry-build/registry/theme/theme-toggle-button.tsx",
-          "target": "components/transitions/theme-toggle-button.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "categories": [
-        "theme"
-      ]
-    },
-    {
-      "name": "theme/theme-toggle-switch",
-      "type": "registry:component",
-      "title": "Theme Toggle Switch",
-      "description": "A switch that flips between light and dark with any transition style.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
-      ],
-      "files": [
-        {
-          "path": ".registry-build/registry/theme/theme-toggle-switch.tsx",
-          "target": "components/transitions/theme-toggle-switch.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "categories": [
-        "theme"
-      ]
-    },
-    {
-      "name": "theme/theme-switcher",
-      "type": "registry:component",
-      "title": "Theme Switcher",
-      "description": "A light, dark and system segmented control with any transition style.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
-      ],
-      "files": [
-        {
-          "path": ".registry-build/registry/theme/theme-switcher.tsx",
-          "target": "components/transitions/theme-switcher.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "categories": [
-        "theme"
-      ]
-    },
-    {
-      "name": "theme/animated-theme-toggler",
-      "type": "registry:component",
-      "title": "Animated Theme Toggler",
-      "description": "An icon button whose sun and moon morph while the theme transitions.",
-      "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
-      ],
-      "files": [
-        {
-          "path": ".registry-build/registry/theme/animated-theme-toggler.tsx",
-          "target": "components/transitions/animated-theme-toggler.tsx",
-          "type": "registry:component"
-        }
-      ],
       "categories": [
         "theme"
       ]
@@ -119,7 +48,7 @@
       "title": "Circle Reveal",
       "description": "An expanding circle reveals the new theme from the click point.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-circle-reveal)": {
@@ -147,7 +76,7 @@
       "title": "Circle Blur",
       "description": "A soft, blurred circle expands from the click point.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-circle-blur)": {
@@ -179,9 +108,9 @@
       "name": "theme/polygon-reveal",
       "type": "registry:item",
       "title": "Polygon Reveal",
-      "description": "A clip-path polygon sweeps a geometric wipe across the page.",
+      "description": "A geometric wipe sweeps across the viewport.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-polygon-reveal)": {
@@ -220,7 +149,7 @@
       "title": "Star Reveal",
       "description": "An expanding star-shaped mask reveals the new theme.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-star-reveal)": {
@@ -254,7 +183,7 @@
       "title": "Heart Reveal",
       "description": "An expanding heart-shaped mask reveals the new theme.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-heart-reveal)": {
@@ -288,7 +217,7 @@
       "title": "Diagonal Wipe",
       "description": "A diagonal band sweeps across the viewport.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-diagonal-wipe)": {
@@ -327,7 +256,7 @@
       "title": "Checkerboard Reveal",
       "description": "A checkerboard of tiles grows to reveal the new theme.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-checkerboard-reveal)": {
@@ -365,7 +294,7 @@
       "title": "Ripple Reveal",
       "description": "Concentric rings ripple outward from the click point.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-ripple-reveal)": {
@@ -403,7 +332,7 @@
       "title": "Venetian Blinds",
       "description": "Horizontal slats open one by one, like blinds.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-venetian-blinds)": {
@@ -431,7 +360,7 @@
       "title": "Spiral Reveal",
       "description": "A spiral-shaped mask winds outward.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-spiral-reveal)": {
@@ -469,7 +398,7 @@
       "title": "Wave Reveal",
       "description": "A wavy edge sweeps across the viewport.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-wave-reveal)": {
@@ -497,7 +426,7 @@
       "title": "Clock Wipe",
       "description": "A wedge sweeps clockwise around the viewport centre, like a clock hand.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-clock-wipe)": {
@@ -537,7 +466,7 @@
       "title": "GIF Frog",
       "description": "A dancing frog reveals the new theme through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-frog)": {
@@ -575,7 +504,7 @@
       "title": "GIF Penguin",
       "description": "A dancing penguin reveals the new theme through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-penguin)": {
@@ -613,7 +542,7 @@
       "title": "GIF Cat",
       "description": "A dancing cat reveals the new theme through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-cat)": {
@@ -651,7 +580,7 @@
       "title": "GIF Michael Jackson",
       "description": "A moonwalk reveals the new theme through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-michael-jackson)": {
@@ -689,7 +618,7 @@
       "title": "GIF Deadpool",
       "description": "Deadpool breaks in through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-deadpool)": {
@@ -727,7 +656,7 @@
       "title": "GIF Chika",
       "description": "Chika's dance reveals the new theme through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-chika)": {
@@ -765,7 +694,7 @@
       "title": "GIF Hakari Dance",
       "description": "Hakari dances in through an expanding mask.",
       "registryDependencies": [
-        "https://transition-kit.space/r/theme/theme-transition.json"
+        "https://transition-kit.space/r/theme-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-theme-gif-hakari-dance)": {
@@ -798,7 +727,7 @@
       ]
     },
     {
-      "name": "page/page-transition",
+      "name": "page-transition",
       "type": "registry:component",
       "title": "Page Transition",
       "description": "PageTransition and navigateWithTransition: route changes animated by React's <ViewTransition>.",
@@ -820,6 +749,28 @@
           "::view-transition-old(.tk-page), ::view-transition-new(.tk-page)": {
             "animation": "none !important"
           }
+        },
+        "::view-transition-old(.tk-page-fade)": {
+          "animation": "tk-page-fade-out var(--tk-page-duration, 300ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "::view-transition-new(.tk-page-fade)": {
+          "animation": "tk-page-fade-in var(--tk-page-duration, 300ms) var(--tk-page-easing, ease-in-out) both"
+        },
+        "@keyframes tk-page-fade-out": {
+          "from": {
+            "opacity": "1"
+          },
+          "to": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes tk-page-fade-in": {
+          "from": {
+            "opacity": "0"
+          },
+          "to": {
+            "opacity": "1"
+          }
         }
       },
       "categories": [
@@ -832,7 +783,7 @@
       "title": "Fade",
       "description": "The old page fades out as the new one fades in.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-page-fade)": {
@@ -868,7 +819,7 @@
       "title": "Slide",
       "description": "Pages slide past each other; backward navigations reverse.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-page-slide), ::view-transition-new(.tk-page-slide)": {
@@ -910,7 +861,7 @@
       "title": "Scale",
       "description": "The new page scales up while the old one fades out.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-scale.tk-page-exit)": {
@@ -961,7 +912,7 @@
       "title": "Flip",
       "description": "A 3D card flip around the vertical axis.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-flip.tk-page-exit)": {
@@ -1027,7 +978,7 @@
       "title": "Blur",
       "description": "The old page blurs away while the new one sharpens in.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-blur.tk-page-exit)": {
@@ -1082,7 +1033,7 @@
       "title": "Rotate",
       "description": "The new page rotates in while the old one fades out.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-rotate.tk-page-exit)": {
@@ -1137,7 +1088,7 @@
       "title": "Zoom",
       "description": "The old page zooms out as the new one zooms in.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-zoom.tk-page-exit)": {
@@ -1188,7 +1139,7 @@
       "title": "Curtain",
       "description": "The new page opens out of a centre strip as the old one closes into it.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-curtain.tk-page-exit)": {
@@ -1232,7 +1183,7 @@
       "title": "Cube",
       "description": "Pages turn around the faces of a 3D cube.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-cube.tk-page-exit)": {
@@ -1297,7 +1248,7 @@
       "title": "Skew Slide",
       "description": "Pages skew as they slide past each other.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-skew-slide.tk-page-exit)": {
@@ -1352,7 +1303,7 @@
       "title": "Page Curl",
       "description": "The old page curls up from the corner like a book page.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-page-curl.tk-page-exit)": {
@@ -1420,7 +1371,7 @@
       "title": "Accordion",
       "description": "The old page folds shut towards one edge as the new one unfolds from it.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-accordion.tk-page-exit)": {
@@ -1476,7 +1427,7 @@
       "title": "Doorway",
       "description": "The old page swings away on a hinge, revealing the new one.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-doorway.tk-page-exit)": {
@@ -1542,7 +1493,7 @@
       "title": "Book Flip",
       "description": "The new page turns over the old one around a central spine.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-book-flip.tk-page-exit)": {
@@ -1601,7 +1552,7 @@
       "title": "Roll",
       "description": "The old page rolls away like a scroll as the new one unrolls.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-roll.tk-page-exit)": {
@@ -1660,7 +1611,7 @@
       "title": "Fold",
       "description": "The old page folds inward along its centre as the new one emerges.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-fold.tk-page-exit)": {
@@ -1718,7 +1669,7 @@
       "title": "Glitch",
       "description": "The old page jitters out in stepped frames before the new one snaps in.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-old(.tk-page-glitch)": {
@@ -1782,7 +1733,7 @@
       "title": "Iris Wipe",
       "description": "An iris closes on the old page and opens on the new one.",
       "registryDependencies": [
-        "https://transition-kit.space/r/page/page-transition.json"
+        "https://transition-kit.space/r/page-transition.json"
       ],
       "css": {
         "::view-transition-image-pair(.tk-page-iris-wipe.tk-page-exit)": {
@@ -1824,7 +1775,7 @@
       ]
     },
     {
-      "name": "ui/ui-transition",
+      "name": "ui-transition",
       "type": "registry:component",
       "title": "UI Transition",
       "description": "The tk() class helper, useTransitionNames and the tk-* View Transition Classes every UI component composes with React's <ViewTransition>.",
@@ -2080,12 +2031,97 @@
       ]
     },
     {
-      "name": "ui/tabs",
+      "name": "theme-toggle-button",
+      "type": "registry:component",
+      "title": "Theme Toggle Button",
+      "description": "A sun and moon icon button that toggles the theme with any transition style.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/theme-toggle-button.tsx",
+          "target": "components/transitions/theme-toggle-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "theme-toggle-switch",
+      "type": "registry:component",
+      "title": "Theme Toggle Switch",
+      "description": "A switch that flips between light and dark with any transition style.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/theme-toggle-switch.tsx",
+          "target": "components/transitions/theme-toggle-switch.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "theme-mode-switch",
+      "type": "registry:component",
+      "title": "Theme Mode Switch",
+      "description": "A light, dark and system segmented control with any transition style.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/theme-mode-switch.tsx",
+          "target": "components/transitions/theme-mode-switch.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "theme-morph-button",
+      "type": "registry:component",
+      "title": "Theme Morph Button",
+      "description": "An icon button whose sun and moon morph while the theme transitions.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/theme-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/theme-morph-button.tsx",
+          "target": "components/transitions/theme-morph-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "tabs",
       "type": "registry:component",
       "title": "Tabs",
       "description": "The active pill glides to the selected tab and the panel slides in the direction you moved.",
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2099,12 +2135,12 @@
       ]
     },
     {
-      "name": "ui/segmented-control",
+      "name": "segmented-control",
       "type": "registry:component",
       "title": "Segmented Control",
-      "description": "An iOS-style segmented control whose thumb glides to the chosen option with a slight spring.",
+      "description": "An iOS-style segmented control whose thumb glides to the chosen option.",
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2118,15 +2154,15 @@
       ]
     },
     {
-      "name": "ui/accordion",
+      "name": "accordion",
       "type": "registry:component",
       "title": "Accordion",
-      "description": "Opening a panel grows its item and the items below glide down, with no height measured in JavaScript.",
+      "description": "Opening a panel grows its item and the items below glide down.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2140,15 +2176,15 @@
       ]
     },
     {
-      "name": "ui/carousel",
+      "name": "carousel",
       "type": "registry:component",
       "title": "Carousel",
-      "description": "Slides push in like a track from the side you moved toward, with arrows, dots, swipe, keyboard and optional autoplay.",
+      "description": "Slides push in like a track from the side you moved toward.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2167,15 +2203,15 @@
       ]
     },
     {
-      "name": "ui/stack-navigator",
+      "name": "stack-navigator",
       "type": "registry:component",
       "title": "Stack Navigator",
-      "description": "iOS-style push and pop screens in a fixed frame. Screens slide in the direction you travel and the title glides into the back button.",
+      "description": "Push and pop screens like an iOS navigation stack. Screens slide in the direction you travel and the title glides into the back button.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2189,7 +2225,7 @@
       ]
     },
     {
-      "name": "ui/step-wizard",
+      "name": "step-wizard",
       "type": "registry:component",
       "title": "Step Wizard",
       "description": "A multi-step form whose panels slide in the direction you move and whose progress indicator glides between steps.",
@@ -2197,7 +2233,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2222,12 +2258,12 @@
       ]
     },
     {
-      "name": "ui/dynamic-island",
+      "name": "dynamic-island",
       "type": "registry:component",
       "title": "Dynamic Island",
-      "description": "A pill that springs between sizes as its state changes, with the content blurring across inside it.",
+      "description": "A pill that springs between sizes as its state changes.",
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2256,7 +2292,7 @@
       ]
     },
     {
-      "name": "ui/status-button",
+      "name": "status-button",
       "type": "registry:component",
       "title": "Status Button",
       "description": "A button that morphs from idle to loading to success or error, resizing smoothly while its label and icon crossfade.",
@@ -2264,7 +2300,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json",
+        "https://transition-kit.space/r/ui-transition.json",
         "button"
       ],
       "files": [
@@ -2284,12 +2320,12 @@
       ]
     },
     {
-      "name": "ui/number-flip",
+      "name": "number-flip",
       "type": "registry:component",
       "title": "Number Flip",
       "description": "Changed digits roll up when the number grows and down when it shrinks. Separators and unchanged digits stay put.",
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2303,7 +2339,7 @@
       ]
     },
     {
-      "name": "ui/add-to-cart",
+      "name": "add-to-cart",
       "type": "registry:component",
       "title": "Add to Cart",
       "description": "The product image flies into the cart button, the badge count rolls up and the button label morphs to \"Added\".",
@@ -2311,7 +2347,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2367,12 +2403,12 @@
       ]
     },
     {
-      "name": "ui/morphing-popover",
+      "name": "morphing-popover",
       "type": "registry:component",
       "title": "Morphing Popover",
       "description": "A trigger that morphs into its popover surface and back.",
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2425,7 +2461,7 @@
       ]
     },
     {
-      "name": "ui/product-gallery",
+      "name": "product-gallery",
       "type": "registry:component",
       "title": "Product Gallery",
       "description": "A hero image with a thumbnail strip. The chosen thumbnail grows into the hero while the old hero shrinks back into its slot.",
@@ -2433,7 +2469,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2477,15 +2513,15 @@
       ]
     },
     {
-      "name": "ui/layout-switcher",
+      "name": "layout-switcher",
       "type": "registry:component",
       "title": "Layout Switcher",
-      "description": "Toggle a collection between grid and list. Every card, avatar, name and stat glides to its new spot.",
+      "description": "Toggle a collection between grid and list. Every card glides to its new spot.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2509,12 +2545,12 @@
       ]
     },
     {
-      "name": "ui/animated-list",
+      "name": "animated-list",
       "type": "registry:component",
       "title": "Animated List",
       "description": "A list whose items pop in, fade out and glide into place as they change.",
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {
@@ -2533,7 +2569,7 @@
       ]
     },
     {
-      "name": "ui/filter-grid",
+      "name": "filter-grid",
       "type": "registry:component",
       "title": "Filter Grid",
       "description": "Filter a grid with chips and search. Matches reflow into place, the rest pop out, and new items pop in one after another.",
@@ -2541,7 +2577,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json",
+        "https://transition-kit.space/r/ui-transition.json",
         "input"
       ],
       "files": [
@@ -2556,15 +2592,15 @@
       ]
     },
     {
-      "name": "ui/sortable-table",
+      "name": "sortable-table",
       "type": "registry:component",
       "title": "Sortable Table",
-      "description": "Click a column header to sort and the rows glide to their new positions. Filtered rows fade out while the rest close the gap.",
+      "description": "A data table with sortable columns and search. Rows glide to their new positions.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json",
+        "https://transition-kit.space/r/ui-transition.json",
         "input"
       ],
       "files": [
@@ -2579,15 +2615,15 @@
       ]
     },
     {
-      "name": "ui/kanban-board",
+      "name": "kanban-board",
       "type": "registry:component",
       "title": "Kanban Board",
-      "description": "Drag cards between columns, or move them with the keyboard. The card glides into place, its neighbours make room and the column counts roll.",
+      "description": "Drag cards between columns. The card glides into place while its neighbours make room and the column counts roll.",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://transition-kit.space/r/ui/ui-transition.json"
+        "https://transition-kit.space/r/ui-transition.json"
       ],
       "files": [
         {

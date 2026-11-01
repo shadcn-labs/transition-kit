@@ -4,7 +4,7 @@
   "title": "Diagonal Wipe",
   "description": "A diagonal band sweeps across the viewport.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-diagonal-wipe)": {

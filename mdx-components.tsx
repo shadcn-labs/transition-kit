@@ -10,6 +10,7 @@ import { CopyButton } from "@/components/copy-button";
 import { getIconForLanguageExtension } from "@/components/icons";
 import { InstallCommand } from "@/components/install-command";
 import { ItemGrid } from "@/components/item-grid";
+import { ItemList } from "@/components/item-list";
 import {
   Accordion,
   AccordionContent,
@@ -85,6 +86,7 @@ export const mdxComponents = {
   ),
   InstallCommand,
   ItemGrid,
+  ItemList,
   Link: ({ className, href, ...props }: React.ComponentProps<"a">) => (
     <Link
       className={cn("font-medium underline underline-offset-4", className)}

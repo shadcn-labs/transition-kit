@@ -27,6 +27,7 @@ import { PageTransitionDemo } from "@/examples/page/page-transition-demo";
 import { ThemeTransitionDemo } from "@/examples/theme/theme-transition-demo";
 import { PACKAGE_RUNNERS } from "@/hooks/use-package-manager";
 import type { ComponentSourceData } from "@/lib/component-sources";
+import { docsPathForItem } from "@/lib/docs";
 import { cn } from "@/lib/utils";
 import { items } from "@/registry/items";
 import type { ItemGroup, ItemSource } from "@/registry/items";
@@ -34,7 +35,7 @@ import type { ItemGroup, ItemSource } from "@/registry/items";
 /**
  * Style CSS and UI component TSX, highlighted at build time (see vite.config.ts) and
  * loaded on demand, keyed by item name: `/registry/theme/styles/circle-reveal.css` ->
- * `theme/circle-reveal`, `/registry/ui/tabs.tsx` -> `ui/tabs`.
+ * `theme/circle-reveal`, `/registry/ui/tabs.tsx` -> `tabs`.
  */
 const sourceLoaders = new Map<string, () => Promise<ComponentSourceData>>(
   Object.entries(
@@ -45,7 +46,9 @@ const sourceLoaders = new Map<string, () => Promise<ComponentSourceData>>(
   ).map(([path, load]) => {
     const segments = path.split("/");
     const [slug] = (segments.at(-1) ?? "").split(".");
-    return [`${segments[2]}/${slug}`, load] as const;
+    // Keys match item names: styles keep `group/slug`, UI components are bare.
+    const key = segments[2] === "ui" ? slug : `${segments[2]}/${slug}`;
+    return [key, load] as const;
   })
 );
 
@@ -89,7 +92,7 @@ const uiDemoModules = import.meta.glob<Record<string, ComponentType>>(
 
 /**
  * UI demos keyed by item name, loaded when first shown:
- * `/examples/ui/number-flip-demo.tsx` exports `NumberFlipDemo` for `ui/number-flip`.
+ * `/examples/ui/number-flip-demo.tsx` exports `NumberFlipDemo` for `number-flip`.
  */
 const uiDemos: Record<
   string,
@@ -102,7 +105,7 @@ const uiDemos: Record<
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join("")}Demo`;
     return [
-      `ui/${slug}`,
+      slug,
       lazy(async () => {
         const demos = await load();
         const demo = demos[exportName];
@@ -465,7 +468,13 @@ export const HomeShowcase = () => {
                 <h3 className="text-lg font-semibold tracking-tight">
                   <Link
                     to="/docs/$"
-                    params={{ _splat: `components/${detail.name}` }}
+                    params={{
+                      // The UI helper has no docs page of its own; link to installation.
+                      _splat:
+                        detail.name === "ui-transition"
+                          ? "installation"
+                          : `components/${docsPathForItem(detail.name)}`,
+                    }}
                     viewTransition={{ types: ["nav-forward"] }}
                     className="group inline-flex items-center gap-1.5 rounded-sm underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >

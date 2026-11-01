@@ -4,7 +4,7 @@
   "title": "GIF Penguin",
   "description": "A dancing penguin reveals the new theme through an expanding mask.",
   "registryDependencies": [
-    "https://transition-kit.space/r/theme/theme-transition.json"
+    "https://transition-kit.space/r/theme-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-theme-gif-penguin)": {

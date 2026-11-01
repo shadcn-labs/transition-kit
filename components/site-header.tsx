@@ -15,9 +15,6 @@ import { ROUTES } from "@/constants/routes";
 const navItems = [
   { href: ROUTES.DOCS, label: "Docs" },
   { href: ROUTES.DOCS_COMPONENTS, label: "Components" },
-  { href: ROUTES.DOCS_THEME, label: "Theme" },
-  { href: ROUTES.DOCS_PAGE, label: "Page" },
-  { href: ROUTES.DOCS_UI, label: "UI" },
 ];
 
 export const SiteHeader = () => {

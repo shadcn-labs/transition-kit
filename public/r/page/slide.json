@@ -4,7 +4,7 @@
   "title": "Slide",
   "description": "Pages slide past each other; backward navigations reverse.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-page-slide), ::view-transition-new(.tk-page-slide)": {

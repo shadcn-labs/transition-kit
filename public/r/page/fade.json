@@ -4,7 +4,7 @@
   "title": "Fade",
   "description": "The old page fades out as the new one fades in.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-old(.tk-page-fade)": {

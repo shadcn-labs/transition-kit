@@ -4,7 +4,7 @@
   "title": "Page Curl",
   "description": "The old page curls up from the corner like a book page.",
   "registryDependencies": [
-    "https://transition-kit.space/r/page/page-transition.json"
+    "https://transition-kit.space/r/page-transition.json"
   ],
   "css": {
     "::view-transition-image-pair(.tk-page-page-curl.tk-page-exit)": {
