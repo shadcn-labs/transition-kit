@@ -9,7 +9,7 @@
       "description": "ThemeTransitionProvider and useThemeTransition: theme state animated by React's <ViewTransition>.",
       "files": [
         {
-          "path": ".registry-build/registry/theme/theme-transition.tsx",
+          "path": ".registry-build\\registry\\theme\\theme-transition.tsx",
           "target": "components/transitions/theme-transition.tsx",
           "type": "registry:component"
         }
@@ -733,7 +733,7 @@
       "description": "PageTransition and navigateWithTransition: route changes animated by React's <ViewTransition>.",
       "files": [
         {
-          "path": ".registry-build/registry/page/page-transition.tsx",
+          "path": ".registry-build\\registry\\page\\page-transition.tsx",
           "target": "components/transitions/page-transition.tsx",
           "type": "registry:component"
         }
@@ -1781,7 +1781,7 @@
       "description": "The tk() class helper, useTransitionNames and the tk-* View Transition Classes every UI component composes with React's <ViewTransition>.",
       "files": [
         {
-          "path": ".registry-build/registry/ui/ui-transition.ts",
+          "path": ".registry-build\\registry\\ui\\ui-transition.ts",
           "target": "components/transitions/ui-transition.ts",
           "type": "registry:component"
         }
@@ -2043,7 +2043,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/theme-toggle-button.tsx",
+          "path": ".registry-build\\registry\\ui\\theme-toggle-button.tsx",
           "target": "components/transitions/theme-toggle-button.tsx",
           "type": "registry:component"
         }
@@ -2065,7 +2065,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/theme-toggle-switch.tsx",
+          "path": ".registry-build\\registry\\ui\\theme-toggle-switch.tsx",
           "target": "components/transitions/theme-toggle-switch.tsx",
           "type": "registry:component"
         }
@@ -2087,7 +2087,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/theme-mode-switch.tsx",
+          "path": ".registry-build\\registry\\ui\\theme-mode-switch.tsx",
           "target": "components/transitions/theme-mode-switch.tsx",
           "type": "registry:component"
         }
@@ -2106,7 +2106,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/theme-morph-button.tsx",
+          "path": ".registry-build\\registry\\ui\\theme-morph-button.tsx",
           "target": "components/transitions/theme-morph-button.tsx",
           "type": "registry:component"
         }
@@ -2125,7 +2125,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/tabs.tsx",
+          "path": ".registry-build\\registry\\ui\\tabs.tsx",
           "target": "components/transitions/tabs.tsx",
           "type": "registry:component"
         }
@@ -2144,7 +2144,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/segmented-control.tsx",
+          "path": ".registry-build\\registry\\ui\\segmented-control.tsx",
           "target": "components/transitions/segmented-control.tsx",
           "type": "registry:component"
         }
@@ -2166,7 +2166,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/accordion.tsx",
+          "path": ".registry-build\\registry\\ui\\accordion.tsx",
           "target": "components/transitions/accordion.tsx",
           "type": "registry:component"
         }
@@ -2188,7 +2188,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/carousel.tsx",
+          "path": ".registry-build\\registry\\ui\\carousel.tsx",
           "target": "components/transitions/carousel.tsx",
           "type": "registry:component"
         }
@@ -2215,7 +2215,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/stack-navigator.tsx",
+          "path": ".registry-build\\registry\\ui\\stack-navigator.tsx",
           "target": "components/transitions/stack-navigator.tsx",
           "type": "registry:component"
         }
@@ -2237,7 +2237,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/step-wizard.tsx",
+          "path": ".registry-build\\registry\\ui\\step-wizard.tsx",
           "target": "components/transitions/step-wizard.tsx",
           "type": "registry:component"
         }
@@ -2267,7 +2267,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/dynamic-island.tsx",
+          "path": ".registry-build\\registry\\ui\\dynamic-island.tsx",
           "target": "components/transitions/dynamic-island.tsx",
           "type": "registry:component"
         }
@@ -2305,7 +2305,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/status-button.tsx",
+          "path": ".registry-build\\registry\\ui\\status-button.tsx",
           "target": "components/transitions/status-button.tsx",
           "type": "registry:component"
         }
@@ -2329,7 +2329,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/number-flip.tsx",
+          "path": ".registry-build\\registry\\ui\\number-flip.tsx",
           "target": "components/transitions/number-flip.tsx",
           "type": "registry:component"
         }
@@ -2351,7 +2351,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/add-to-cart.tsx",
+          "path": ".registry-build\\registry\\ui\\add-to-cart.tsx",
           "target": "components/transitions/add-to-cart.tsx",
           "type": "registry:component"
         }
@@ -2412,7 +2412,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/morphing-popover.tsx",
+          "path": ".registry-build\\registry\\ui\\morphing-popover.tsx",
           "target": "components/transitions/morphing-popover.tsx",
           "type": "registry:component"
         }
@@ -2461,6 +2461,54 @@
       ]
     },
     {
+      "name": "expandable-card",
+      "type": "registry:component",
+      "title": "Expandable Card",
+      "description": "A card whose media, title and surface grow into a full dialog and fold back into place.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build\\registry\\ui\\expandable-card.tsx",
+          "target": "components/transitions/expandable-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-expandable-card-surface)": {
+          "border-radius": "var(--tk-ui-expandable-card-radius, calc(var(--radius) + 4px))",
+          "background": "var(--card)",
+          "box-shadow": "0 0 0 1px var(--border), 0 25px 50px -12px rgb(0 0 0 / 0.25)"
+        },
+        "::view-transition-image-pair(.tk-expandable-card-surface)": {
+          "overflow": "clip",
+          "border-radius": "inherit"
+        },
+        "::view-transition-old(.tk-expandable-card-surface), ::view-transition-new(.tk-expandable-card-surface)": {
+          "inline-size": "auto",
+          "block-size": "auto"
+        },
+        "::view-transition-image-pair(.tk-expandable-card-media)": {
+          "overflow": "clip",
+          "border-radius": "var(--tk-ui-expandable-card-media-radius, var(--radius))"
+        },
+        "::view-transition-old(.tk-expandable-card-media), ::view-transition-new(.tk-expandable-card-media)": {
+          "block-size": "100%",
+          "object-fit": "cover"
+        },
+        "html:has([data-slot=\"expandable-card-dialog\"][open])": {
+          "overflow": "hidden"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
       "name": "product-gallery",
       "type": "registry:component",
       "title": "Product Gallery",
@@ -2473,7 +2521,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/product-gallery.tsx",
+          "path": ".registry-build\\registry\\ui\\product-gallery.tsx",
           "target": "components/transitions/product-gallery.tsx",
           "type": "registry:component"
         }
@@ -2525,7 +2573,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/layout-switcher.tsx",
+          "path": ".registry-build\\registry\\ui\\layout-switcher.tsx",
           "target": "components/transitions/layout-switcher.tsx",
           "type": "registry:component"
         }
@@ -2554,7 +2602,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/animated-list.tsx",
+          "path": ".registry-build\\registry\\ui\\animated-list.tsx",
           "target": "components/transitions/animated-list.tsx",
           "type": "registry:component"
         }
@@ -2582,7 +2630,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/filter-grid.tsx",
+          "path": ".registry-build\\registry\\ui\\filter-grid.tsx",
           "target": "components/transitions/filter-grid.tsx",
           "type": "registry:component"
         }
@@ -2605,7 +2653,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/sortable-table.tsx",
+          "path": ".registry-build\\registry\\ui\\sortable-table.tsx",
           "target": "components/transitions/sortable-table.tsx",
           "type": "registry:component"
         }
@@ -2627,7 +2675,7 @@
       ],
       "files": [
         {
-          "path": ".registry-build/registry/ui/kanban-board.tsx",
+          "path": ".registry-build\\registry\\ui\\kanban-board.tsx",
           "target": "components/transitions/kanban-board.tsx",
           "type": "registry:component"
         }

@@ -10,21 +10,21 @@ import {
 
 const products = [
   {
-    art: "from-amber-200 via-orange-300 to-rose-400",
+    art: "from-neutral-200 via-neutral-300 to-neutral-400",
     id: "lamp",
     name: "Aurora Lamp",
     price: 89,
     shape: <circle cx="50" cy="44" r="20" />,
   },
   {
-    art: "from-sky-200 via-indigo-300 to-violet-400",
+    art: "from-neutral-200 via-neutral-300 to-neutral-400",
     id: "notebook",
     name: "Field Notebook",
     price: 24,
     shape: <rect x="32" y="22" width="36" height="46" rx="4" />,
   },
   {
-    art: "from-emerald-200 via-teal-300 to-cyan-400",
+    art: "from-neutral-200 via-neutral-300 to-neutral-400",
     id: "mug",
     name: "Ceramic Mug",
     price: 32,

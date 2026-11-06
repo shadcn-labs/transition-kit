@@ -14,28 +14,28 @@ import {
 
 const members = [
   {
-    gradient: "from-rose-400 to-orange-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "ava",
     name: "Ava Chen",
     pulls: 42,
     role: "Design Engineer",
   },
   {
-    gradient: "from-sky-400 to-indigo-400",
+    gradient: "from-neutral-400 to-neutral-400",
     id: "marcus",
     name: "Marcus Reid",
     pulls: 87,
     role: "Staff Engineer",
   },
   {
-    gradient: "from-emerald-400 to-teal-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "priya",
     name: "Priya Patel",
     pulls: 23,
     role: "Product Designer",
   },
   {
-    gradient: "from-violet-400 to-fuchsia-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "diego",
     name: "Diego Alvarez",
     pulls: 64,

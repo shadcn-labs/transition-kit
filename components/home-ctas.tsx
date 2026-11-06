@@ -26,7 +26,7 @@ const GetStartedButton = () => {
     <Button
       asChild
       sound="click"
-      className="px-4"
+      className="sheen px-4"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

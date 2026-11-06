@@ -69,8 +69,8 @@ const columns: SortableTableColumn<Stock>[] = [
       <span
         className={cn(
           stock.change < 0
-            ? "text-red-600 dark:text-red-400"
-            : "text-emerald-600 dark:text-emerald-400"
+            ? "text-neutral-600 dark:text-neutral-400"
+            : "text-neutral-600 dark:text-neutral-400"
         )}
       >
         {stock.change > 0 ? "+" : ""}

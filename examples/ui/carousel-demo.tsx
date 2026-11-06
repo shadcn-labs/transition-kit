@@ -9,32 +9,32 @@ import {
 
 const places = [
   {
-    art: "radial-gradient(circle at 72% 30%, #fde68a 0 9%, transparent 10%), linear-gradient(180deg, #312e81 0%, #7c3aed 45%, #f472b6 100%)",
-    ground: "linear-gradient(180deg, #1e1b4b, #0f0a2e)",
+    art: "radial-gradient(circle at 72% 30%, #e4e4e4 0 9%, transparent 10%), linear-gradient(180deg, #353535 0%, #555555 45%, #939393 100%)",
+    ground: "linear-gradient(180deg, #1f1f1f, #0e0e0e)",
     place: "Lofoten, Norway",
     title: "Aurora Ridge",
   },
   {
-    art: "radial-gradient(circle at 28% 34%, #fff7ed 0 8%, transparent 9%), linear-gradient(180deg, #fb923c 0%, #f59e0b 50%, #fde68a 100%)",
-    ground: "linear-gradient(180deg, #c2410c, #7c2d12)",
+    art: "radial-gradient(circle at 28% 34%, #f8f8f8 0 8%, transparent 9%), linear-gradient(180deg, #a2a2a2 0%, #a6a6a6 50%, #e4e4e4 100%)",
+    ground: "linear-gradient(180deg, #595959, #3c3c3c)",
     place: "Wadi Rum, Jordan",
     title: "Copper Dunes",
   },
   {
-    art: "radial-gradient(circle at 60% 26%, #ecfeff 0 7%, transparent 8%), linear-gradient(180deg, #0ea5e9 0%, #22d3ee 55%, #a5f3fc 100%)",
-    ground: "linear-gradient(180deg, #0369a1, #0c4a6e)",
+    art: "radial-gradient(circle at 60% 26%, #fafafa 0 7%, transparent 8%), linear-gradient(180deg, #8a8a8a 0%, #afafaf 55%, #e3e3e3 100%)",
+    ground: "linear-gradient(180deg, #575757, #3f3f3f)",
     place: "Azores, Portugal",
     title: "Tide Pools",
   },
   {
-    art: "radial-gradient(circle at 80% 22%, #f7fee7 0 8%, transparent 9%), linear-gradient(180deg, #65a30d 0%, #84cc16 45%, #d9f99d 100%)",
-    ground: "linear-gradient(180deg, #166534, #052e16)",
+    art: "radial-gradient(circle at 80% 22%, #fbfbfb 0 8%, transparent 9%), linear-gradient(180deg, #8b8b8b 0%, #b0b0b0 45%, #ececec 100%)",
+    ground: "linear-gradient(180deg, #515151, #242424)",
     place: "Yakushima, Japan",
     title: "Moss Canopy",
   },
   {
-    art: "radial-gradient(circle at 40% 30%, #fef2f2 0 8%, transparent 9%), linear-gradient(180deg, #7f1d1d 0%, #dc2626 50%, #fb7185 100%)",
-    ground: "linear-gradient(180deg, #450a0a, #1c0505)",
+    art: "radial-gradient(circle at 40% 30%, #f5f5f5 0 8%, transparent 9%), linear-gradient(180deg, #323232 0%, #4d4d4d 50%, #909090 100%)",
+    ground: "linear-gradient(180deg, #171717, #0a0a0a)",
     place: "Etna, Italy",
     title: "Ember Fields",
   },

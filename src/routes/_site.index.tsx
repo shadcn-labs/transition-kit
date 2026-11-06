@@ -3,7 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AgentPrompt } from "@/components/agent-prompt";
 import { CommandBox } from "@/components/command-box";
 import { HomeCtas } from "@/components/home-ctas";
-import { HomeShowcase } from "@/components/home-showcase";
+import { HomeGallery } from "@/components/home-gallery";
+import { HomeGroups } from "@/components/home-groups";
+import { HomeThemeTry } from "@/components/home-theme-try";
 import { PageHero } from "@/components/page-hero";
 import { PageTransition } from "@/components/page-transition";
 import { ROUTES } from "@/constants/routes";
@@ -14,35 +16,38 @@ const IndexPage = () => (
   <>
     <BreadcrumbJsonLd items={[{ name: "Home", path: ROUTES.HOME }]} />
     <PageTransition>
-      <section className="container-wrapper relative">
-        <div className="container flex flex-col items-center gap-4 py-16 text-center md:py-20 lg:py-24">
+      <section className="container-wrapper relative isolate">
+        <div className="container flex flex-col items-center gap-4 py-20 text-center md:py-28 lg:py-32">
           <PageHero
             showAnnouncement
-            title="Beautiful UI transitions, made simple"
+            title="Smooth every change."
             titleClassName="max-w-7xl"
             description={
               <>
-                Copy-paste UI transitions for React.
-                <br className="hidden sm:block" /> Built on React 19.3{" "}
+                Theme, page and UI transitions for React, built on{" "}
                 <code className="font-mono text-[0.9em]">
                   &lt;ViewTransition&gt;
                 </code>
-                . Distributed via shadcn.
+                . One shadcn command each, no animation library.
               </>
             }
-            descriptionClassName="max-w-2xl text-lg sm:text-xl"
+            descriptionClassName="max-w-xl text-base sm:text-lg"
           />
 
-          <CommandBox className="mt-4 w-full max-w-xl" />
+          <HomeCtas className="rise mt-2 [--i:3]" />
 
-          <HomeCtas className="mt-4" />
+          <HomeThemeTry className="rise [--i:4]" />
 
-          <AgentPrompt />
+          <CommandBox className="rise mt-8 w-full max-w-xl [--i:5]" />
+
+          <AgentPrompt className="rise [--i:6]" />
         </div>
       </section>
     </PageTransition>
 
-    <HomeShowcase />
+    <HomeGallery />
+
+    <HomeGroups />
   </>
 );
 

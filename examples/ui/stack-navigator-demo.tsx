@@ -24,7 +24,7 @@ interface Chat {
 const chats: Chat[] = [
   {
     email: "ava@northwind.dev",
-    gradient: "from-rose-400 to-orange-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "ava",
     initials: "AC",
     messages: [
@@ -38,7 +38,7 @@ const chats: Chat[] = [
   },
   {
     email: "marcus@northwind.dev",
-    gradient: "from-sky-400 to-indigo-400",
+    gradient: "from-neutral-400 to-neutral-400",
     id: "marcus",
     initials: "MO",
     messages: [
@@ -52,7 +52,7 @@ const chats: Chat[] = [
   },
   {
     email: "lena@northwind.dev",
-    gradient: "from-emerald-400 to-teal-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "lena",
     initials: "LV",
     messages: [
@@ -65,7 +65,7 @@ const chats: Chat[] = [
   },
   {
     email: "priya@northwind.dev",
-    gradient: "from-violet-400 to-fuchsia-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "priya",
     initials: "PS",
     messages: [
@@ -78,7 +78,7 @@ const chats: Chat[] = [
   },
   {
     email: "tom@northwind.dev",
-    gradient: "from-amber-400 to-yellow-300",
+    gradient: "from-neutral-400 to-neutral-300",
     id: "tom",
     initials: "TB",
     messages: [{ from: "them", text: "Board game night at mine, 7pm?" }],

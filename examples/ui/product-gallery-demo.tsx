@@ -52,10 +52,10 @@ const images: ProductGalleryImage[] = [
     alt: "Front view of the Summit bottle in ember orange",
     id: "front",
     node: (
-      <Shot background="radial-gradient(circle at 50% 35%, #fde6c8, #f4a259 70%, #c8693a)">
+      <Shot background="radial-gradient(circle at 50% 35%, #e9e9e9, #aeaeae 70%, #7a7a7a)">
         <div className="absolute bottom-[10%] left-1/2 h-[5%] w-[40%] -translate-x-1/2 rounded-[50%] bg-black/20 blur-[2px]" />
         <Bottle
-          color="#e8590c"
+          color="#727272"
           className="top-[14%] left-[37%] h-[76%] w-[26%]"
         />
       </Shot>
@@ -65,9 +65,9 @@ const images: ProductGalleryImage[] = [
     alt: "The bottle tilted on its side against a rose backdrop",
     id: "tilt",
     node: (
-      <Shot background="linear-gradient(160deg, #ffe3ec, #f783ac 55%, #c2255c)">
+      <Shot background="linear-gradient(160deg, #eaeaea, #9f9f9f 55%, #4a4a4a)">
         <Bottle
-          color="#e8590c"
+          color="#727272"
           className="top-[16%] left-[38%] h-[70%] w-[24%]"
           style={{ rotate: "-24deg" }}
         />
@@ -78,7 +78,7 @@ const images: ProductGalleryImage[] = [
     alt: "Close-up of the leak-proof cap",
     id: "cap",
     node: (
-      <Shot background="radial-gradient(circle at 30% 30%, #c3fae8, #20c997 60%, #087f5b)">
+      <Shot background="radial-gradient(circle at 30% 30%, #ededed, #a1a1a1 60%, #636363)">
         <div className="absolute top-[18%] left-[18%] size-[64%] rounded-full bg-neutral-900 shadow-[0_16px_32px_-8px_rgb(0_0_0/0.5)]" />
         <div className="absolute top-[45%] left-[18%] h-[10%] w-[64%] bg-neutral-300/90" />
         <div className="absolute top-[30%] left-[30%] size-[40%] rounded-full bg-neutral-700" />
@@ -90,17 +90,17 @@ const images: ProductGalleryImage[] = [
     alt: "Three colorways side by side: ember, slate and moss",
     id: "colors",
     node: (
-      <Shot background="linear-gradient(180deg, #e9ecef, #adb5bd)">
+      <Shot background="linear-gradient(180deg, #ececec, #b4b4b4)">
         <Bottle
-          color="#e8590c"
+          color="#727272"
           className="top-[24%] left-[14%] h-[60%] w-[20%]"
         />
         <Bottle
-          color="#495057"
+          color="#4f4f4f"
           className="top-[18%] left-[40%] h-[66%] w-[20%]"
         />
         <Bottle
-          color="#5c940d"
+          color="#7e7e7e"
           className="top-[24%] left-[66%] h-[60%] w-[20%]"
         />
       </Shot>
@@ -110,12 +110,12 @@ const images: ProductGalleryImage[] = [
     alt: "The bottle on a rock at sunset",
     id: "outdoors",
     node: (
-      <Shot background="linear-gradient(180deg, #4263eb, #9775fa 45%, #ffa94d 75%)">
-        <div className="absolute top-[22%] left-[62%] size-[18%] rounded-full bg-amber-200/90" />
-        <div className="absolute inset-x-0 bottom-0 h-[30%] bg-[#343a40]" />
-        <div className="absolute bottom-[22%] left-[14%] h-[14%] w-[54%] rounded-t-[50%] bg-[#495057]" />
+      <Shot background="linear-gradient(180deg, #666666, #868686 45%, #b5b5b5 75%)">
+        <div className="absolute top-[22%] left-[62%] size-[18%] rounded-full bg-neutral-200/90" />
+        <div className="absolute inset-x-0 bottom-0 h-[30%] bg-[#393939]" />
+        <div className="absolute bottom-[22%] left-[14%] h-[14%] w-[54%] rounded-t-[50%] bg-[#4f4f4f]" />
         <Bottle
-          color="#e8590c"
+          color="#727272"
           className="bottom-[30%] left-[30%] h-[46%] w-[16%]"
         />
       </Shot>

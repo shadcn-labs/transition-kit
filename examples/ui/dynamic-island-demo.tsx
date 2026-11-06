@@ -64,7 +64,7 @@ const CallActions = () => {
         onClick={() => setState("idle")}
         className={cn(
           iconButton,
-          "bg-emerald-500 text-white hover:bg-emerald-500/90"
+          "bg-neutral-500 text-white hover:bg-neutral-500/90"
         )}
       >
         <Phone className="size-4" />
@@ -129,7 +129,7 @@ export const DynamicIslandDemo = () => {
             state="idle"
             className="flex w-32 items-center justify-between px-4 py-3"
           >
-            <span className="bg-emerald-400 size-2 rounded-full" />
+            <span className="bg-neutral-400 size-2 rounded-full" />
             <Mic
               aria-label="Microphone in use"
               className="text-background/70 size-3.5"
@@ -140,7 +140,7 @@ export const DynamicIslandDemo = () => {
             state="timer"
             className="flex w-44 items-center justify-between px-4 py-2.5"
           >
-            <Timer aria-label="Timer" className="text-amber-400 size-4" />
+            <Timer aria-label="Timer" className="text-neutral-400 size-4" />
             <Countdown />
           </DynamicIslandContent>
 
@@ -165,7 +165,7 @@ export const DynamicIslandDemo = () => {
             <div className="flex items-center gap-3.5">
               <span
                 aria-hidden
-                className="size-14 shrink-0 rounded-xl bg-[linear-gradient(135deg,#f97316,#db2777_55%,#7c3aed)]"
+                className="size-14 shrink-0 rounded-xl bg-[linear-gradient(135deg,#898989,#db2777_55%,#555555)]"
               />
               <div className="min-w-0 flex-1 leading-tight">
                 <p className="truncate font-semibold">Entropy</p>

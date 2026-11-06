@@ -471,6 +471,17 @@ export const items: ItemSource[] = [
     title: "Morphing Popover",
   },
   {
+    css: "registry/ui/expandable-card.css",
+    description:
+      "A card whose media, title and surface grow into a full dialog and fold back into place.",
+    files: ["registry/ui/expandable-card.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "expandable-card",
+    title: "Expandable Card",
+  },
+  {
     css: "registry/ui/product-gallery.css",
     description:
       "A hero image with a thumbnail strip. The chosen thumbnail grows into the hero while the old hero shrinks back into its slot.",
