@@ -64,10 +64,10 @@ const tasks = [
 ];
 
 const tagClassName: Record<string, string> = {
-  Bug: "bg-neutral-500/10 text-neutral-700 dark:text-neutral-300",
-  Design: "bg-neutral-500/10 text-neutral-700 dark:text-neutral-300",
-  Docs: "bg-neutral-500/10 text-neutral-700 dark:text-neutral-300",
-  Feature: "bg-neutral-500/10 text-neutral-700 dark:text-neutral-300",
+  Bug: "bg-muted text-muted-foreground",
+  Design: "bg-muted text-muted-foreground",
+  Docs: "bg-muted text-muted-foreground",
+  Feature: "bg-muted text-muted-foreground",
 };
 
 export const KanbanBoardDemo = () => (

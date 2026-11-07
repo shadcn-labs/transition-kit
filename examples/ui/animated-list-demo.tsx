@@ -37,37 +37,37 @@ const templates: Omit<Notification, "id" | "age">[] = [
     detail: "feat: keyboard shortcuts for the editor",
     icon: GitPullRequest,
     title: "Maya opened a pull request",
-    tone: "bg-neutral-500/15 text-neutral-600 dark:text-neutral-400",
+    tone: "bg-muted text-muted-foreground",
   },
   {
     detail: "Production is live at v2.14.0",
     icon: Rocket,
     title: "Deploy finished",
-    tone: "bg-neutral-500/15 text-neutral-600 dark:text-neutral-400",
+    tone: "bg-muted text-muted-foreground",
   },
   {
     detail: "“Can we ship this behind a flag?”",
     icon: MessageSquare,
     title: "Jonas replied in #design",
-    tone: "bg-neutral-500/15 text-neutral-600 dark:text-neutral-400",
+    tone: "bg-muted text-muted-foreground",
   },
   {
     detail: "TypeError in checkout/summary.tsx",
     icon: Bug,
     title: "New issue in production",
-    tone: "bg-neutral-500/15 text-neutral-600 dark:text-neutral-400",
+    tone: "bg-muted text-muted-foreground",
   },
   {
     detail: "Invoice #1042 for $240.00",
     icon: CreditCard,
     title: "Payment received",
-    tone: "bg-neutral-500/15 text-neutral-600 dark:text-neutral-400",
+    tone: "bg-muted text-muted-foreground",
   },
   {
     detail: "Priya joined the Acme workspace",
     icon: UserPlus,
     title: "New team member",
-    tone: "bg-neutral-500/15 text-neutral-600 dark:text-neutral-400",
+    tone: "bg-muted text-muted-foreground",
   },
 ];
 

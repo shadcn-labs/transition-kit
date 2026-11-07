@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { SortableTable } from "@/registry/ui/sortable-table";
 import type { SortableTableColumn } from "@/registry/ui/sortable-table";
 
@@ -66,13 +65,7 @@ const columns: SortableTableColumn<Stock>[] = [
   {
     align: "right",
     cell: (stock) => (
-      <span
-        className={cn(
-          stock.change < 0
-            ? "text-neutral-600 dark:text-neutral-400"
-            : "text-neutral-600 dark:text-neutral-400"
-        )}
-      >
+      <span className="text-muted-foreground">
         {stock.change > 0 ? "+" : ""}
         {stock.change.toFixed(2)}%
       </span>

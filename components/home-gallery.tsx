@@ -61,7 +61,7 @@ export const HomeGallery = () => (
             <article
               key={name}
               className={cn(
-                "reveal bg-card flex min-w-0 flex-col overflow-hidden rounded-xl border",
+                "reveal bg-card ring-foreground/10 hover:ring-foreground/20 flex min-w-0 flex-col overflow-hidden rounded-xl ring-1 transition-shadow",
                 wide && "lg:col-span-2"
               )}
             >
@@ -72,7 +72,7 @@ export const HomeGallery = () => (
                 to="/docs/$"
                 params={{ _splat: `components/${docsPathForItem(name)}` }}
                 viewTransition={{ types: ["nav-forward"] }}
-                className="group hover:bg-muted/40 focus-visible:ring-ring/50 flex items-center justify-between gap-3 border-t px-4 py-3 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+                className="group hover:bg-muted/40 focus-visible:ring-ring/50 flex items-center justify-between gap-3 border-foreground/10 border-t px-4 py-3 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
               >
                 <span className="min-w-0">
                   <span className="font-medium">{item?.title ?? name}</span>
