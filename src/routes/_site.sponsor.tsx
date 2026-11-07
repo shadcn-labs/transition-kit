@@ -1,11 +1,12 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { ExternalLink, Heart, Plus, Star } from "lucide-react";
+import { Heart, Plus, Star } from "lucide-react";
 
 import { ExternalLinkButton } from "@/components/external-link-button";
 import { PageTransition } from "@/components/page-transition";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { LINK } from "@/constants/links";
+import { LINK, MAINTAINERS } from "@/constants/links";
 import { ROUTES } from "@/constants/routes";
 import { getStargazers } from "@/lib/github";
 import { tiers } from "@/lib/sponsors";
@@ -48,16 +49,42 @@ const SponsorPage = () => {
             Any amount is genuinely appreciated. And if money&apos;s not your
             thing, starring the repo or sharing something you liked works too.
           </p>
-          <ExternalLinkButton
-            sound="heart"
-            size="lg"
-            className="mt-4"
-            href={LINK.SPONSOR}
+          <div
+            id="maintainers"
+            className="mt-4 grid w-full scroll-mt-24 gap-3 text-left sm:grid-cols-2"
           >
-            <Heart />
-            Sponsor on GitHub
-            <ExternalLink className="size-3.5 opacity-60" />
-          </ExternalLinkButton>
+            {MAINTAINERS.map((maintainer) => (
+              <div
+                key={maintainer.login}
+                className="bg-card ring-foreground/10 flex items-center gap-3 rounded-xl p-3 ring-1"
+              >
+                <img
+                  src={maintainer.avatar}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="ring-border size-10 rounded-full ring-1"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">
+                    {maintainer.name}
+                  </p>
+                  <p className="text-muted-foreground truncate font-mono text-xs">
+                    @{maintainer.login}
+                  </p>
+                </div>
+                <ExternalLinkButton
+                  sound="heart"
+                  size="sm"
+                  href={maintainer.sponsor}
+                  aria-label={`Sponsor ${maintainer.name} on GitHub`}
+                >
+                  <Heart />
+                  Sponsor
+                </ExternalLinkButton>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -138,9 +165,8 @@ const SponsorPage = () => {
                   {Array.from({ length: empty }).map((_, i) => (
                     <a
                       key={`empty-${tier.name}-${i}`}
-                      href={LINK.SPONSOR}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#maintainers"
+                      aria-label={`Sponsor at ${tier.name} tier`}
                       className="flex items-center justify-center rounded-md border border-dashed p-8 transition-all hover:scale-[1.02]"
                       style={{ borderColor: tier.colors.slotBorder }}
                     >
@@ -206,10 +232,12 @@ const SponsorPage = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <ExternalLinkButton sound="heart" href={LINK.SPONSOR}>
-              <Heart />
-              Become a Sponsor
-            </ExternalLinkButton>
+            <Button sound="heart" asChild>
+              <a href="#maintainers">
+                <Heart />
+                Become a Sponsor
+              </a>
+            </Button>
             <ExternalLinkButton
               sound="star"
               variant="outline"

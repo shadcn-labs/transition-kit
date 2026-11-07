@@ -14,6 +14,14 @@ export const LINK = {
   PORTFOLIO: `https://github.com/${GITHUB.user}`,
   SHADCN_LABS: "https://shadcn-labs.com",
   SHADCN_MCP_DOCS: "https://ui.shadcn.com/docs/mcp",
-  SPONSOR: "https://github.com/sponsors/Aniket-508",
   X_SHADCN_LABS: "https://x.com/shadcnlabs",
 } as const;
+
+export const MAINTAINERS = [
+  { login: "Aniket-508", name: "Aniket Pawar" },
+  { login: "AbdullahMukadam", name: "Abdullah Mukadam" },
+].map((maintainer) => ({
+  ...maintainer,
+  avatar: `https://avatars.githubusercontent.com/${maintainer.login}?s=80`,
+  sponsor: `https://github.com/sponsors/${maintainer.login}`,
+}));
