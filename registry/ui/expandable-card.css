@@ -1,0 +1,42 @@
+/*
+ * Expandable Card: the card's surface, media and text grow into a dialog and
+ * fold back. Radii match `rounded-xl` (surface) and `rounded-lg` (media); if
+ * you change them, set `--tk-ui-expandable-card-radius` and
+ * `--tk-ui-expandable-card-media-radius` on :root to match.
+ */
+
+/* The box paints the surface itself, so corners and edges never stretch. */
+::view-transition-group(.tk-expandable-card-surface) {
+  border-radius: var(--tk-ui-expandable-card-radius, calc(var(--radius) + 4px));
+  background: var(--card);
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+/* Dialog-only content is revealed as the box grows, never squashed. */
+::view-transition-image-pair(.tk-expandable-card-surface) {
+  overflow: clip;
+  border-radius: inherit;
+}
+::view-transition-old(.tk-expandable-card-surface),
+::view-transition-new(.tk-expandable-card-surface) {
+  inline-size: auto;
+  block-size: auto;
+}
+
+/* Media crops like `object-fit: cover` while its aspect ratio changes. */
+::view-transition-image-pair(.tk-expandable-card-media) {
+  overflow: clip;
+  border-radius: var(--tk-ui-expandable-card-media-radius, var(--radius));
+}
+::view-transition-old(.tk-expandable-card-media),
+::view-transition-new(.tk-expandable-card-media) {
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* The page behind an open card doesn't scroll. */
+html:has([data-slot="expandable-card-dialog"][open]) {
+  overflow: hidden;
+}

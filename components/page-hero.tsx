@@ -21,12 +21,14 @@ export const PageHero = ({
   <header className="relative flex flex-col items-center gap-4 text-center">
     {showAnnouncement && (
       <div className="absolute bottom-full left-1/2 mb-4 flex -translate-x-1/2">
-        <Announcement />
+        <div className="rise">
+          <Announcement />
+        </div>
       </div>
     )}
     <h1
       className={cn(
-        "from-foreground via-foreground to-foreground/65 bg-linear-to-b bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl",
+        "rise [--i:1] from-foreground to-foreground/70 bg-linear-to-b bg-clip-text pb-1 text-5xl font-semibold tracking-[-0.045em] text-transparent sm:text-6xl md:text-7xl",
         titleClassName
       )}
     >
@@ -34,7 +36,7 @@ export const PageHero = ({
     </h1>
     <p
       className={cn(
-        "text-muted-foreground max-w-lg text-base leading-relaxed text-balance",
+        "rise [--i:2] text-muted-foreground max-w-lg text-base leading-relaxed text-balance",
         descriptionClassName
       )}
     >

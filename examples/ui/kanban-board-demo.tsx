@@ -64,10 +64,10 @@ const tasks = [
 ];
 
 const tagClassName: Record<string, string> = {
-  Bug: "bg-red-500/10 text-red-700 dark:text-red-300",
-  Design: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
-  Docs: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
-  Feature: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  Bug: "bg-muted text-muted-foreground",
+  Design: "bg-muted text-muted-foreground",
+  Docs: "bg-muted text-muted-foreground",
+  Feature: "bg-muted text-muted-foreground",
 };
 
 export const KanbanBoardDemo = () => (

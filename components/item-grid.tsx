@@ -1,56 +1,22 @@
 "use client";
 
 import { Link } from "@tanstack/react-router";
-import {
-  ArrowDownUpIcon,
-  CircleCheckIcon,
-  ComponentIcon,
-  FilterIcon,
-  GalleryHorizontalIcon,
-  GalleryThumbnailsIcon,
-  HashIcon,
-  KanbanIcon,
-  LayersIcon,
-  LayoutGridIcon,
-  ListCollapseIcon,
-  ListIcon,
-  ListOrderedIcon,
-  MessageSquareIcon,
-  PanelTopIcon,
-  PillIcon,
-  ShoppingCartIcon,
-  SlidersHorizontalIcon,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
-import { Badge } from "@/components/ui/badge";
 import { docsPathForItem } from "@/lib/docs";
 import { cn } from "@/lib/utils";
 import { items } from "@/registry/items";
-import type { ItemGroup, ItemKind } from "@/registry/items";
+import type { ItemGroup, ItemKind, ItemSource } from "@/registry/items";
 
-/** Icons for the preview tile of UI components, which have no video. */
-const UI_ICONS: Record<string, LucideIcon> = {
-  accordion: ListCollapseIcon,
-  "add-to-cart": ShoppingCartIcon,
-  "animated-list": ListIcon,
-  carousel: GalleryHorizontalIcon,
-  "dynamic-island": PillIcon,
-  "filter-grid": FilterIcon,
-  "kanban-board": KanbanIcon,
-  "layout-switcher": LayoutGridIcon,
-  "morphing-popover": MessageSquareIcon,
-  "number-flip": HashIcon,
-  "product-gallery": GalleryThumbnailsIcon,
-  "segmented-control": SlidersHorizontalIcon,
-  "sortable-table": ArrowDownUpIcon,
-  "stack-navigator": LayersIcon,
-  "status-button": CircleCheckIcon,
-  "step-wizard": ListOrderedIcon,
-  tabs: PanelTopIcon,
-};
+type CardItem = Pick<ItemSource, "name" | "title" | "description" | "isNew">;
 
-/** Plays a preview while it is hovered or focused. */
+const docsLink = (name: string) => ({
+  params: { _splat: `components/${docsPathForItem(name)}` },
+  to: "/docs/$" as const,
+  viewTransition: { types: ["nav-forward"] },
+});
+
 const playPreview = (event: React.SyntheticEvent<HTMLElement>) => {
   void event.currentTarget.querySelector("video")?.play();
 };
@@ -59,7 +25,91 @@ const pausePreview = (event: React.SyntheticEvent<HTMLElement>) => {
   event.currentTarget.querySelector("video")?.pause();
 };
 
-/** Cards for a group's catalog items, linking to their docs pages. */
+export const ItemCard = ({
+  item,
+  preview,
+  video,
+  meta,
+  className,
+}: {
+  item: CardItem;
+  /** Interactive, so it is rendered outside the docs link. */
+  preview?: ReactNode;
+  video?: string;
+  meta?: string;
+  className?: string;
+}) => (
+  <article
+    data-slot="item-card"
+    className={cn(
+      "bg-card ring-foreground/10 has-[[data-slot=item-card-link]:hover]:ring-foreground/20 flex min-w-0 flex-col overflow-hidden rounded-xl ring-1 transition-shadow duration-150",
+      className
+    )}
+    {...(video && {
+      onBlur: pausePreview,
+      onFocus: playPreview,
+      onMouseEnter: playPreview,
+      onMouseLeave: pausePreview,
+    })}
+  >
+    {video && (
+      <Link
+        {...docsLink(item.name)}
+        tabIndex={-1}
+        aria-hidden
+        data-slot="item-card-link"
+        className="bg-muted border-foreground/10 aspect-video overflow-hidden border-b"
+      >
+        <video
+          src={`${video}#t=0.1`}
+          className="size-full object-cover"
+          muted
+          loop
+          playsInline
+          preload="metadata"
+        />
+      </Link>
+    )}
+    {preview}
+    <div
+      className={cn(
+        "has-[[data-slot=item-card-link]:hover]:bg-muted/40 mt-auto transition-colors duration-150",
+        !video && "border-foreground/10 border-t"
+      )}
+    >
+      <Link
+        {...docsLink(item.name)}
+        data-slot="item-card-link"
+        className="group/link focus-visible:ring-ring/50 flex items-center justify-between gap-4 p-4 outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+      >
+        <span className="flex min-w-0 flex-col gap-1">
+          <span className="text-foreground flex items-center gap-2 text-sm font-medium">
+            {item.title}
+            {item.isNew && (
+              <span className="text-muted-foreground text-xs font-normal">
+                New
+              </span>
+            )}
+            {meta && (
+              <span className="text-muted-foreground text-xs font-normal">
+                {meta}
+              </span>
+            )}
+          </span>
+          <span className="text-muted-foreground line-clamp-2 text-sm">
+            {item.description}
+          </span>
+        </span>
+        <ArrowRightIcon
+          className="text-muted-foreground size-4 shrink-0 transition-transform duration-150 group-hover/link:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </Link>
+    </div>
+  </article>
+);
+
+/** Cards for a group's styles, linking to their docs pages. */
 export const ItemGrid = ({
   group,
   kind,
@@ -79,59 +129,9 @@ export const ItemGrid = ({
       className={cn("not-prose mt-6 grid gap-4 sm:grid-cols-2", className)}
       data-slot="item-grid"
     >
-      {visible.map((item) => {
-        const Icon = UI_ICONS[item.name] ?? ComponentIcon;
-        return (
-          <Link
-            key={item.name}
-            to="/docs/$"
-            params={{ _splat: `components/${docsPathForItem(item.name)}` }}
-            viewTransition={{ types: ["nav-forward"] }}
-            className="group/item bg-card hover:bg-accent/40 focus-visible:ring-ring/50 flex flex-col overflow-hidden rounded-xl border transition-colors outline-none focus-visible:ring-[3px]"
-            onMouseEnter={playPreview}
-            onMouseLeave={pausePreview}
-            onFocus={playPreview}
-            onBlur={pausePreview}
-          >
-            {item.video && (
-              <div className="bg-muted aspect-video overflow-hidden border-b">
-                <video
-                  src={`${item.video}#t=0.1`}
-                  className="size-full object-cover"
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  aria-hidden
-                />
-              </div>
-            )}
-            {item.group === "ui" && (
-              <div
-                className="bg-muted/50 flex aspect-video items-center justify-center overflow-hidden border-b bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:16px_16px]"
-                aria-hidden
-              >
-                <div className="bg-background text-muted-foreground group-hover/item:text-foreground group-focus-visible/item:text-foreground flex size-14 items-center justify-center rounded-xl border shadow-xs transition-[color,scale] duration-200 group-hover/item:scale-105 group-focus-visible/item:scale-105">
-                  <Icon className="size-6" />
-                </div>
-              </div>
-            )}
-            <div className="flex flex-col gap-1 p-4">
-              <div className="flex items-center gap-2 font-medium">
-                {item.title}
-                {item.isNew && (
-                  <Badge variant="secondary" className="rounded-full">
-                    New
-                  </Badge>
-                )}
-              </div>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {item.description}
-              </p>
-            </div>
-          </Link>
-        );
-      })}
+      {visible.map((item) => (
+        <ItemCard key={item.name} item={item} video={item.video} />
+      ))}
     </div>
   );
 };

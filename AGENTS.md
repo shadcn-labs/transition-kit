@@ -15,21 +15,21 @@ pnpm check / pnpm fix # ultracite (oxlint + oxfmt)
 
 ## Layout
 
-| Path                                    | Holds                                                                                                                                                        |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `registry/items.ts`                     | Item catalog. `registry.json` is generated from it; never edit `registry.json` by hand.                                                                      |
-| `registry/theme/theme-transition.tsx`   | Theme core: `ThemeTransitionProvider`, `useThemeTransition`, `ThemeTransitionScript`.                                                                        |
-| `registry/theme/theme-transition.css`   | Rules shared by every theme style.                                                                                                                           |
-| `registry/theme/<component>.tsx`        | Ready-made theme controls built on the core.                                                                                                                 |
-| `registry/theme/styles/<slug>.css`      | One theme style. Shipped as the item's `css`.                                                                                                                |
-| `registry/page/page-transition.tsx`     | Page core: `PageTransition`, `navigateWithTransition`.                                                                                                       |
-| `registry/page/page-transition.css`     | Rules shared by every page style.                                                                                                                            |
-| `registry/page/styles/<slug>.css`       | One page style. Shipped as the item's `css`.                                                                                                                 |
-| `registry/ui/ui-transition.ts`          | UI core: `tk()`, `useTransitionNames`, `FORWARD`/`BACK` transition types.                                                                                    |
-| `registry/ui/ui-transition.css`         | The composable `tk-*` View Transition Classes and `--tk-ui-*` settings.                                                                                      |
-| `registry/ui/<name>.tsx` / `.css`       | One UI component, plus optional component CSS shipped as the item's `css`.                                                                                   |
-| `examples/<group>/*.tsx`                | Docs demos rendered by `<ComponentPreview>`; UI demos are `examples/ui/<slug>-demo.tsx`, exporting `<Slug>Demo` (the home showcase finds them by that name). |
-| `content/docs/components/<group>/*.mdx` | One docs page per item; list it in that folder's `meta.json`.                                                                                                |
+| Path                                    | Holds                                                                                                                                                                                |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `registry/items.ts`                     | Item catalog. `registry.json` is generated from it; never edit `registry.json` by hand.                                                                                              |
+| `registry/theme/theme-transition.tsx`   | Theme core: `ThemeTransitionProvider`, `useThemeTransition`, `ThemeTransitionScript`.                                                                                                |
+| `registry/theme/theme-transition.css`   | Rules shared by every theme style.                                                                                                                                                   |
+| `registry/theme/<component>.tsx`        | Ready-made theme controls built on the core.                                                                                                                                         |
+| `registry/theme/styles/<slug>.css`      | One theme style. Shipped as the item's `css`.                                                                                                                                        |
+| `registry/page/page-transition.tsx`     | Page core: `PageTransition`, `navigateWithTransition`.                                                                                                                               |
+| `registry/page/page-transition.css`     | Rules shared by every page style.                                                                                                                                                    |
+| `registry/page/styles/<slug>.css`       | One page style. Shipped as the item's `css`.                                                                                                                                         |
+| `registry/ui/ui-transition.ts`          | UI core: `tk()`, `useTransitionNames`, `FORWARD`/`BACK` transition types.                                                                                                            |
+| `registry/ui/ui-transition.css`         | The composable `tk-*` View Transition Classes and `--tk-ui-*` settings.                                                                                                              |
+| `registry/ui/<name>.tsx` / `.css`       | One UI component, plus optional component CSS shipped as the item's `css`.                                                                                                           |
+| `examples/<group>/*.tsx`                | Docs demos rendered by `<ComponentPreview>`; UI demos are `examples/ui/<slug>-demo.tsx`, exporting `<Slug>Demo`; `components/home-gallery.tsx` picks which ones the home page shows. |
+| `content/docs/components/<group>/*.mdx` | One docs page per item; list it in that folder's `meta.json`.                                                                                                                        |
 
 Items are named like their docs URLs: bare slugs for UI components and cores (`tabs`), `theme/<slug>` or `page/<slug>` for styles. They install as `@transition-kit/<name>`. Cores and components install to `components/transitions/`. `scripts/build-registry.ts` rewrites `@/registry/<group>/x` imports to `@/components/transitions/x` and turns imports into `registryDependencies`: the group core (unless the item sets `omitGroupCore`, e.g. the theme toggles, which live in `ui` but depend on the `theme` core) and any other item imported, plus shadcn primitives for `@/components/ui/<name>`.
 

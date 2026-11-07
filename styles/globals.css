@@ -437,3 +437,67 @@ html:active-view-transition-type(nav-back)::view-transition-new(page) {
     animation-delay: 0s !important;
   }
 }
+
+/*
+ * Home polish. CSS only, motion-gated. `--i` staggers the hero entrance.
+ * Keyframes use `transform`, not `translate`: Tailwind's translate-* utilities own that property.
+ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(14px);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.97);
+  }
+}
+
+@keyframes sheen {
+  to {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 90ms + 100ms);
+  }
+
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+
+  .sheen {
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 40%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in oklab, var(--primary-foreground) 35%, transparent),
+        transparent
+      );
+      transform: translateX(-150%) skewX(-20deg);
+      pointer-events: none;
+    }
+
+    &:hover::after {
+      animation: sheen 700ms ease-out;
+    }
+  }
+}

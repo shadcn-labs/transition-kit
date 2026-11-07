@@ -47,7 +47,8 @@ const readSource = (file: string) => {
   if (!existsSync(absolute)) {
     throw new Error(`build-registry: missing file ${file}`);
   }
-  return readFileSync(absolute, "utf-8");
+  // LF on every OS, so a build on Windows ships the same files as one on Linux.
+  return readFileSync(absolute, "utf-8").replaceAll("\r\n", "\n");
 };
 
 /** Collapses the newlines and indentation postcss keeps in selectors, params and values. */
@@ -177,7 +178,7 @@ const buildFile = (
   mkdirSync(path.dirname(path.join(root, built)), { recursive: true });
   writeFileSync(path.join(root, built), content);
   return {
-    path: built,
+    path: built.replaceAll(path.sep, "/"),
     target: shipped.get(file)?.target ?? `${TARGET_DIR}/${path.basename(file)}`,
     type: "registry:component" as const,
   };

@@ -40,6 +40,8 @@ export const docs = defineDocs({
       links: z
         .object({ api: z.string().optional(), doc: z.string().optional() })
         .optional(),
+      /** Search and social title when it should differ from the page heading. */
+      seoTitle: z.string().optional(),
     }),
   },
   meta: {

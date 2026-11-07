@@ -2461,6 +2461,54 @@
       ]
     },
     {
+      "name": "expandable-card",
+      "type": "registry:component",
+      "title": "Expandable Card",
+      "description": "A card whose media, title and surface grow into a full dialog and fold back into place.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/expandable-card.tsx",
+          "target": "components/transitions/expandable-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-expandable-card-surface)": {
+          "border-radius": "var(--tk-ui-expandable-card-radius, calc(var(--radius) + 4px))",
+          "background": "var(--card)",
+          "box-shadow": "0 0 0 1px var(--border), 0 25px 50px -12px rgb(0 0 0 / 0.25)"
+        },
+        "::view-transition-image-pair(.tk-expandable-card-surface)": {
+          "overflow": "clip",
+          "border-radius": "inherit"
+        },
+        "::view-transition-old(.tk-expandable-card-surface), ::view-transition-new(.tk-expandable-card-surface)": {
+          "inline-size": "auto",
+          "block-size": "auto"
+        },
+        "::view-transition-image-pair(.tk-expandable-card-media)": {
+          "overflow": "clip",
+          "border-radius": "var(--tk-ui-expandable-card-media-radius, var(--radius))"
+        },
+        "::view-transition-old(.tk-expandable-card-media), ::view-transition-new(.tk-expandable-card-media)": {
+          "block-size": "100%",
+          "object-fit": "cover"
+        },
+        "html:has([data-slot=\"expandable-card-dialog\"][open])": {
+          "overflow": "hidden"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
       "name": "product-gallery",
       "type": "registry:component",
       "title": "Product Gallery",

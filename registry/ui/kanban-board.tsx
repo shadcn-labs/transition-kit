@@ -572,7 +572,7 @@ const KanbanBoard = <T extends KanbanCardData>({
         ref={rootRef}
         data-slot="kanban-board"
         className={cn(
-          "grid auto-cols-[minmax(11rem,1fr)] grid-flow-col gap-3 overflow-x-auto p-1",
+          "relative grid auto-cols-[minmax(11rem,1fr)] grid-flow-col gap-3 overflow-x-auto p-1",
           className
         )}
         {...props}
