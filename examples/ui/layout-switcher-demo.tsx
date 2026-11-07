@@ -45,7 +45,8 @@ const members = [
 
 export const LayoutSwitcherDemo = () => (
   // A fixed height keeps the toggle still while the list grows below it.
-  <LayoutSwitcher className="h-[19rem] w-full max-w-xl">
+  // Narrow screens wrap the grid to two rows, so they need more room.
+  <LayoutSwitcher className="h-[24rem] w-full max-w-xl @lg:h-[20rem]">
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm font-medium">Team</p>

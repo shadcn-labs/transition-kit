@@ -55,12 +55,16 @@ const ProductArt = ({ product }: { product: Product }) => (
 
 const ProductCard = ({ product }: { product: Product }) => {
   const imageRef = React.useRef<HTMLDivElement>(null);
+  // A row on narrow screens, a card once three fit side by side.
   return (
-    <div className="bg-card text-card-foreground flex flex-col gap-2 rounded-xl border p-2 @md:gap-3 @md:p-3">
-      <div ref={imageRef} className="aspect-[4/3] overflow-hidden rounded-lg">
+    <div className="bg-card text-card-foreground flex items-center gap-3 rounded-xl border p-2 @lg:flex-col @lg:items-stretch @lg:p-3">
+      <div
+        ref={imageRef}
+        className="size-14 shrink-0 overflow-hidden rounded-lg @lg:aspect-[4/3] @lg:size-auto"
+      >
         <ProductArt product={product} />
       </div>
-      <div className="flex flex-col gap-0.5 px-0.5 @md:flex-row @md:items-baseline @md:justify-between">
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5 px-0.5 @lg:flex-row @lg:items-baseline @lg:justify-between">
         <p className="truncate text-sm font-medium">{product.name}</p>
         <p className="text-muted-foreground text-sm tabular-nums">
           ${product.price}
@@ -70,8 +74,11 @@ const ProductCard = ({ product }: { product: Product }) => {
         productId={product.id}
         image={<ProductArt product={product} />}
         source={imageRef}
-        className="h-8 w-full px-2 text-xs @md:text-sm"
-      />
+        className="h-8 shrink-0 px-3 text-xs @lg:w-full @lg:text-sm"
+      >
+        <span className="@lg:hidden">Add</span>
+        <span className="hidden @lg:inline">Add to cart</span>
+      </AddToCartButton>
     </div>
   );
 };
@@ -102,7 +109,7 @@ export const AddToCartDemo = () => (
     <div className="@container w-full max-w-xl">
       <div className="flex flex-col gap-4">
         <Header />
-        <div className="grid grid-cols-3 gap-2 @md:gap-3">
+        <div className="grid grid-cols-1 gap-2 @lg:grid-cols-3 @lg:gap-3">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
