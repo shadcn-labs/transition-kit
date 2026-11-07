@@ -58,6 +58,7 @@ const loadDoc = createServerFn({ method: "GET" })
       doc: {
         description: page.data.description,
         links: page.data.links,
+        seoTitle: page.data.seoTitle,
         title: page.data.title,
       },
       markdownUrl: getPageMarkdownUrl(page).url,
@@ -263,7 +264,7 @@ export const Route = createFileRoute("/_site/docs/$")({
           description: loaderData.doc.description,
           ogType: "article",
           path: loaderData.url,
-          title: loaderData.doc.title,
+          title: loaderData.doc.seoTitle ?? loaderData.doc.title,
         })
       : {},
   loader: loadDocPage,

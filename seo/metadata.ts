@@ -90,18 +90,18 @@ export const createPageMetadata = ({
   };
 };
 
+const HOME_TITLE = `shadcn View Transition Components for React | ${SITE.NAME}`;
+
 const siteHead = createPageMetadata({
   description: SITE.DESCRIPTION.LONG,
+  ogTitle: HOME_TITLE,
   path: ROUTES.HOME,
   title: SITE.NAME,
 });
 
 export const homepageMetadata: PageHead = {
   ...siteHead,
-  meta: [
-    { title: `${SITE.NAME} - ${SITE.DESCRIPTION.SHORT}` },
-    ...siteHead.meta.slice(1),
-  ],
+  meta: [{ title: HOME_TITLE }, ...siteHead.meta.slice(1)],
 };
 
 export const baseMetadata: PageHead = {
@@ -131,7 +131,7 @@ export const baseMetadata: PageHead = {
   meta: [
     { charSet: "utf-8" },
     { content: "width=device-width, initial-scale=1", name: "viewport" },
-    { title: `${SITE.NAME} - ${SITE.DESCRIPTION.SHORT}` },
+    { title: HOME_TITLE },
     ...siteHead.meta.slice(1),
     { content: SITE.NAME, name: "application-name" },
     { content: SITE.AUTHOR.NAME, name: "author" },
