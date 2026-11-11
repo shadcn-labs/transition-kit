@@ -13,12 +13,9 @@
  *   are built on the `theme` core), and on every other item they import, through absolute URLs, so `shadcn add` pulls them in
  *   from any registry setup. `@/components/ui/<name>` imports depend on the
  *   shadcn primitive `<name>`.
- *
- * Also checks that every `group: "ui", kind: "component"` item in
- * registry/items.ts appears once in SECTIONS in
- * components/component-catalog.tsx (the components index), and that SECTIONS
- * lists no unknown or duplicate names. The check runs before any output is
- * written, so a failure leaves the tree unchanged.
+ * - Fails first, writing nothing, if the components index (`SECTIONS` in
+ *   components/component-catalog.tsx) doesn't list every `group: "ui",
+ *   kind: "component"` item exactly once.
  */
 import {
   existsSync,
@@ -32,6 +29,7 @@ import path from "node:path";
 import { parse } from "postcss";
 import type { ChildNode, Container } from "postcss";
 import type { Registry, RegistryItem } from "shadcn/schema";
+import ts from "typescript";
 
 import { FALLBACK_SITE_ORIGIN } from "../constants/site.ts";
 import { items } from "../registry/items.ts";
@@ -244,75 +242,103 @@ const toRegistryItem = (item: ItemSource): RegistryItem => {
 
 const CATALOG_FILE = "components/component-catalog.tsx";
 
-/** Entry `name` values from the `SECTIONS` object in the components index. */
-const catalogNamesFromSource = (source: string): string[] => {
-  const block =
-    /const SECTIONS = \{([\s\S]*?)\n\} satisfies Record<string, Entry\[\]>/.exec(
-      source
-    );
-  if (!block) {
-    throw new Error(
-      `build-registry: could not find the SECTIONS object in ${CATALOG_FILE}`
-    );
-  }
-  const names = [...block[1].matchAll(/\bname:\s*"([^"]+)"/g)].map(
-    (match) => match[1]
+/**
+ * `name` of every entry in `SECTIONS`, the components index in CATALOG_FILE.
+ * Parsed with the TypeScript compiler, so only real string literals count;
+ * comments and other strings are ignored. Anything the check can't read
+ * statically fails the build instead of being skipped.
+ */
+const catalogNames = (): string[] => {
+  const fail = (reason: string) =>
+    new Error(`build-registry: ${CATALOG_FILE}: ${reason}`);
+  const source = ts.createSourceFile(
+    CATALOG_FILE,
+    readSource(CATALOG_FILE),
+    ts.ScriptTarget.Latest,
+    false,
+    ts.ScriptKind.TSX
   );
-  if (names.length === 0) {
-    throw new Error(
-      `build-registry: SECTIONS in ${CATALOG_FILE} has no entries`
-    );
+  let sections = source.statements
+    .filter(ts.isVariableStatement)
+    .flatMap((statement) => statement.declarationList.declarations)
+    .find(
+      (declaration) =>
+        ts.isIdentifier(declaration.name) &&
+        declaration.name.text === "SECTIONS"
+    )?.initializer;
+  if (sections && ts.isSatisfiesExpression(sections)) {
+    sections = sections.expression;
   }
-  return names;
+  if (!sections || !ts.isObjectLiteralExpression(sections)) {
+    throw fail("expected `const SECTIONS = { ... }`");
+  }
+
+  return sections.properties.flatMap((section) => {
+    if (
+      !ts.isPropertyAssignment(section) ||
+      !ts.isArrayLiteralExpression(section.initializer)
+    ) {
+      throw fail("expected every SECTIONS value to be an array literal");
+    }
+    return section.initializer.elements.map((entry) => {
+      const name = ts.isObjectLiteralExpression(entry)
+        ? entry.properties.find(
+            (property): property is ts.PropertyAssignment =>
+              ts.isPropertyAssignment(property) &&
+              ts.isIdentifier(property.name) &&
+              property.name.text === "name"
+          )?.initializer
+        : undefined;
+      if (!name || !ts.isStringLiteralLike(name)) {
+        const { line } = source.getLineAndCharacterOfPosition(
+          entry.getStart(source)
+        );
+        throw fail(
+          `line ${line + 1}: expected an entry with a string \`name\``
+        );
+      }
+      return name.text;
+    });
+  });
 };
 
+const quoted = (names: Iterable<string>) =>
+  [...names].map((name) => `"${name}"`).join(", ");
+
 /**
- * Fails the registry build when the components index drifts from the
- * registry: a UI component missing from SECTIONS, listed twice, or listed
- * but not a `group: "ui", kind: "component"` item in registry/items.ts.
+ * Fails the build, before any output is touched, when the components index
+ * drifts from the registry: a UI component missing from SECTIONS, listed
+ * twice, or listed but not a UI component in registry/items.ts.
  */
 const assertCatalogMatchesRegistry = () => {
-  const listed = catalogNamesFromSource(readSource(CATALOG_FILE));
-  const registryNames = items
-    .filter((item) => item.group === "ui" && item.kind === "component")
-    .map((item) => item.name);
-  const registrySet = new Set(registryNames);
-  const seen = new Map<string, number>();
-  for (const name of listed) {
-    seen.set(name, (seen.get(name) ?? 0) + 1);
-  }
+  const listed = catalogNames();
+  const components = new Set(
+    items
+      .filter((item) => item.group === "ui" && item.kind === "component")
+      .map((item) => item.name)
+  );
 
   const problems: string[] = [];
-  const duplicates = [...seen.entries()]
-    .filter(([, count]) => count > 1)
-    .map(([name, count]) => `"${name}" (${count} times)`);
-  if (duplicates.length > 0) {
-    problems.push(
-      `listed more than once in SECTIONS: ${duplicates.join(", ")}`
-    );
-  }
-
-  const unknown = [...new Set(listed.filter((name) => !registrySet.has(name)))];
-  if (unknown.length > 0) {
-    problems.push(
-      `listed in SECTIONS but not a UI component in registry/items.ts: ${unknown
-        .map((name) => `"${name}"`)
-        .join(", ")}`
-    );
-  }
-
-  const missing = registryNames.filter((name) => !seen.has(name));
+  const missing = [...components].filter((name) => !listed.includes(name));
   if (missing.length > 0) {
+    problems.push(`missing from SECTIONS: ${quoted(missing)}`);
+  }
+  const duplicates = new Set(
+    listed.filter((name, index) => listed.indexOf(name) !== index)
+  );
+  if (duplicates.size > 0) {
+    problems.push(`listed more than once in SECTIONS: ${quoted(duplicates)}`);
+  }
+  const unknown = new Set(listed.filter((name) => !components.has(name)));
+  if (unknown.size > 0) {
     problems.push(
-      `UI component in registry/items.ts missing from SECTIONS: ${missing
-        .map((name) => `"${name}"`)
-        .join(", ")}`
+      `in SECTIONS but not a UI component in registry/items.ts: ${quoted(unknown)}`
     );
   }
 
   if (problems.length > 0) {
     throw new Error(
-      `build-registry: the components index is out of sync with the registry.\n  - ${problems.join("\n  - ")}\nEvery group: "ui", kind: "component" item must appear once in SECTIONS in ${CATALOG_FILE}, and SECTIONS must not list unknown names.`
+      `build-registry: the components index (${CATALOG_FILE}) is out of sync with registry/items.ts:\n  - ${problems.join("\n  - ")}`
     );
   }
 };
