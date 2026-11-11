@@ -13,6 +13,12 @@
  *   are built on the `theme` core), and on every other item they import, through absolute URLs, so `shadcn add` pulls them in
  *   from any registry setup. `@/components/ui/<name>` imports depend on the
  *   shadcn primitive `<name>`.
+ *
+ * Also checks that every `group: "ui", kind: "component"` item in
+ * registry/items.ts appears once in SECTIONS in
+ * components/component-catalog.tsx (the components index), and that SECTIONS
+ * lists no unknown or duplicate names. The check runs before any output is
+ * written, so a failure leaves the tree unchanged.
  */
 import {
   existsSync,
@@ -235,6 +241,83 @@ const toRegistryItem = (item: ItemSource): RegistryItem => {
     categories: [item.group],
   };
 };
+
+const CATALOG_FILE = "components/component-catalog.tsx";
+
+/** Entry `name` values from the `SECTIONS` object in the components index. */
+const catalogNamesFromSource = (source: string): string[] => {
+  const block =
+    /const SECTIONS = \{([\s\S]*?)\n\} satisfies Record<string, Entry\[\]>/.exec(
+      source
+    );
+  if (!block) {
+    throw new Error(
+      `build-registry: could not find the SECTIONS object in ${CATALOG_FILE}`
+    );
+  }
+  const names = [...block[1].matchAll(/\bname:\s*"([^"]+)"/g)].map(
+    (match) => match[1]
+  );
+  if (names.length === 0) {
+    throw new Error(
+      `build-registry: SECTIONS in ${CATALOG_FILE} has no entries`
+    );
+  }
+  return names;
+};
+
+/**
+ * Fails the registry build when the components index drifts from the
+ * registry: a UI component missing from SECTIONS, listed twice, or listed
+ * but not a `group: "ui", kind: "component"` item in registry/items.ts.
+ */
+const assertCatalogMatchesRegistry = () => {
+  const listed = catalogNamesFromSource(readSource(CATALOG_FILE));
+  const registryNames = items
+    .filter((item) => item.group === "ui" && item.kind === "component")
+    .map((item) => item.name);
+  const registrySet = new Set(registryNames);
+  const seen = new Map<string, number>();
+  for (const name of listed) {
+    seen.set(name, (seen.get(name) ?? 0) + 1);
+  }
+
+  const problems: string[] = [];
+  const duplicates = [...seen.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([name, count]) => `"${name}" (${count} times)`);
+  if (duplicates.length > 0) {
+    problems.push(
+      `listed more than once in SECTIONS: ${duplicates.join(", ")}`
+    );
+  }
+
+  const unknown = [...new Set(listed.filter((name) => !registrySet.has(name)))];
+  if (unknown.length > 0) {
+    problems.push(
+      `listed in SECTIONS but not a UI component in registry/items.ts: ${unknown
+        .map((name) => `"${name}"`)
+        .join(", ")}`
+    );
+  }
+
+  const missing = registryNames.filter((name) => !seen.has(name));
+  if (missing.length > 0) {
+    problems.push(
+      `UI component in registry/items.ts missing from SECTIONS: ${missing
+        .map((name) => `"${name}"`)
+        .join(", ")}`
+    );
+  }
+
+  if (problems.length > 0) {
+    throw new Error(
+      `build-registry: the components index is out of sync with the registry.\n  - ${problems.join("\n  - ")}\nEvery group: "ui", kind: "component" item must appear once in SECTIONS in ${CATALOG_FILE}, and SECTIONS must not list unknown names.`
+    );
+  }
+};
+
+assertCatalogMatchesRegistry();
 
 rmSync(path.join(root, BUILD_DIR), { force: true, recursive: true });
 const registry: Registry & { $schema: string } = {
