@@ -6,11 +6,11 @@ export interface LabsNavLink {
   description?: string;
 }
 
-export const LABS_LATEST = {
-  description: "Beautiful transitions, made simple",
-  href: "https://transition-kit.space",
-  name: "transition-kit",
-} as const satisfies LabsNavLink;
+// export const LABS_LATEST = {
+//   description: "Beautiful transitions, made simple",
+//   href: "https://transition-kit.space",
+//   name: "transition-kit",
+// } as const satisfies LabsNavLink;
 
 export const LABS_REGISTRIES = [
   { href: "https://termcn.dev", name: "termcn" },
