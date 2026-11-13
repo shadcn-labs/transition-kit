@@ -7,6 +7,10 @@ import { ArrowRightIcon } from "@/components/animated-icons/arrow-right";
 import type { ArrowRightIconHandle } from "@/components/animated-icons/arrow-right";
 import { ComponentIcon } from "@/components/animated-icons/component";
 import type { ComponentIconHandle } from "@/components/animated-icons/component";
+import {
+  BRAND_BUTTON,
+  NEUTRAL_BUTTON,
+} from "@/components/landing/button-styles";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
@@ -26,7 +30,7 @@ const GetStartedButton = () => {
     <Button
       asChild
       sound="click"
-      className="sheen px-4"
+      className={cn("sheen px-4", BRAND_BUTTON)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -58,9 +62,9 @@ const BrowseComponentsButton = () => {
   return (
     <Button
       asChild
-      variant="outline"
+      variant="secondary"
       sound="click"
-      className="px-4"
+      className={cn("px-4", NEUTRAL_BUTTON)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

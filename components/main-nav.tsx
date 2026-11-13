@@ -1,10 +1,10 @@
 "use client";
 
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
-import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
+import { useFeedback } from "@/hooks/use-feedback";
 import { cn } from "@/lib/utils";
-
 export const MainNav = ({
   items,
   className,
@@ -12,20 +12,22 @@ export const MainNav = ({
 }: React.ComponentProps<"nav"> & {
   items: { href: string; label: string }[];
 }) => {
-  const pathname = useLocation({ select: (location) => location.pathname });
+  const playClick = useFeedback({ sound: "click" });
 
   return (
-    <nav className={cn("items-center gap-0.5", className)} {...props}>
+    <nav className={cn("items-stretch", className)} {...props}>
       {items.map((item) => (
-        <Button key={item.href} variant="ghost" asChild size="sm" sound="click">
-          <Link
-            to={item.href}
-            viewTransition={{ types: ["nav-forward"] }}
-            className={cn(pathname === item.href && "text-primary")}
-          >
-            {item.label}
-          </Link>
-        </Button>
+        <Link
+          key={item.href}
+          to={item.href}
+          onClick={playClick}
+          viewTransition={{ types: ["nav-forward"] }}
+          // /docs must not match its children.
+          activeOptions={{ exact: item.href === ROUTES.DOCS }}
+          className="text-muted-foreground hover:bg-muted/50 hover:text-foreground aria-[current=page]:text-foreground focus-visible:ring-ring/50 flex items-center border-r px-4 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+        >
+          {item.label}
+        </Link>
       ))}
     </nav>
   );

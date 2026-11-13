@@ -5,8 +5,10 @@ import { useCallback, useRef } from "react";
 
 import type { HeartHandshakeIconHandle } from "@/components/animated-icons/heart-handshake";
 import { HeartHandshakeIcon } from "@/components/animated-icons/heart-handshake";
+import { BRAND_BUTTON } from "@/components/landing/button-styles";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
+import { cn } from "@/lib/utils";
 
 export const SponsorLink = () => {
   const heartRef = useRef<HeartHandshakeIconHandle>(null);
@@ -23,14 +25,13 @@ export const SponsorLink = () => {
     <Button
       asChild
       size="sm"
-      variant="ghost"
       sound="click"
-      className="max-sm:size-8"
+      className={cn("max-sm:size-8", BRAND_BUTTON)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <Link to={ROUTES.SPONSOR}>
-        <HeartHandshakeIcon className="text-pink-500" ref={heartRef} />
+        <HeartHandshakeIcon ref={heartRef} />
         <span className="max-sm:sr-only">Sponsor</span>
       </Link>
     </Button>

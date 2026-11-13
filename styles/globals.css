@@ -53,6 +53,10 @@
   --color-code-number: var(--code-number);
   --color-selection: var(--selection);
   --color-selection-foreground: var(--selection-foreground);
+  --color-brand: var(--brand);
+  --color-brand-bright: var(--brand-bright);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-foreground: var(--brand-foreground);
 }
 
 :root {
@@ -96,6 +100,11 @@
   --code-number: oklch(0.56 0 0);
   --selection: oklch(0.145 0 0);
   --selection-foreground: oklch(1 0 0);
+  --brand: oklch(0.56 0.24 293);
+  --brand-bright: oklch(0.66 0.21 296);
+  --brand-deep: oklch(0.47 0.23 290);
+  --brand-foreground: oklch(0.99 0 0);
+  --brand-glow: oklch(0.56 0.24 293 / 0.35);
 }
 
 .dark {
@@ -138,6 +147,11 @@
   --code-number: oklch(0.72 0 0);
   --selection: oklch(0.922 0 0);
   --selection-foreground: oklch(0.205 0 0);
+  --brand: oklch(0.7 0.19 295);
+  --brand-bright: oklch(0.74 0.17 298);
+  --brand-deep: oklch(0.52 0.24 291);
+  --brand-foreground: oklch(0.99 0 0);
+  --brand-glow: oklch(0.7 0.19 295 / 0.55);
 }
 
 @layer base {
@@ -185,6 +199,25 @@
 
 @utility container {
   @apply 3xl:max-w-screen-2xl mx-auto max-w-[1400px] px-4 lg:px-8;
+}
+@utility rail {
+  @apply mx-auto w-full max-w-6xl border-x;
+}
+@utility rail-wide {
+  @apply mx-auto w-full max-w-7xl border-x;
+}
+
+@utility text-glow {
+  text-shadow: 0 0 18px var(--brand-glow);
+}
+
+@utility bg-brand-gradient {
+  background-image: linear-gradient(
+    180deg,
+    var(--brand-bright),
+    var(--brand) 55%,
+    var(--brand-deep)
+  );
 }
 
 @utility no-scrollbar {
@@ -385,13 +418,26 @@ html:active-view-transition-type(nav-forward, nav-back) {
 }
 
 /* Everything else (sidebar) swaps instantly, like pdfcn. */
-html:active-view-transition-type(nav-forward, nav-back)::view-transition-old(
-    root
-  ),
-html:active-view-transition-type(nav-forward, nav-back)::view-transition-new(
-    root
-  ) {
+html:active-view-transition-type(
+    nav-forward,
+    nav-back,
+    nav-sidebar
+  )::view-transition-old(root),
+html:active-view-transition-type(
+    nav-forward,
+    nav-back,
+    nav-sidebar
+  )::view-transition-new(root) {
   animation: none;
+}
+
+html:active-view-transition-type(nav-sidebar) [data-sidebar-indicator="page"] {
+  view-transition-name: sidebar-indicator;
+}
+
+::view-transition-group(sidebar-indicator) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 ::view-transition-group(site-header),
@@ -431,6 +477,7 @@ html:active-view-transition-type(nav-back)::view-transition-new(page) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(sidebar-indicator),
   ::view-transition-old(page),
   ::view-transition-new(page) {
     animation-duration: 0s !important;

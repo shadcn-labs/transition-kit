@@ -95,3 +95,21 @@ export const JsonLdScripts = () => (
     <OrganizationJsonLd />
   </>
 );
+
+export const FaqJsonLd = ({
+  faqs,
+}: {
+  faqs: readonly { answer: string; question: string }[];
+}) => (
+  <JsonLdScript
+    data={{
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        name: faq.question,
+      })),
+    }}
+  />
+);
