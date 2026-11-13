@@ -1,3 +1,7 @@
+"use client";
+
+import { useLocation } from "@tanstack/react-router";
+
 import { BrandContextMenu } from "@/components/brand-context-menu";
 import { CommandMenu } from "@/components/command-menu";
 import { LabsNav } from "@/components/labs-nav";
@@ -11,57 +15,72 @@ import { SponsorLink } from "@/components/sponsor-link";
 import { Button } from "@/components/ui/button";
 import { LINK } from "@/constants/links";
 import { ROUTES } from "@/constants/routes";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: ROUTES.DOCS, label: "Docs" },
   { href: ROUTES.DOCS_COMPONENTS, label: "Components" },
+  { href: ROUTES.SPONSOR, label: "Sponsors" },
 ];
+
+const CELL = "flex items-center border-l";
 
 export const SiteHeader = () => {
   const { tree } = useSiteData();
+  const isHome = useLocation({
+    select: (location) => location.pathname === ROUTES.HOME,
+  });
 
   return (
     <header
-      className="bg-background sticky top-0 z-50 w-full"
+      className="bg-background/85 sticky top-0 z-50 w-full border-b backdrop-blur-lg"
       data-slot="site-header"
     >
-      <div className="container-wrapper 3xl:fixed:px-0 relative px-6">
-        <div className="3xl:fixed:container relative flex h-(--header-height) items-center">
-          <MobileNav
-            items={navItems}
-            tree={tree}
-            className="flex lg:hidden mr-2"
-          />
-          <div className="flex items-center">
-            <BrandContextMenu>
-              <Button
-                asChild
-                variant="ghost"
-                size="icon-sm"
-                className="hover:bg-transparent focus-visible:bg-transparent dark:hover:bg-transparent lg:size-9"
-                sound="click"
+      <div
+        className={cn(
+          "flex h-(--header-height) items-stretch",
+          isHome ? "rail" : "rail-wide"
+        )}
+      >
+        <div className="flex items-center border-r px-3 lg:hidden">
+          <MobileNav items={navItems} tree={tree} />
+        </div>
+        <div className="flex min-w-0 items-center border-r pr-3 pl-1.5">
+          <BrandContextMenu>
+            <Button
+              asChild
+              variant="ghost"
+              size="icon-sm"
+              className="hover:bg-transparent focus-visible:bg-transparent dark:hover:bg-transparent lg:size-9"
+              sound="click"
+            >
+              <a
+                href={LINK.SHADCN_LABS}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <a
-                  href={LINK.SHADCN_LABS}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <LogoMark className="size-5" />
-                  <span className="sr-only">Shadcn Labs</span>
-                </a>
-              </Button>
-            </BrandContextMenu>
-            <span className="text-muted-foreground/50 ml-1">/</span>
-            <LabsNav />
+                <LogoMark className="size-5" />
+                <span className="sr-only">Shadcn Labs</span>
+              </a>
+            </Button>
+          </BrandContextMenu>
+          <span className="text-muted-foreground/50 ml-1">/</span>
+          <LabsNav />
+        </div>
+        <MainNav items={navItems} className="hidden lg:flex" />
+
+        <div className="ml-auto flex items-stretch">
+          <div className={cn(CELL, "hidden px-2 md:flex")}>
+            <CommandMenu navItems={navItems} tree={tree} />
           </div>
-          <MainNav items={navItems} className="hidden lg:flex" />
-          <div className="ml-auto flex items-center gap-1 md:gap-2 md:flex-1 md:justify-end">
-            <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
-              <CommandMenu navItems={navItems} tree={tree} />
-            </div>
+          <div className={cn(CELL, "hidden px-1 sm:flex")}>
             <NavItemGithub />
-            <SponsorLink />
+          </div>
+          <div className={cn(CELL, "px-1")}>
             <SiteSettings />
+          </div>
+          <div className={cn(CELL, "px-2")}>
+            <SponsorLink />
           </div>
         </div>
       </div>

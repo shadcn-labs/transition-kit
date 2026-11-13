@@ -15,9 +15,11 @@ import { DocsKeyboardShortcuts } from "@/components/docs-keyboard-shortcuts";
 import { DocsLayout } from "@/components/docs-layout";
 import { DocsNavLink } from "@/components/docs-nav-link";
 import { DocsShareMenu } from "@/components/docs-share-menu";
+import { DocsSponsorCard } from "@/components/docs-sponsor-card";
 import { DocsTableOfContents } from "@/components/docs-toc";
 import { DocsTocFooter } from "@/components/docs-toc-footer";
 import { PageTransition } from "@/components/page-transition";
+import { ScrollFade } from "@/components/scroll-fade";
 import { Badge } from "@/components/ui/badge";
 import { ROUTES } from "@/constants/routes";
 import { loadComponentSources } from "@/lib/component-sources.server";
@@ -39,11 +41,7 @@ const tocLoader = browserCollections.docs.createClientLoader<
   Record<string, never>
 >({
   component: ({ toc }) =>
-    toc.length ? (
-      <div className="no-scrollbar overflow-y-auto mx-8 border-b">
-        <DocsTableOfContents toc={toc} />
-      </div>
-    ) : null,
+    toc.length ? <DocsTableOfContents toc={toc} /> : null,
 });
 
 const loadDoc = createServerFn({ method: "GET" })
@@ -144,9 +142,8 @@ const DocPage = () => {
           className="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full"
         >
           <div className="flex min-w-0 flex-1 flex-col">
-            <div className="h-(--top-spacing) shrink-0" />
-            <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-300">
-              <div className="flex flex-col gap-2">
+            <div className="border-b">
+              <div className="mx-auto flex w-full max-w-2xl flex-col gap-2 px-4 py-8 md:px-0 lg:py-10">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <h1 className="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
@@ -218,38 +215,50 @@ const DocPage = () => {
                   </div>
                 ) : null}
               </div>
+            </div>
+            <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col px-4 py-8 text-neutral-800 md:px-0 dark:text-neutral-300">
               <div className="w-full flex-1 *:data-[slot=component-preview]:first:mt-0">
                 <ComponentSourceProvider sources={sources}>
                   <MdxContent />
                 </ComponentSourceProvider>
               </div>
             </div>
-            <div className="mx-auto hidden h-16 w-full max-w-2xl items-center gap-2 px-4 sm:flex md:px-0">
-              {neighbours.previous && (
-                <DocsNavLink
-                  href={neighbours.previous.url}
-                  direction="previous"
-                  size="sm"
-                >
-                  {neighbours.previous.name}
-                </DocsNavLink>
-              )}
-              {neighbours.next && (
-                <DocsNavLink
-                  href={neighbours.next.url}
-                  direction="next"
-                  className="ml-auto"
-                  size="sm"
-                >
-                  {neighbours.next.name}
-                </DocsNavLink>
-              )}
+            <div className="mt-8 hidden border-t sm:grid sm:grid-cols-2 sm:divide-x">
+              <div className="flex items-center px-6 py-4">
+                {neighbours.previous && (
+                  <DocsNavLink
+                    href={neighbours.previous.url}
+                    direction="previous"
+                    size="sm"
+                  >
+                    {neighbours.previous.name}
+                  </DocsNavLink>
+                )}
+              </div>
+              <div className="flex items-center justify-end px-6 py-4">
+                {neighbours.next && (
+                  <DocsNavLink
+                    href={neighbours.next.url}
+                    direction="next"
+                    size="sm"
+                  >
+                    {neighbours.next.name}
+                  </DocsNavLink>
+                )}
+              </div>
             </div>
           </div>
-          <div className="sticky top-[calc(var(--header-height)+1px)] z-30 ml-auto hidden h-[calc(100svh-var(--footer-height)+2rem)] w-72 flex-col gap-4 overflow-hidden overscroll-none pb-8 xl:flex">
-            <div className="h-(--top-spacing) shrink-0" />
-            <TocContent />
-            <DocsTocFooter docId={page.path} className="mx-8" />
+          <div className="hidden w-72 shrink-0 border-l xl:block">
+            <div className="sticky top-(--header-height) z-30 flex h-[calc(100svh-var(--header-height))] flex-col overscroll-none">
+              <ScrollFade className="min-h-0 shrink">
+                <TocContent />
+              </ScrollFade>
+              <DocsTocFooter
+                docId={page.path}
+                className="shrink-0 border-t px-4 py-3"
+              />
+              <DocsSponsorCard className="mt-auto shrink-0 border-t" />
+            </div>
           </div>
         </div>
       </PageTransition>

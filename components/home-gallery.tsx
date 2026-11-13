@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRightIcon } from "lucide-react";
 import type { ComponentType } from "react";
 
+import { SectionHeading } from "@/components/landing/section-heading";
 import { ROUTES } from "@/constants/routes";
 import { AddToCartDemo } from "@/examples/ui/add-to-cart-demo";
 import { DynamicIslandDemo } from "@/examples/ui/dynamic-island-demo";
@@ -30,38 +31,20 @@ const TILES: { name: string; Demo: ComponentType; wide?: boolean }[] = [
 ];
 
 export const HomeGallery = () => (
-  <section className="container-wrapper pb-16 md:pb-24">
-    <div className="container flex flex-col gap-8">
-      <div className="flex items-end justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Play with them
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            Every tile is the real component. Click around.
-          </p>
-        </div>
-        <Link
-          to="/docs/$"
-          params={{
-            _splat: ROUTES.DOCS_COMPONENTS.slice(ROUTES.DOCS.length + 1),
-          }}
-          viewTransition={{ types: ["nav-forward"] }}
-          className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 inline-flex shrink-0 items-center gap-1 rounded-sm text-sm outline-none focus-visible:ring-[3px]"
-        >
-          All components
-          <ArrowRightIcon className="size-3.5" aria-hidden="true" />
-        </Link>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-3">
+  <section className="rail">
+    <SectionHeading
+      title="Click around. It's all live."
+      description="Every cell is the real component, running on React's <ViewTransition>. Nothing here is a recording."
+    />
+    <div>
+      <div className="bg-border grid gap-px lg:grid-cols-3">
         {TILES.map(({ Demo, name, wide }) => {
           const item = getItem(name);
           return (
             <article
               key={name}
               className={cn(
-                "reveal bg-card ring-foreground/10 hover:ring-foreground/20 flex min-w-0 flex-col overflow-hidden rounded-xl ring-1 transition-shadow",
+                "bg-background flex min-w-0 flex-col",
                 wide && "lg:col-span-2"
               )}
             >
@@ -72,7 +55,7 @@ export const HomeGallery = () => (
                 to="/docs/$"
                 params={{ _splat: `components/${docsPathForItem(name)}` }}
                 viewTransition={{ types: ["nav-forward"] }}
-                className="group hover:bg-muted/40 focus-visible:ring-ring/50 flex items-center justify-between gap-3 border-foreground/10 border-t px-4 py-3 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+                className="group hover:bg-muted/40 focus-visible:ring-ring/50 flex items-center justify-between gap-3 border-t px-4 py-3 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
               >
                 <span className="min-w-0">
                   <span className="font-medium">{item?.title ?? name}</span>
@@ -81,7 +64,7 @@ export const HomeGallery = () => (
                   </span>
                 </span>
                 <ArrowRightIcon
-                  className="text-muted-foreground size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+                  className="text-muted-foreground group-hover:text-brand size-4 shrink-0 transition-[color,transform] group-hover:translate-x-0.5"
                   aria-hidden="true"
                 />
               </Link>
@@ -90,5 +73,19 @@ export const HomeGallery = () => (
         })}
       </div>
     </div>
+    <Link
+      to="/docs/$"
+      params={{
+        _splat: ROUTES.DOCS_COMPONENTS.slice(ROUTES.DOCS.length + 1),
+      }}
+      viewTransition={{ types: ["nav-forward"] }}
+      className="group text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex items-center justify-center gap-1.5 border-t py-4 text-sm transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+    >
+      Browse all components
+      <ArrowRightIcon
+        className="size-3.5 transition-transform group-hover:translate-x-0.5"
+        aria-hidden="true"
+      />
+    </Link>
   </section>
 );

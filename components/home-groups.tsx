@@ -33,33 +33,31 @@ const GROUPS = [
 ] as const;
 
 export const HomeGroups = () => (
-  <section className="container-wrapper pb-16 md:pb-24">
-    <div className="container">
-      <div className="grid divide-y border-y md:grid-cols-3 md:divide-x md:divide-y-0">
-        {GROUPS.map(({ description, group, label, path }) => (
-          <Link
-            key={group}
-            to="/docs/$"
-            params={{ _splat: path }}
-            viewTransition={{ types: ["nav-forward"] }}
-            className="group hover:bg-muted/40 focus-visible:ring-ring/50 flex flex-col gap-3 p-6 transition-colors outline-none focus-visible:ring-[3px] md:p-8"
-          >
-            <span className="font-mono text-4xl font-medium tracking-tighter tabular-nums">
-              {count(group)}
-            </span>
-            <span className="flex items-center gap-1.5 text-sm font-medium">
-              {label} transitions
-              <ArrowRightIcon
-                className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </span>
-            <span className="text-muted-foreground text-sm leading-relaxed">
-              {description}
-            </span>
-          </Link>
-        ))}
-      </div>
+  <section className="rail">
+    <div className="grid divide-y md:grid-cols-3 md:divide-x md:divide-y-0">
+      {GROUPS.map(({ description, group, label, path }) => (
+        <Link
+          key={group}
+          to="/docs/$"
+          params={{ _splat: path }}
+          viewTransition={{ types: ["nav-forward"] }}
+          className="group hover:bg-muted/40 focus-visible:ring-ring/50 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 px-4 py-5 transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-inset md:flex md:flex-col md:gap-3 md:p-8"
+        >
+          <span className="text-brand text-glow row-span-2 text-4xl font-normal tracking-tight tabular-nums md:text-5xl">
+            {count(group)}
+          </span>
+          <span className="flex items-center gap-1.5 text-sm font-medium">
+            {label} transitions
+            <ArrowRightIcon
+              className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </span>
+          <span className="text-muted-foreground text-sm leading-relaxed">
+            {description}
+          </span>
+        </Link>
+      ))}
     </div>
   </section>
 );

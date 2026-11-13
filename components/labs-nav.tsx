@@ -37,6 +37,7 @@ const SECTION_LIST: Partial<Record<SectionId, string>> = {
   registries: "columns-2 gap-x-6 space-y-1",
 };
 
+// oxlint-disable-next-line no-unused-vars -- "Latest" card is parked, see 224f7b3
 const latestCardClassName = cn(
   "flex flex-col gap-4 rounded-lg border border-border bg-background p-4",
   "text-base font-normal no-underline transition-colors",
@@ -96,6 +97,7 @@ const LabsNavLink = ({
   });
 };
 
+// oxlint-disable-next-line no-unused-vars -- "Latest" card is parked, see 224f7b3
 const LatestCard = ({
   item,
   nameClassName,

@@ -44,7 +44,7 @@ const SiteLayout = () => {
   }, [serialized]);
   return (
     <SiteDataProvider value={data}>
-      <div className="bg-background relative flex min-h-svh flex-col">
+      <div className="bg-background relative flex min-h-svh flex-col overflow-x-clip">
         <blockquote className="sr-only">{AGENT_DOCS_DIRECTIVE_TEXT}</blockquote>
         <WebMcpTools />
         <SiteHeader />
