@@ -8,7 +8,7 @@ export const ComponentPreview = ({
   children,
 }: {
   /**
-   * Render children directly, without the bordered preview container. Use it
+   * Render children directly, without the framed preview container. Use it
    * when the demo already draws its own window, like the page demos.
    */
   bare?: boolean;
@@ -26,7 +26,7 @@ export const ComponentPreview = ({
     <div
       data-slot="component-preview"
       className={cn(
-        "@container bg-background mt-6 flex min-h-96 w-full items-center justify-center rounded-xl border p-4 sm:p-10",
+        "@container bg-card ring-foreground/10 mt-6 flex min-h-96 w-full items-center justify-center rounded-xl p-4 ring-1 sm:p-10",
         className
       )}
     >

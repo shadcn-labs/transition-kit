@@ -19,7 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { LABS_LATEST, LABS_NAV_SECTIONS } from "@/constants/nav";
+import { LABS_NAV_SECTIONS } from "@/constants/nav";
 import type { LabsNavLink as LabsNavLinkItem } from "@/constants/nav";
 import { SITE, UTM_PARAMS } from "@/constants/site";
 import { useIconAnimation } from "@/hooks/use-icon-animation";
@@ -217,7 +217,7 @@ const LabsNavMobile = () => {
         sideOffset={14}
       >
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
-          <div className="flex flex-col gap-4">
+          {/* <div className="flex flex-col gap-4">
             <SectionTitle>Latest</SectionTitle>
             <LatestCard
               item={LABS_LATEST}
@@ -238,7 +238,7 @@ const LabsNavMobile = () => {
                 </a>
               )}
             </LatestCard>
-          </div>
+          </div> */}
           {LABS_NAV_SECTIONS.map((section) => (
             <div key={section.id} className="flex flex-col gap-4">
               <SectionTitle>{section.title}</SectionTitle>
@@ -312,15 +312,21 @@ const LabsNavDesktop = () => {
             >
               <div className="container-wrapper px-6">
                 <div className="flex gap-8 py-4 pl-3">
-                  <div className="flex w-64 flex-col gap-3">
+                  {/* <div className="flex w-64 flex-col gap-3">
                     <SectionTitle>Latest</SectionTitle>
-                    <LatestCard item={LABS_LATEST} nameClassName="min-h-15">
+                    <LatestCard
+                      item={LABS_LATEST}
+                      nameClassName="min-h-8 flex-1"
+                    >
                       {({ content, onMouseEnter, onMouseLeave }) => (
                         <NavigationMenuLink
                           href={addQueryParams(LABS_LATEST.href, UTM_PARAMS)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={cn(latestCardClassName, "w-60 gap-2 p-3")}
+                          className={cn(
+                            latestCardClassName,
+                            "w-60 flex-1 gap-2 p-3"
+                          )}
                           onMouseEnter={onMouseEnter}
                           onMouseLeave={onMouseLeave}
                         >
@@ -328,7 +334,7 @@ const LabsNavDesktop = () => {
                         </NavigationMenuLink>
                       )}
                     </LatestCard>
-                  </div>
+                  </div> */}
                   {LABS_NAV_SECTIONS.map((section) => (
                     <DesktopSection
                       key={section.id}
