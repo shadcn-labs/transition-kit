@@ -74,6 +74,7 @@ const measureOverflow = (page: Page) =>
   page.evaluate(() => {
     const root = document.documentElement;
     const viewportWidth = root.clientWidth;
+    const viewportHeight = root.clientHeight;
     const main = document.querySelector("main");
     const scrollsSidewaysBy = Math.max(0, root.scrollWidth - viewportWidth);
 
@@ -109,13 +110,16 @@ const measureOverflow = (page: Page) =>
       (main !== null && element.contains(main));
 
     /**
-     * Whether a box with this `position`, placed in `container`, overflows
-     * into the page rather than being held by a scroll or clip container, or
-     * being fixed to the viewport. Follows the containing block chain: an
-     * absolutely positioned box escapes clipping ancestors below its
-     * containing block.
+     * Where a box with this `position`, placed in `container`, overflows to:
+     * a scroll or clip container inside the page, which holds it; the page;
+     * or the viewport, when the box or a containing block on its chain is
+     * fixed. Follows the containing block chain: an absolutely positioned box
+     * escapes clipping ancestors below its containing block.
      */
-    const reachesPage = (container: Element | null, boxPosition: string) => {
+    const overflowsInto = (
+      container: Element | null,
+      boxPosition: string
+    ): "container" | "page" | "viewport" => {
       let position = boxPosition;
       for (let node = container; node; node = node.parentElement) {
         const style = getComputedStyle(node);
@@ -129,14 +133,38 @@ const measureOverflow = (page: Page) =>
           continue;
         }
         if (clips(style) && !isPageLevel(node)) {
-          return false;
+          return "container";
         }
         ({ position } = style);
       }
-      return position !== "fixed";
+      return position === "fixed" ? "viewport" : "page";
     };
 
     const isPastEdge = (rect: DOMRect) => rect.right - viewportWidth > 0.5;
+    const overlapsViewport = (rect: DOMRect) =>
+      viewportWidth - rect.left > 0.5 &&
+      viewportHeight - rect.top > 0.5 &&
+      rect.bottom > 0.5;
+    /**
+     * Whether a rect past the right edge is cut off there. The page scrolls
+     * vertically, so anything in it can be scrolled to. A box fixed to the
+     * viewport cannot: one parked wholly off-screen, like a closed drawer
+     * translated out of view, shows nothing, so it only counts while it
+     * overlaps the viewport.
+     */
+    const isCutOff = (
+      rect: DOMRect,
+      container: Element | null,
+      position: string
+    ) => {
+      if (!isPastEdge(rect)) {
+        return false;
+      }
+      const layer = overflowsInto(container, position);
+      return (
+        layer === "page" || (layer === "viewport" && overlapsViewport(rect))
+      );
+    };
     const isAncestorOrSelf = (elements: Set<Element>, element: Element) => {
       for (
         let node: Element | null = element;
@@ -152,10 +180,12 @@ const measureOverflow = (page: Page) =>
 
     // Element boxes past the edge.
     const boxes = new Set(
-      [...document.body.querySelectorAll("*")].filter(
-        (element) =>
-          isPastEdge(element.getBoundingClientRect()) &&
-          reachesPage(element.parentElement, getComputedStyle(element).position)
+      [...document.body.querySelectorAll("*")].filter((element) =>
+        isCutOff(
+          element.getBoundingClientRect(),
+          element.parentElement,
+          getComputedStyle(element).position
+        )
       )
     );
     // Report the outermost: it sets the width, its descendants follow it.
@@ -185,7 +215,7 @@ const measureOverflow = (page: Page) =>
       range.selectNodeContents(node);
       const rect = range.getBoundingClientRect();
       // Text is in flow, so its own element can clip it too.
-      if (isPastEdge(rect) && reachesPage(parent, "static")) {
+      if (isCutOff(rect, parent, "static")) {
         textParents.set(parent, rect.right);
       }
     }
@@ -237,7 +267,13 @@ test("no page is wider than the viewport", async ({ page }, testInfo) => {
   for (const path of paths) {
     await test.step(path, async () => {
       // Docs content is a lazily loaded chunk that renders after `load`.
-      await page.goto(path, { waitUntil: "networkidle" });
+      const response = await page.goto(path, { waitUntil: "networkidle" });
+      // goto resolves on error statuses too: report the page, don't measure it.
+      const status = response?.status();
+      expect.soft(status, `GET ${path}`).toBe(200);
+      if (status !== 200) {
+        return;
+      }
       await renderWholePage(page);
       expect
         .soft(
