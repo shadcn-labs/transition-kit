@@ -8,8 +8,10 @@ import { AccordionDemo } from "@/examples/ui/accordion-demo";
 import { AddToCartDemo } from "@/examples/ui/add-to-cart-demo";
 import { AnimatedListDemo } from "@/examples/ui/animated-list-demo";
 import { CarouselDemo } from "@/examples/ui/carousel-demo";
+import { CollapsibleSidebarDemo } from "@/examples/ui/collapsible-sidebar-demo";
 import { DynamicIslandDemo } from "@/examples/ui/dynamic-island-demo";
 import { ExpandableCardDemo } from "@/examples/ui/expandable-card-demo";
+import { ExpandingSearchDemo } from "@/examples/ui/expanding-search-demo";
 import { FilterGridDemo } from "@/examples/ui/filter-grid-demo";
 import { KanbanBoardDemo } from "@/examples/ui/kanban-board-demo";
 import { LayoutSwitcherDemo } from "@/examples/ui/layout-switcher-demo";
@@ -22,10 +24,12 @@ import { StackNavigatorDemo } from "@/examples/ui/stack-navigator-demo";
 import { StatusButtonDemo } from "@/examples/ui/status-button-demo";
 import { StepWizardDemo } from "@/examples/ui/step-wizard-demo";
 import { TabsDemo } from "@/examples/ui/tabs-demo";
+import { TextMorphDemo } from "@/examples/ui/text-morph-demo";
 import { ThemeModeSwitchDemo } from "@/examples/ui/theme-mode-switch-demo";
 import { ThemeMorphButtonDemo } from "@/examples/ui/theme-morph-button-demo";
 import { ThemeToggleButtonDemo } from "@/examples/ui/theme-toggle-button-demo";
 import { ThemeToggleSwitchDemo } from "@/examples/ui/theme-toggle-switch-demo";
+import { ToastStackDemo } from "@/examples/ui/toast-stack-demo";
 import { cn } from "@/lib/utils";
 import { getItem, items } from "@/registry/items";
 
@@ -75,6 +79,12 @@ const SECTIONS = {
       name: "product-gallery",
       wide: true,
     },
+    {
+      Demo: ToastStackDemo,
+      hint: "Show a few toasts",
+      name: "toast-stack",
+      wide: true,
+    },
   ],
   controls: [
     { Demo: TabsDemo, hint: "Pick a tab", name: "tabs" },
@@ -89,6 +99,7 @@ const SECTIONS = {
       name: "number-flip",
     },
     { Demo: StatusButtonDemo, hint: "Press the button", name: "status-button" },
+    { Demo: TextMorphDemo, hint: "Change the word", name: "text-morph" },
     {
       Demo: AddToCartDemo,
       hint: "Add a product to the cart",
@@ -106,6 +117,11 @@ const SECTIONS = {
       Demo: MorphingPopoverDemo,
       hint: "Open the popover",
       name: "morphing-popover",
+    },
+    {
+      Demo: ExpandingSearchDemo,
+      hint: "Open the search",
+      name: "expanding-search",
     },
     {
       Demo: ExpandableCardDemo,
@@ -127,6 +143,12 @@ const SECTIONS = {
     },
     { Demo: AccordionDemo, hint: "Open a section", name: "accordion" },
     { Demo: CarouselDemo, hint: "Use the arrows or dots", name: "carousel" },
+    {
+      Demo: CollapsibleSidebarDemo,
+      hint: "Collapse the sidebar",
+      name: "collapsible-sidebar",
+      wide: true,
+    },
   ],
   "theme-switches": [
     {
