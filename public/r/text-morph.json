@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-morph",
+  "title": "Text Morph",
+  "description": "Text that morphs between strings. Shared letters glide to their new spot while the rest blur in and out.",
+  "registryDependencies": [
+    "https://transition-kit.space/r/ui-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/ui/text-morph.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { addTransitionType, startTransition, ViewTransition } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { tk, useTransitionNames } from \"@/components/transitions/ui-transition\";\n\ninterface MorphChar {\n  key: string;\n  char: string;\n}\n\nconst segmenter =\n  typeof Intl !== \"undefined\" && \"Segmenter\" in Intl\n    ? new Intl.Segmenter(undefined, { granularity: \"grapheme\" })\n    : null;\n\nconst toChars = (text: string): MorphChar[] => {\n  const graphemes = segmenter\n    ? Array.from(segmenter.segment(text), (part) => part.segment)\n    : [...text];\n  const counts = new Map<string, number>();\n  return graphemes.map((char) => {\n    const count = counts.get(char) ?? 0;\n    counts.set(char, count + 1);\n    return { char, key: `${char}-${count}` };\n  });\n};\n\nconst TextMorph = ({\n  children,\n  className,\n  ...props\n}: Omit<React.ComponentProps<\"span\">, \"children\"> & { children: string }) => {\n  const names = useTransitionNames();\n  const [shown, setShown] = React.useState(children);\n  const morph = names(\"morph\");\n\n  React.useEffect(() => {\n    if (children === shown) {\n      return;\n    }\n    startTransition(() => {\n      addTransitionType(morph);\n      setShown(children);\n    });\n  }, [children, shown, morph]);\n\n  const glide = { [morph]: tk(\"tk-morph\", \"tk-text\"), default: \"none\" };\n  const presence = {\n    [morph]: tk(\"tk-morph\", \"tk-text\", \"tk-text-morph-char\"),\n    default: \"none\",\n  };\n\n  return (\n    <span\n      data-slot=\"text-morph\"\n      className={cn(\"inline-flex whitespace-pre\", className)}\n      {...props}\n    >\n      <span className=\"sr-only\">{children}</span>\n      <span aria-hidden className=\"inline-flex\">\n        {toChars(shown).map(({ char, key }) => (\n          <ViewTransition\n            key={key}\n            default=\"none\"\n            update={glide}\n            enter={presence}\n            exit={presence}\n          >\n            <span data-slot=\"text-morph-char\" className=\"inline-block\">\n              {char}\n            </span>\n          </ViewTransition>\n        ))}\n      </span>\n    </span>\n  );\n};\n\nexport { TextMorph };\n",
+      "type": "registry:component",
+      "target": "components/transitions/text-morph.tsx"
+    }
+  ],
+  "css": {
+    "::view-transition-old(.tk-text-morph-char):only-child": {
+      "animation": "var(--tk-ui-exit) var(--tk-ui-ease-out) both tk-text-morph-out"
+    },
+    "::view-transition-new(.tk-text-morph-char):only-child": {
+      "animation": "var(--tk-ui-move) var(--tk-ui-ease-out) calc(var(--tk-ui-exit) / 2) both tk-text-morph-in"
+    },
+    "@keyframes tk-text-morph-out": {
+      "to": {
+        "opacity": "0",
+        "filter": "blur(4px)",
+        "scale": "0.8"
+      }
+    },
+    "@keyframes tk-text-morph-in": {
+      "from": {
+        "opacity": "0",
+        "filter": "blur(4px)",
+        "scale": "0.8"
+      }
+    }
+  },
+  "categories": [
+    "ui"
+  ],
+  "type": "registry:component"
+}

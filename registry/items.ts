@@ -538,6 +538,50 @@ export const items: ItemSource[] = [
     name: "kanban-board",
     title: "Kanban Board",
   },
+  {
+    css: "registry/ui/text-morph.css",
+    description:
+      "Text that morphs between strings. Shared letters glide to their new spot while the rest blur in and out.",
+    files: ["registry/ui/text-morph.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "text-morph",
+    title: "Text Morph",
+  },
+  {
+    css: "registry/ui/toast-stack.css",
+    description:
+      "Toast notifications that rise into a stack, slide away when dismissed and close the gap behind them.",
+    files: ["registry/ui/toast-stack.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "toast-stack",
+    title: "Toast Stack",
+  },
+  {
+    css: "registry/ui/expanding-search.css",
+    description:
+      "A round search button that stretches into a search field and folds back when you're done.",
+    files: ["registry/ui/expanding-search.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "expanding-search",
+    title: "Expanding Search",
+  },
+  {
+    css: "registry/ui/collapsible-sidebar.css",
+    description:
+      "A sidebar that collapses to an icon rail. The surface resizes, labels fade and the active pill glides between items.",
+    files: ["registry/ui/collapsible-sidebar.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "collapsible-sidebar",
+    title: "Collapsible Sidebar",
+  },
 ];
 
 export const getItem = (name: string) =>

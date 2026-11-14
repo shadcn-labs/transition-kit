@@ -1,0 +1,34 @@
+/*
+ * Collapsible sidebar: a flat surface that resizes without stretching,
+ * with labels that fade out first and fade back in once there is room.
+ * Change the corner radius with `:root { --tk-ui-collapsible-sidebar-radius: 1rem; }`.
+ */
+::view-transition-image-pair(.tk-collapsible-sidebar-surface) {
+  --tk-ui-radius: var(--tk-ui-collapsible-sidebar-radius, 0.75rem);
+}
+::view-transition-old(.tk-collapsible-sidebar-surface),
+::view-transition-new(.tk-collapsible-sidebar-surface) {
+  block-size: 100%;
+}
+
+::view-transition-old(.tk-collapsible-sidebar-label):only-child {
+  animation: var(--tk-ui-exit) var(--tk-ui-ease-out) both
+    tk-collapsible-sidebar-label-out;
+}
+::view-transition-new(.tk-collapsible-sidebar-label):only-child {
+  animation: var(--tk-ui-enter) var(--tk-ui-ease-out)
+    calc(var(--tk-ui-move) * 0.6) both tk-collapsible-sidebar-label-in;
+}
+
+@keyframes tk-collapsible-sidebar-label-out {
+  to {
+    opacity: 0;
+    translate: -0.5rem 0;
+  }
+}
+@keyframes tk-collapsible-sidebar-label-in {
+  from {
+    opacity: 0;
+    translate: -0.5rem 0;
+  }
+}

@@ -1,0 +1,26 @@
+/*
+ * Text morph: letters shared by both words glide to their new spot,
+ * the rest blur in and out where they stand.
+ */
+::view-transition-old(.tk-text-morph-char):only-child {
+  animation: var(--tk-ui-exit) var(--tk-ui-ease-out) both tk-text-morph-out;
+}
+::view-transition-new(.tk-text-morph-char):only-child {
+  animation: var(--tk-ui-move) var(--tk-ui-ease-out) calc(var(--tk-ui-exit) / 2)
+    both tk-text-morph-in;
+}
+
+@keyframes tk-text-morph-out {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    scale: 0.8;
+  }
+}
+@keyframes tk-text-morph-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    scale: 0.8;
+  }
+}

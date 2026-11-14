@@ -1,0 +1,27 @@
+/*
+ * Toast stack: new toasts rise from below, dismissed ones slide away
+ * sideways while the rest glide to close the gap.
+ */
+::view-transition-new(.tk-toast-stack-enter):only-child {
+  animation: var(--tk-ui-move) var(--tk-ui-spring) both tk-toast-stack-in;
+}
+::view-transition-old(.tk-toast-stack-exit):only-child {
+  animation: var(--tk-ui-enter) var(--tk-ui-ease-out) both tk-toast-stack-out;
+}
+::view-transition-group(.tk-toast-stack-exit) {
+  z-index: 1;
+}
+
+@keyframes tk-toast-stack-in {
+  from {
+    opacity: 0;
+    translate: 0 100%;
+    scale: 0.96;
+  }
+}
+@keyframes tk-toast-stack-out {
+  to {
+    opacity: 0;
+    translate: 40% 0;
+  }
+}

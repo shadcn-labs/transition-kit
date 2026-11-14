@@ -1,0 +1,48 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast-stack",
+  "title": "Toast Stack",
+  "description": "Toast notifications that rise into a stack, slide away when dismissed and close the gap behind them.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://transition-kit.space/r/ui-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/ui/toast-stack.tsx",
+      "content": "\"use client\";\n\nimport { XIcon } from \"lucide-react\";\nimport * as React from \"react\";\nimport { startTransition, ViewTransition } from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { tk, useTransitionNames } from \"@/components/transitions/ui-transition\";\nimport type { TransitionNames } from \"@/components/transitions/ui-transition\";\n\ntype ToastId = number;\n\ninterface ToastOptions {\n  title: React.ReactNode;\n  description?: React.ReactNode;\n  action?: React.ReactNode;\n  /** Milliseconds before the toast dismisses itself. `Infinity` keeps it open. */\n  duration?: number;\n}\n\ninterface ToastData extends ToastOptions {\n  id: ToastId;\n}\n\ninterface ToastContextValue {\n  toasts: ToastData[];\n  toast: (options: ToastOptions) => ToastId;\n  dismiss: (id?: ToastId) => void;\n  names: TransitionNames;\n  duration: number;\n  paused: boolean;\n  setPaused: (paused: boolean) => void;\n}\n\nconst ToastContext = React.createContext<ToastContextValue | null>(null);\n\nconst useToastContext = () => {\n  const context = React.useContext(ToastContext);\n  if (!context) {\n    throw new Error(\n      \"useToast and ToastViewport must be used within <ToastProvider>.\"\n    );\n  }\n  return context;\n};\n\n/** Shows and dismisses toasts from anywhere inside a `<ToastProvider>`. */\nconst useToast = () => {\n  const { dismiss, toast, toasts } = useToastContext();\n  return { dismiss, toast, toasts };\n};\n\nconst ToastProvider = ({\n  limit = 3,\n  duration = 4000,\n  children,\n}: {\n  limit?: number;\n  duration?: number;\n  children?: React.ReactNode;\n}) => {\n  const [toasts, setToasts] = React.useState<ToastData[]>([]);\n  const [paused, setPaused] = React.useState(false);\n  const nextId = React.useRef(1);\n  const names = useTransitionNames();\n\n  const toast = React.useCallback(\n    (options: ToastOptions) => {\n      const id = nextId.current;\n      nextId.current += 1;\n      startTransition(() => {\n        setToasts((previous) =>\n          [...previous, { ...options, id }].slice(-limit)\n        );\n      });\n      return id;\n    },\n    [limit]\n  );\n\n  const dismiss = React.useCallback((id?: ToastId) => {\n    startTransition(() => {\n      setToasts((previous) => {\n        const next =\n          id === undefined ? [] : previous.filter((item) => item.id !== id);\n        return next.length === previous.length ? previous : next;\n      });\n    });\n  }, []);\n\n  const context = React.useMemo(\n    () => ({ dismiss, duration, names, paused, setPaused, toast, toasts }),\n    [dismiss, duration, names, paused, toast, toasts]\n  );\n\n  return (\n    <ToastContext.Provider value={context}>{children}</ToastContext.Provider>\n  );\n};\n\nconst ToastItem = ({ id, title, description, action, duration }: ToastData) => {\n  const { dismiss, duration: fallback, names, paused } = useToastContext();\n  const total = duration ?? fallback;\n  const remaining = React.useRef(total);\n\n  React.useEffect(() => {\n    if (paused || !Number.isFinite(remaining.current)) {\n      return;\n    }\n    const started = Date.now();\n    const timer = setTimeout(() => dismiss(id), remaining.current);\n    return () => {\n      clearTimeout(timer);\n      remaining.current -= Date.now() - started;\n    };\n  }, [paused, dismiss, id]);\n\n  return (\n    <ViewTransition\n      name={names(\"toast\", id)}\n      default=\"none\"\n      update={tk(\"tk-morph\")}\n      enter={tk(\"tk-toast-stack-enter\")}\n      exit={tk(\"tk-toast-stack-exit\")}\n    >\n      <li\n        data-slot=\"toast\"\n        className=\"bg-popover text-popover-foreground relative flex items-start gap-3 rounded-lg border p-4 pr-10 text-sm shadow-lg\"\n      >\n        <div className=\"grid min-w-0 flex-1 gap-0.5\">\n          <p data-slot=\"toast-title\" className=\"font-medium\">\n            {title}\n          </p>\n          {description ? (\n            <p data-slot=\"toast-description\" className=\"text-muted-foreground\">\n              {description}\n            </p>\n          ) : null}\n        </div>\n        {action}\n        <button\n          type=\"button\"\n          aria-label=\"Dismiss notification\"\n          data-slot=\"toast-close\"\n          onClick={() => dismiss(id)}\n          className=\"text-muted-foreground hover:text-foreground absolute top-3 right-3 inline-flex size-6 cursor-pointer items-center justify-center rounded-md transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 [&_svg]:size-4\"\n        >\n          <XIcon aria-hidden />\n        </button>\n      </li>\n    </ViewTransition>\n  );\n};\n\nconst ToastViewport = ({\n  className,\n  onPointerEnter,\n  onPointerLeave,\n  onFocus,\n  onBlur,\n  ...props\n}: React.ComponentProps<\"ol\">) => {\n  const { setPaused, toasts } = useToastContext();\n\n  return (\n    <section aria-label=\"Notifications\" data-slot=\"toast-viewport\">\n      <ol\n        aria-live=\"polite\"\n        data-slot=\"toast-list\"\n        onPointerEnter={(event) => {\n          onPointerEnter?.(event);\n          setPaused(true);\n        }}\n        onPointerLeave={(event) => {\n          onPointerLeave?.(event);\n          setPaused(false);\n        }}\n        onFocus={(event) => {\n          onFocus?.(event);\n          setPaused(true);\n        }}\n        onBlur={(event) => {\n          onBlur?.(event);\n          if (!event.currentTarget.contains(event.relatedTarget)) {\n            setPaused(false);\n          }\n        }}\n        className={cn(\"flex w-full max-w-sm flex-col gap-2\", className)}\n        {...props}\n      >\n        {toasts.map((item) => (\n          <ToastItem key={item.id} {...item} />\n        ))}\n      </ol>\n    </section>\n  );\n};\n\nexport { ToastProvider, ToastViewport, useToast };\nexport type { ToastId, ToastOptions };\n",
+      "type": "registry:component",
+      "target": "components/transitions/toast-stack.tsx"
+    }
+  ],
+  "css": {
+    "::view-transition-new(.tk-toast-stack-enter):only-child": {
+      "animation": "var(--tk-ui-move) var(--tk-ui-spring) both tk-toast-stack-in"
+    },
+    "::view-transition-old(.tk-toast-stack-exit):only-child": {
+      "animation": "var(--tk-ui-enter) var(--tk-ui-ease-out) both tk-toast-stack-out"
+    },
+    "::view-transition-group(.tk-toast-stack-exit)": {
+      "z-index": "1"
+    },
+    "@keyframes tk-toast-stack-in": {
+      "from": {
+        "opacity": "0",
+        "translate": "0 100%",
+        "scale": "0.96"
+      }
+    },
+    "@keyframes tk-toast-stack-out": {
+      "to": {
+        "opacity": "0",
+        "translate": "40% 0"
+      }
+    }
+  },
+  "categories": [
+    "ui"
+  ],
+  "type": "registry:component"
+}
