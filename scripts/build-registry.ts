@@ -242,15 +242,22 @@ const toRegistryItem = (item: ItemSource): RegistryItem => {
 
 const CATALOG_FILE = "components/component-catalog.tsx";
 
+/** Strips the parentheses, `as` and `satisfies` that leave a value unchanged at runtime. */
+const unwrap = (node: ts.Expression): ts.Expression =>
+  ts.isParenthesizedExpression(node) ||
+  ts.isAsExpression(node) ||
+  ts.isSatisfiesExpression(node)
+    ? unwrap(node.expression)
+    : node;
+
 /**
  * `name` of every entry in `SECTIONS`, the components index in CATALOG_FILE.
  * Parsed with the TypeScript compiler, so only real string literals count;
  * comments and other strings are ignored. Anything the check can't read
- * statically fails the build instead of being skipped.
+ * statically, such as a spread or computed key that could set an entry's
+ * `name`, fails the build instead of being skipped.
  */
 const catalogNames = (): string[] => {
-  const fail = (reason: string) =>
-    new Error(`build-registry: ${CATALOG_FILE}: ${reason}`);
   const source = ts.createSourceFile(
     CATALOG_FILE,
     readSource(CATALOG_FILE),
@@ -258,7 +265,48 @@ const catalogNames = (): string[] => {
     false,
     ts.ScriptKind.TSX
   );
-  let sections = source.statements
+  const fail = (reason: string, node?: ts.Node) => {
+    const at = node
+      ? `line ${source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1}: `
+      : "";
+    return new Error(`build-registry: ${CATALOG_FILE}: ${at}${reason}`);
+  };
+
+  const entryName = (element: ts.Expression) => {
+    const entry = unwrap(element);
+    if (!ts.isObjectLiteralExpression(entry)) {
+      throw fail("expected an entry with a string `name`", element);
+    }
+    const names = entry.properties.filter((property) => {
+      if (ts.isSpreadAssignment(property)) {
+        throw fail(
+          "spread in an entry, which could override its `name`",
+          property
+        );
+      }
+      if (ts.isComputedPropertyName(property.name)) {
+        throw fail("computed key in an entry, which could be `name`", property);
+      }
+      return (
+        (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)) &&
+        property.name.text === "name"
+      );
+    });
+    if (names.length > 1) {
+      throw fail("entry sets `name` more than once", names[1]);
+    }
+    const [property] = names;
+    const name =
+      property && ts.isPropertyAssignment(property)
+        ? unwrap(property.initializer)
+        : undefined;
+    if (!name || !ts.isStringLiteralLike(name)) {
+      throw fail("expected an entry with a string `name`", property ?? entry);
+    }
+    return name.text;
+  };
+
+  const initializer = source.statements
     .filter(ts.isVariableStatement)
     .flatMap((statement) => statement.declarationList.declarations)
     .find(
@@ -266,39 +314,19 @@ const catalogNames = (): string[] => {
         ts.isIdentifier(declaration.name) &&
         declaration.name.text === "SECTIONS"
     )?.initializer;
-  if (sections && ts.isSatisfiesExpression(sections)) {
-    sections = sections.expression;
-  }
+  const sections = initializer && unwrap(initializer);
   if (!sections || !ts.isObjectLiteralExpression(sections)) {
     throw fail("expected `const SECTIONS = { ... }`");
   }
 
   return sections.properties.flatMap((section) => {
-    if (
-      !ts.isPropertyAssignment(section) ||
-      !ts.isArrayLiteralExpression(section.initializer)
-    ) {
+    const entries = ts.isPropertyAssignment(section)
+      ? unwrap(section.initializer)
+      : undefined;
+    if (!entries || !ts.isArrayLiteralExpression(entries)) {
       throw fail("expected every SECTIONS value to be an array literal");
     }
-    return section.initializer.elements.map((entry) => {
-      const name = ts.isObjectLiteralExpression(entry)
-        ? entry.properties.find(
-            (property): property is ts.PropertyAssignment =>
-              ts.isPropertyAssignment(property) &&
-              ts.isIdentifier(property.name) &&
-              property.name.text === "name"
-          )?.initializer
-        : undefined;
-      if (!name || !ts.isStringLiteralLike(name)) {
-        const { line } = source.getLineAndCharacterOfPosition(
-          entry.getStart(source)
-        );
-        throw fail(
-          `line ${line + 1}: expected an entry with a string \`name\``
-        );
-      }
-      return name.text;
-    });
+    return entries.elements.map(entryName);
   });
 };
 
