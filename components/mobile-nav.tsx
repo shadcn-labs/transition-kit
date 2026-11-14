@@ -46,7 +46,7 @@ const MobileLink = ({
       {children}
       {NEW_DOCS_URLS.has(href) && (
         <span
-          className="ml-2 inline-block size-2 rounded-full bg-blue-500"
+          className="ml-2 inline-block size-2 rounded-full bg-foreground"
           title="New"
         />
       )}
