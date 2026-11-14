@@ -180,6 +180,7 @@ pnpm registry:build  # regenerate registry.json and public/r
 pnpm build           # registry + Vite build
 pnpm typecheck
 pnpm check           # lint and format (ultracite)
+pnpm test:e2e        # overflow check at 360, 768 and 1280px (after pnpm build)
 pnpm deploy          # build and deploy to Cloudflare Workers
 ```
 
