@@ -30,6 +30,7 @@ pnpm check / pnpm fix # ultracite (oxlint + oxfmt)
 | `registry/ui/<name>.tsx` / `.css`       | One UI component, plus optional component CSS shipped as the item's `css`.                                                                                                           |
 | `examples/<group>/*.tsx`                | Docs demos rendered by `<ComponentPreview>`; UI demos are `examples/ui/<slug>-demo.tsx`, exporting `<Slug>Demo`; `components/home-gallery.tsx` picks which ones the home page shows. |
 | `content/docs/components/<group>/*.mdx` | One docs page per item; list it in that folder's `meta.json`.                                                                                                                        |
+| `components/component-catalog.tsx`      | Components index (`/docs/components`). Its `SECTIONS` must list every `group: "ui", kind: "component"` item once; `pnpm registry:build` fails otherwise.                             |
 
 Items are named like their docs URLs: bare slugs for UI components and cores (`tabs`), `theme/<slug>` or `page/<slug>` for styles. They install as `@transition-kit/<name>`. Cores and components install to `components/transitions/`. `scripts/build-registry.ts` rewrites `@/registry/<group>/x` imports to `@/components/transitions/x` and turns imports into `registryDependencies`: the group core (unless the item sets `omitGroupCore`, e.g. the theme toggles, which live in `ui` but depend on the `theme` core) and any other item imported, plus shadcn primitives for `@/components/ui/<name>`.
 
