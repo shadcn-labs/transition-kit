@@ -11,6 +11,7 @@ pnpm build            # registry + production build
 pnpm deploy           # build + wrangler deploy
 pnpm typecheck
 pnpm check / pnpm fix # ultracite (oxlint + oxfmt)
+pnpm test:e2e         # Playwright: no page wider than 360/768/1280px; needs pnpm build
 ```
 
 ## Layout

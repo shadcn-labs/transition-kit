@@ -17,6 +17,7 @@
     "build": "pnpm registry:build && vite build",
     "preview": "vite preview",
     "deploy": "pnpm build && wrangler deploy",
+    "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "registry:build": "node scripts/build-registry.ts && shadcn build registry.json --output ./public/r",
     "postinstall": "fumadocs-mdx",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.26.0",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/vite": "^4.2.4",
     "@types/mdx": "^2.0.13",
     "@types/node": "^25.6.0",
