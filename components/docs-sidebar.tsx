@@ -66,7 +66,7 @@ const SidebarMenuItemLink = ({
         {isActive && <ActiveIndicator kind={kind} />}
         {children}
         {PAGES_NEW.has(href) && (
-          <span className="bg-brand/15 text-brand rounded-full px-1.5 text-[0.65rem] leading-4 font-medium">
+          <span className="bg-brand/15 text-brand-text rounded-full px-1.5 text-[0.65rem] leading-4 font-medium">
             new
           </span>
         )}

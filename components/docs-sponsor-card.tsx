@@ -30,7 +30,7 @@ export const DocsSponsorCard = ({ className }: { className?: string }) => (
           the next ones.
         </p>
       </div>
-      <span className="text-brand inline-flex items-center gap-1 text-[0.8rem] font-medium">
+      <span className="text-brand-text inline-flex items-center gap-1 text-[0.8rem] font-medium">
         Back the project
         <ArrowRightIcon
           aria-hidden="true"

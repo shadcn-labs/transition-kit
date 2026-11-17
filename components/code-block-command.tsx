@@ -85,6 +85,7 @@ export const CodeBlockCommand = ({
 
   return (
     <div
+      data-slot="code-block-command"
       className={cn("bezel text-code-foreground relative text-sm", className)}
     >
       <Tabs

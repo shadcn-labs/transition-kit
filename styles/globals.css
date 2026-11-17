@@ -57,6 +57,7 @@
   --color-brand-bright: var(--brand-bright);
   --color-brand-deep: var(--brand-deep);
   --color-brand-foreground: var(--brand-foreground);
+  --color-brand-text: var(--brand-text);
 }
 
 :root {
@@ -103,7 +104,8 @@
   --brand: #f06292;
   --brand-bright: #f78db3;
   --brand-deep: #ec407a;
-  --brand-foreground: #ffffff;
+  --brand-foreground: #111111;
+  --brand-text: #c2185b;
   --brand-glow: rgb(240 98 146 / 0.35);
 }
 
@@ -150,7 +152,8 @@
   --brand: #f06292;
   --brand-bright: #f78db3;
   --brand-deep: #ec407a;
-  --brand-foreground: #ffffff;
+  --brand-foreground: #111111;
+  --brand-text: #f06292;
   --brand-glow: rgb(240 98 146 / 0.5);
 }
 
@@ -289,9 +292,22 @@
     outline: none;
     position: relative;
 
-    & pre {
+    & > pre,
+    & > div > pre {
       @apply bezel-inner;
       background-color: var(--color-code) !important;
+    }
+
+    &:has(> pre [data-slot="code-block-command"]) {
+      border: 0;
+      background-color: transparent;
+      padding: 0;
+
+      & > pre {
+        border: 0;
+        box-shadow: none;
+        background-color: transparent !important;
+      }
     }
 
     &:has([data-rehype-pretty-code-title]) [data-slot="copy-button"] {
