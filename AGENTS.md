@@ -11,7 +11,10 @@ pnpm build            # registry + production build
 pnpm deploy           # build + wrangler deploy
 pnpm typecheck
 pnpm check / pnpm fix # ultracite (oxlint + oxfmt)
+pnpm test:e2e         # Playwright: no page wider than 360/768/1280px; needs pnpm build
 ```
+
+`pnpm test:e2e` needs Chromium: run `pnpm exec playwright install chromium` once first (`--with-deps` on Linux also installs its system libraries, as CI does).
 
 ## Layout
 

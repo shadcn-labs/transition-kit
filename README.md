@@ -180,8 +180,11 @@ pnpm registry:build  # regenerate registry.json and public/r
 pnpm build           # registry + Vite build
 pnpm typecheck
 pnpm check           # lint and format (ultracite)
+pnpm test:e2e        # overflow check at 360, 768 and 1280px (after pnpm build)
 pnpm deploy          # build and deploy to Cloudflare Workers
 ```
+
+Before the first `pnpm test:e2e`, download the browser it runs in with `pnpm exec playwright install chromium`. On Linux, use `pnpm exec playwright install --with-deps chromium` to also install the system libraries Chromium needs.
 
 The site is built with TanStack Start, Vite, and Fumadocs and deployed to Cloudflare Workers. Registry source lives in `registry/`; [AGENTS.md](./AGENTS.md) documents the architecture.
 
