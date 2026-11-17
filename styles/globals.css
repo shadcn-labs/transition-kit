@@ -94,7 +94,7 @@
   --sidebar-ring: #8f8d85;
   --surface: #fafaf7;
   --surface-foreground: var(--foreground);
-  --code: var(--surface);
+  --code: var(--card);
   --code-foreground: var(--surface-foreground);
   --code-highlight: #efeee9;
   --code-number: #8a8982;
@@ -141,7 +141,7 @@
   --sidebar-ring: #77756c;
   --surface: #1f1e1a;
   --surface-foreground: #a6a49b;
-  --code: var(--surface);
+  --code: var(--card);
   --code-foreground: var(--surface-foreground);
   --code-highlight: #2b2a24;
   --code-number: #8f8d85;
@@ -207,6 +207,20 @@
   @apply mx-auto w-full max-w-7xl border-x;
 }
 
+@utility bezel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background-color: color-mix(in oklab, var(--muted) 70%, var(--background));
+  padding: 4px;
+}
+
+@utility bezel-inner {
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-xl) - 4px);
+  background-color: var(--card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+
 @utility text-glow {
   text-shadow: 0 0 18px var(--brand-glow);
 }
@@ -268,32 +282,32 @@
   }
 
   [data-rehype-pretty-code-figure] {
-    background-color: var(--color-code);
+    @apply bezel -mx-1;
     color: var(--color-code-foreground);
-    border-radius: var(--radius-lg);
-    border-width: 0px;
-    border-color: var(--border);
     margin-top: calc(var(--spacing) * 6);
-    overflow: hidden;
     font-size: var(--text-sm);
     outline: none;
     position: relative;
-    @apply -mx-1 md:-mx-1;
+
+    & pre {
+      @apply bezel-inner;
+      background-color: var(--color-code) !important;
+    }
 
     &:has([data-rehype-pretty-code-title]) [data-slot="copy-button"] {
-      top: calc(var(--spacing) * 1.5) !important;
+      top: calc(var(--spacing) * 2) !important;
+      right: calc(var(--spacing) * 2) !important;
+      background-color: transparent;
     }
   }
 
   [data-rehype-pretty-code-title] {
-    border-bottom: color-mix(in oklab, var(--border) 30%, transparent);
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    padding-block: calc(var(--spacing) * 2.5);
-    padding-inline: calc(var(--spacing) * 4);
+    padding-block: calc(var(--spacing) * 1.5);
+    padding-inline: calc(var(--spacing) * 2.5);
+    padding-right: calc(var(--spacing) * 10);
     font-size: var(--text-sm);
     font-family: var(--font-mono);
-    color: var(--color-code-foreground);
+    color: var(--color-muted-foreground);
   }
 
   [data-line-numbers] {

@@ -48,12 +48,12 @@ export const CodeCollapsibleWrapper = ({
       </CollapsibleTrigger>
       <CollapsibleContent
         forceMount
-        className="relative mt-6 overflow-hidden data-[state=closed]:max-h-64 data-[state=closed]:[content-visibility:auto] [&>figure]:mt-0 [&>figure]:md:mx-0!"
+        className="relative mt-6 data-[state=closed]:[content-visibility:auto] data-[state=closed]:[&_pre]:max-h-56 data-[state=closed]:[&_pre]:overflow-hidden [&>figure]:mt-0 [&>figure]:md:mx-0!"
       >
         {children}
       </CollapsibleContent>
 
-      <div className="absolute inset-x-0 -bottom-2 flex h-20 items-center justify-center rounded-b-lg bg-linear-to-b from-code/70 to-code group-data-[state=open]/collapsible:hidden">
+      <div className="absolute inset-x-[5px] bottom-[5px] flex h-20 items-center justify-center rounded-b-[calc(var(--radius-xl)-5px)] bg-linear-to-b from-transparent to-code group-data-[state=open]/collapsible:hidden">
         <CollapsibleTrigger asChild>
           <Button variant="outline" size="sm">
             Expand

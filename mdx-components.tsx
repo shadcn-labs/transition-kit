@@ -143,7 +143,7 @@ export const mdxComponents = {
   }: React.ComponentProps<typeof TabsList>) => (
     <TabsList
       className={cn(
-        "justify-start gap-4 rounded-none bg-transparent px-0",
+        "bezel h-auto justify-start gap-0.5 rounded-[calc(var(--radius-xl)-2px)] p-[3px]",
         className
       )}
       {...props}
@@ -156,7 +156,7 @@ export const mdxComponents = {
     <TabsTrigger
       sound="tabSwitch"
       className={cn(
-        "text-muted-foreground data-[state=active]:text-foreground data-[state=active]:border-primary dark:data-[state=active]:border-primary hover:text-primary rounded-none border-0 border-b-2 border-transparent bg-transparent px-0 pb-3 text-base data-[state=active]:bg-transparent data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent",
+        "text-muted-foreground hover:text-foreground data-[state=active]:bg-card data-[state=active]:border-border data-[state=active]:text-foreground dark:data-[state=active]:bg-card dark:data-[state=active]:border-border dark:data-[state=active]:text-foreground h-8 flex-none rounded-lg border border-transparent px-3.5 text-sm data-[state=active]:shadow-sm",
         className
       )}
       {...props}
@@ -358,20 +358,22 @@ export const mdxComponents = {
     <strong className={cn("font-medium", className)} {...props} />
   ),
   table: ({ className, ...props }: React.ComponentProps<"table">) => (
-    <div className="my-6 no-scrollbar w-full overflow-y-auto rounded-xl border">
-      <table
-        className={cn(
-          "relative w-full overflow-hidden border-none text-sm [&_tbody_tr:last-child]:border-b-0",
-          className
-        )}
-        {...props}
-      />
+    <div className="bezel my-6 w-full">
+      <div className="bezel-inner no-scrollbar w-full overflow-x-auto">
+        <table
+          className={cn(
+            "relative w-full border-none text-sm [&_tbody_tr:last-child]:border-b-0",
+            className
+          )}
+          {...props}
+        />
+      </div>
     </div>
   ),
   td: ({ className, ...props }: React.ComponentProps<"td">) => (
     <td
       className={cn(
-        "px-4 py-2 text-left whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
+        "px-4 py-2.5 text-left whitespace-nowrap [[align=center]]:text-center [[align=right]]:text-right",
         className
       )}
       {...props}
@@ -380,7 +382,7 @@ export const mdxComponents = {
   th: ({ className, ...props }: React.ComponentProps<"th">) => (
     <th
       className={cn(
-        "px-4 py-2 text-left font-bold [[align=center]]:text-center [[align=right]]:text-right",
+        "text-muted-foreground px-4 py-2.5 text-left font-medium [[align=center]]:text-center [[align=right]]:text-right",
         className
       )}
       {...props}
