@@ -18,6 +18,8 @@ const ExpandingSearch = ({
   placeholder = "Search…",
   label = "Search",
   className,
+  ref,
+  onBlur,
   ...props
 }: Omit<
   React.ComponentProps<"div">,
@@ -43,14 +45,15 @@ const ExpandingSearch = ({
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const restoreFocus = React.useRef(false);
+  const wasOpen = React.useRef(open);
   const toggle = names("toggle");
 
   const setOpen = React.useCallback(
-    (next: boolean) => {
+    (next: boolean, { restore = true }: { restore?: boolean } = {}) => {
       if (next === open) {
         return;
       }
-      restoreFocus.current = true;
+      restoreFocus.current = restore;
       startTransition(() => {
         addTransitionType(toggle);
         setUncontrolledOpen(next);
@@ -66,14 +69,31 @@ const ExpandingSearch = ({
   };
 
   React.useLayoutEffect(() => {
-    if (!restoreFocus.current) {
+    if (wasOpen.current === open) {
       return;
     }
+    wasOpen.current = open;
+    const restore = restoreFocus.current;
     restoreFocus.current = false;
-    (open ? inputRef.current : triggerRef.current)?.focus({
-      preventScroll: true,
-    });
+    if (open) {
+      inputRef.current?.focus({ preventScroll: true });
+    } else if (restore) {
+      triggerRef.current?.focus({ preventScroll: true });
+    }
   }, [open]);
+
+  const setRootRef = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      rootRef.current = node;
+      if (typeof ref === "function") {
+        return ref(node);
+      }
+      if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref]
+  );
 
   const surface = {
     [toggle]: tk("tk-morph", "tk-clip", "tk-expanding-search-surface"),
@@ -96,7 +116,7 @@ const ExpandingSearch = ({
 
   return (
     <div
-      ref={rootRef}
+      ref={setRootRef}
       role={open ? "search" : undefined}
       data-slot="expanding-search"
       data-state={open ? "open" : "closed"}
@@ -105,6 +125,16 @@ const ExpandingSearch = ({
         open ? "w-64 gap-2 pr-1 pl-3" : "w-9",
         className
       )}
+      onBlur={(event) => {
+        onBlur?.(event);
+        if (
+          open &&
+          !value &&
+          !event.currentTarget.contains(event.relatedTarget)
+        ) {
+          setOpen(false, { restore: false });
+        }
+      }}
       {...props}
     >
       <ViewTransition default="none" update={surface}>
@@ -141,6 +171,9 @@ const ExpandingSearch = ({
             data-slot="expanding-search-input"
             onChange={(event) => setValue(event.target.value)}
             onKeyDown={(event) => {
+              if (event.nativeEvent.isComposing) {
+                return;
+              }
               if (event.key === "Enter") {
                 event.preventDefault();
                 onSubmit?.(value);
@@ -151,11 +184,6 @@ const ExpandingSearch = ({
                 } else {
                   setOpen(false);
                 }
-              }
-            }}
-            onBlur={(event) => {
-              if (!value && !rootRef.current?.contains(event.relatedTarget)) {
-                setOpen(false);
               }
             }}
             className="placeholder:text-muted-foreground relative min-w-0 flex-1 bg-transparent text-sm outline-none [&::-webkit-search-cancel-button]:hidden"

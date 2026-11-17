@@ -2,7 +2,7 @@
 
 import { XIcon } from "lucide-react";
 import * as React from "react";
-import { startTransition, ViewTransition } from "react";
+import { addTransitionType, startTransition, ViewTransition } from "react";
 
 import { cn } from "@/lib/utils";
 import { tk, useTransitionNames } from "@/registry/ui/ui-transition";
@@ -27,9 +27,11 @@ interface ToastContextValue {
   toast: (options: ToastOptions) => ToastId;
   dismiss: (id?: ToastId) => void;
   names: TransitionNames;
+  change: string;
   duration: number;
   paused: boolean;
-  setPaused: (paused: boolean) => void;
+  setHovered: (hovered: boolean) => void;
+  setFocused: (focused: boolean) => void;
 }
 
 const ToastContext = React.createContext<ToastContextValue | null>(null);
@@ -60,37 +62,59 @@ const ToastProvider = ({
   children?: React.ReactNode;
 }) => {
   const [toasts, setToasts] = React.useState<ToastData[]>([]);
-  const [paused, setPaused] = React.useState(false);
+  const [hovered, setHovered] = React.useState(false);
+  const [focused, setFocused] = React.useState(false);
   const nextId = React.useRef(1);
   const names = useTransitionNames();
+  const change = names("change");
+  const paused = hovered || focused;
+  const max = Number.isFinite(limit)
+    ? Math.max(0, Math.floor(limit))
+    : Infinity;
 
   const toast = React.useCallback(
     (options: ToastOptions) => {
       const id = nextId.current;
       nextId.current += 1;
       startTransition(() => {
-        setToasts((previous) =>
-          [...previous, { ...options, id }].slice(-limit)
-        );
+        addTransitionType(change);
+        setToasts((previous) => {
+          const next = [...previous, { ...options, id }];
+          return max === 0 ? [] : next.slice(-max);
+        });
       });
       return id;
     },
-    [limit]
+    [max, change]
   );
 
-  const dismiss = React.useCallback((id?: ToastId) => {
-    startTransition(() => {
-      setToasts((previous) => {
-        const next =
-          id === undefined ? [] : previous.filter((item) => item.id !== id);
-        return next.length === previous.length ? previous : next;
+  const dismiss = React.useCallback(
+    (id?: ToastId) => {
+      startTransition(() => {
+        addTransitionType(change);
+        setToasts((previous) => {
+          const next =
+            id === undefined ? [] : previous.filter((item) => item.id !== id);
+          return next.length === previous.length ? previous : next;
+        });
       });
-    });
-  }, []);
+    },
+    [change]
+  );
 
   const context = React.useMemo(
-    () => ({ dismiss, duration, names, paused, setPaused, toast, toasts }),
-    [dismiss, duration, names, paused, toast, toasts]
+    () => ({
+      change,
+      dismiss,
+      duration,
+      names,
+      paused,
+      setFocused,
+      setHovered,
+      toast,
+      toasts,
+    }),
+    [change, dismiss, duration, names, paused, toast, toasts]
   );
 
   return (
@@ -99,7 +123,13 @@ const ToastProvider = ({
 };
 
 const ToastItem = ({ id, title, description, action, duration }: ToastData) => {
-  const { dismiss, duration: fallback, names, paused } = useToastContext();
+  const {
+    change,
+    dismiss,
+    duration: fallback,
+    names,
+    paused,
+  } = useToastContext();
   const total = duration ?? fallback;
   const remaining = React.useRef(total);
 
@@ -119,9 +149,9 @@ const ToastItem = ({ id, title, description, action, duration }: ToastData) => {
     <ViewTransition
       name={names("toast", id)}
       default="none"
-      update={tk("tk-morph")}
-      enter={tk("tk-toast-stack-enter")}
-      exit={tk("tk-toast-stack-exit")}
+      update={{ [change]: tk("tk-morph"), default: "none" }}
+      enter={{ [change]: tk("tk-toast-stack-enter"), default: "none" }}
+      exit={{ [change]: tk("tk-toast-stack-exit"), default: "none" }}
     >
       <li
         data-slot="toast"
@@ -160,7 +190,7 @@ const ToastViewport = ({
   onBlur,
   ...props
 }: React.ComponentProps<"ol">) => {
-  const { setPaused, toasts } = useToastContext();
+  const { setFocused, setHovered, toasts } = useToastContext();
 
   return (
     <section aria-label="Notifications" data-slot="toast-viewport">
@@ -169,20 +199,20 @@ const ToastViewport = ({
         data-slot="toast-list"
         onPointerEnter={(event) => {
           onPointerEnter?.(event);
-          setPaused(true);
+          setHovered(true);
         }}
         onPointerLeave={(event) => {
           onPointerLeave?.(event);
-          setPaused(false);
+          setHovered(false);
         }}
         onFocus={(event) => {
           onFocus?.(event);
-          setPaused(true);
+          setFocused(true);
         }}
         onBlur={(event) => {
           onBlur?.(event);
           if (!event.currentTarget.contains(event.relatedTarget)) {
-            setPaused(false);
+            setFocused(false);
           }
         }}
         className={cn("flex w-full max-w-sm flex-col gap-2", className)}

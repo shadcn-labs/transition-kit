@@ -16,6 +16,8 @@ const segmenter =
     ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
     : null;
 
+const rtl = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/u;
+
 const toChars = (text: string): MorphChar[] => {
   const graphemes = segmenter
     ? Array.from(segmenter.segment(text), (part) => part.segment)
@@ -52,6 +54,26 @@ const TextMorph = ({
     [morph]: tk("tk-morph", "tk-text", "tk-text-morph-char"),
     default: "none",
   };
+
+  if (rtl.test(shown) || rtl.test(children)) {
+    return (
+      <ViewTransition
+        default="none"
+        update={{
+          [morph]: tk("tk-morph", "tk-text", "tk-blur"),
+          default: "none",
+        }}
+      >
+        <span
+          data-slot="text-morph"
+          className={cn("inline-block whitespace-pre", className)}
+          {...props}
+        >
+          {shown}
+        </span>
+      </ViewTransition>
+    );
+  }
 
   return (
     <span
