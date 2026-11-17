@@ -1,0 +1,11 @@
+/*
+ * Expanding search: the round button's surface stretches into the field.
+ * Change the corner radius with `:root { --tk-ui-expanding-search-radius: 0.5rem; }`.
+ */
+::view-transition-image-pair(.tk-expanding-search-surface) {
+  --tk-ui-radius: var(--tk-ui-expanding-search-radius, 9999px);
+}
+::view-transition-old(.tk-expanding-search-surface),
+::view-transition-new(.tk-expanding-search-surface) {
+  block-size: 100%;
+}

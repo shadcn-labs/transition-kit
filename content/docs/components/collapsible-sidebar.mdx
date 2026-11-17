@@ -1,0 +1,109 @@
+---
+title: "Collapsible Sidebar"
+seoTitle: "Collapsible Sidebar Component for React and shadcn/ui"
+description: "A sidebar that collapses to an icon rail: the surface resizes, labels fade and the active pill glides between items. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+import { CollapsibleSidebarDemo } from "@/examples/ui/collapsible-sidebar-demo";
+
+<ComponentPreview
+  name="collapsible-sidebar"
+  src="examples/ui/collapsible-sidebar-demo.tsx"
+>
+  <CollapsibleSidebarDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="collapsible-sidebar" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/collapsible-sidebar.tsx"
+  title="components/transitions/collapsible-sidebar.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/collapsible-sidebar.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  CollapsibleSidebar,
+  CollapsibleSidebarInset,
+  CollapsibleSidebarItem,
+  CollapsibleSidebarProvider,
+  CollapsibleSidebarTrigger,
+} from "@/components/transitions/collapsible-sidebar";
+```
+
+```tsx
+<CollapsibleSidebarProvider defaultValue="home">
+  <CollapsibleSidebar aria-label="Main">
+    <CollapsibleSidebarTrigger />
+    <CollapsibleSidebarItem value="home" icon={<HouseIcon />}>
+      Home
+    </CollapsibleSidebarItem>
+    <CollapsibleSidebarItem value="inbox" icon={<InboxIcon />}>
+      Inbox
+    </CollapsibleSidebarItem>
+  </CollapsibleSidebar>
+  <CollapsibleSidebarInset>{/* page content */}</CollapsibleSidebarInset>
+</CollapsibleSidebarProvider>
+```
+
+`useCollapsibleSidebar()` returns `{ collapsed, setCollapsed, value, select }` inside the provider.
+
+## API Reference
+
+### CollapsibleSidebarProvider
+
+| Prop                | Type                           | Default | Description                                   |
+| ------------------- | ------------------------------ | ------- | --------------------------------------------- |
+| `collapsed`         | `boolean`                      | -       | Controlled collapsed state.                   |
+| `defaultCollapsed`  | `boolean`                      | `false` | Initial collapsed state when uncontrolled.    |
+| `onCollapsedChange` | `(collapsed: boolean) => void` | -       | Called when the sidebar collapses or expands. |
+| `value`             | `string`                       | -       | Controlled active item.                       |
+| `defaultValue`      | `string`                       | `""`    | Initial active item when uncontrolled.        |
+| `onValueChange`     | `(value: string) => void`      | -       | Called when another item is chosen.           |
+
+### CollapsibleSidebarItem
+
+| Prop    | Type        | Default | Description           |
+| ------- | ----------- | ------- | --------------------- |
+| `value` | `string`    | -       | Identifies the item.  |
+| `icon`  | `ReactNode` | -       | Shown in both states. |
+
+Change the corner radius with `:root { --tk-ui-collapsible-sidebar-radius: 1rem; }`.

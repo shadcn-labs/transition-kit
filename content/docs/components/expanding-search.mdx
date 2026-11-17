@@ -1,0 +1,91 @@
+---
+title: "Expanding Search"
+seoTitle: "Expanding Search Bar Component for React and shadcn/ui"
+description: "A round search button that stretches into a search field and folds back when you're done. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+import { ExpandingSearchDemo } from "@/examples/ui/expanding-search-demo";
+
+<ComponentPreview
+  name="expanding-search"
+  src="examples/ui/expanding-search-demo.tsx"
+>
+  <ExpandingSearchDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="expanding-search" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/expanding-search.tsx"
+  title="components/transitions/expanding-search.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/expanding-search.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { ExpandingSearch } from "@/components/transitions/expanding-search";
+```
+
+```tsx
+<ExpandingSearch
+  placeholder="Search docs…"
+  onSubmit={(query) => router.navigate({ to: "/search", search: { query } })}
+/>
+```
+
+The field takes focus when it opens. <kbd>Escape</kbd> clears the query, then closes the field; leaving an empty field closes it too.
+
+## API Reference
+
+### ExpandingSearch
+
+| Prop            | Type                      | Default     | Description                              |
+| --------------- | ------------------------- | ----------- | ---------------------------------------- |
+| `value`         | `string`                  | -           | Controlled query.                        |
+| `defaultValue`  | `string`                  | `""`        | Initial query when uncontrolled.         |
+| `onValueChange` | `(value: string) => void` | -           | Called as the query changes.             |
+| `open`          | `boolean`                 | -           | Controlled open state.                   |
+| `defaultOpen`   | `boolean`                 | `false`     | Initial open state when uncontrolled.    |
+| `onOpenChange`  | `(open: boolean) => void` | -           | Called when the field opens or closes.   |
+| `onSubmit`      | `(value: string) => void` | -           | Called when the user presses Enter.      |
+| `placeholder`   | `string`                  | `"Search…"` | Input placeholder.                       |
+| `label`         | `string`                  | `"Search"`  | Accessible name of the button and input. |
+
+Change the corner radius with `:root { --tk-ui-expanding-search-radius: 0.5rem; }`.

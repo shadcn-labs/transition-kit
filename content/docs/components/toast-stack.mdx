@@ -1,0 +1,105 @@
+---
+title: "Toast Stack"
+seoTitle: "Animated Toast Notifications for React and shadcn/ui"
+description: "Toast notifications that rise into a stack, slide away when dismissed and close the gap behind them. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+import { ToastStackDemo } from "@/examples/ui/toast-stack-demo";
+
+<ComponentPreview name="toast-stack" src="examples/ui/toast-stack-demo.tsx">
+  <ToastStackDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="toast-stack" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/toast-stack.tsx"
+  title="components/transitions/toast-stack.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css + registry/ui/toast-stack.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  ToastProvider,
+  ToastViewport,
+  useToast,
+} from "@/components/transitions/toast-stack";
+```
+
+```tsx
+<ToastProvider>
+  <App />
+  <ToastViewport className="fixed right-4 bottom-4 z-50" />
+</ToastProvider>
+```
+
+```tsx
+const { toast, dismiss } = useToast();
+
+const id = toast({
+  title: "Deploy finished",
+  description: "Production is live at v2.14.0.",
+});
+dismiss(id); // one toast
+dismiss(); // all toasts
+```
+
+Toasts dismiss themselves after `duration`. Hovering or focusing the stack pauses the timers.
+
+## API Reference
+
+### ToastProvider
+
+| Prop       | Type     | Default | Description                                           |
+| ---------- | -------- | ------- | ----------------------------------------------------- |
+| `limit`    | `number` | `3`     | Most toasts on screen. The oldest leaves first.       |
+| `duration` | `number` | `4000`  | Default milliseconds before a toast dismisses itself. |
+
+### toast(options)
+
+| Option        | Type        | Default    | Description                                    |
+| ------------- | ----------- | ---------- | ---------------------------------------------- |
+| `title`       | `ReactNode` | -          | Toast heading.                                 |
+| `description` | `ReactNode` | -          | Secondary text.                                |
+| `action`      | `ReactNode` | -          | An extra control, e.g. an Undo button.         |
+| `duration`    | `number`    | provider's | Milliseconds before closing. `Infinity` stays. |
+
+Returns the toast's `id`.

@@ -6,7 +6,9 @@
     "add-to-cart",
     "animated-list",
     "carousel",
+    "collapsible-sidebar",
     "dynamic-island",
+    "expanding-search",
     "expandable-card",
     "filter-grid",
     "kanban-board",
@@ -20,10 +22,12 @@
     "status-button",
     "step-wizard",
     "tabs",
+    "text-morph",
     "theme-mode-switch",
     "theme-morph-button",
     "theme-toggle-button",
     "theme-toggle-switch",
+    "toast-stack",
     "theme-transition",
     "page-transition"
   ]

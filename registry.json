@@ -2683,6 +2683,171 @@
       "categories": [
         "ui"
       ]
+    },
+    {
+      "name": "text-morph",
+      "type": "registry:component",
+      "title": "Text Morph",
+      "description": "Text that morphs between strings. Shared letters glide to their new spot while the rest blur in and out.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/text-morph.tsx",
+          "target": "components/transitions/text-morph.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-old(.tk-text-morph-char):only-child": {
+          "animation": "var(--tk-ui-exit) var(--tk-ui-ease-out) both tk-text-morph-out"
+        },
+        "::view-transition-new(.tk-text-morph-char):only-child": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-ease-out) calc(var(--tk-ui-exit) / 2) both tk-text-morph-in"
+        },
+        "@keyframes tk-text-morph-out": {
+          "to": {
+            "opacity": "0",
+            "filter": "blur(4px)",
+            "scale": "0.8"
+          }
+        },
+        "@keyframes tk-text-morph-in": {
+          "from": {
+            "opacity": "0",
+            "filter": "blur(4px)",
+            "scale": "0.8"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "toast-stack",
+      "type": "registry:component",
+      "title": "Toast Stack",
+      "description": "Toast notifications that rise into a stack, slide away when dismissed and close the gap behind them.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/toast-stack.tsx",
+          "target": "components/transitions/toast-stack.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-new(.tk-toast-stack-enter):only-child": {
+          "animation": "var(--tk-ui-move) var(--tk-ui-spring) both tk-toast-stack-in"
+        },
+        "::view-transition-old(.tk-toast-stack-exit):only-child": {
+          "animation": "var(--tk-ui-enter) var(--tk-ui-ease-out) both tk-toast-stack-out"
+        },
+        "::view-transition-group(.tk-toast-stack-exit)": {
+          "z-index": "1"
+        },
+        "@keyframes tk-toast-stack-in": {
+          "from": {
+            "opacity": "0",
+            "translate": "0 100%",
+            "scale": "0.96"
+          }
+        },
+        "@keyframes tk-toast-stack-out": {
+          "to": {
+            "opacity": "0",
+            "translate": "40% 0"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "expanding-search",
+      "type": "registry:component",
+      "title": "Expanding Search",
+      "description": "A round search button that stretches into a search field and folds back when you're done.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/expanding-search.tsx",
+          "target": "components/transitions/expanding-search.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-expanding-search-surface)": {
+          "--tk-ui-radius": "var(--tk-ui-expanding-search-radius, 9999px)"
+        },
+        "::view-transition-old(.tk-expanding-search-surface), ::view-transition-new(.tk-expanding-search-surface)": {
+          "block-size": "100%"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "collapsible-sidebar",
+      "type": "registry:component",
+      "title": "Collapsible Sidebar",
+      "description": "A sidebar that collapses to an icon rail. The surface resizes, labels fade and the active pill glides between items.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/collapsible-sidebar.tsx",
+          "target": "components/transitions/collapsible-sidebar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-image-pair(.tk-collapsible-sidebar-surface)": {
+          "--tk-ui-radius": "var(--tk-ui-collapsible-sidebar-radius, 0.75rem)"
+        },
+        "::view-transition-old(.tk-collapsible-sidebar-surface), ::view-transition-new(.tk-collapsible-sidebar-surface)": {
+          "block-size": "100%"
+        },
+        "::view-transition-old(.tk-collapsible-sidebar-label):only-child": {
+          "animation": "var(--tk-ui-exit) var(--tk-ui-ease-out) both tk-collapsible-sidebar-label-out"
+        },
+        "::view-transition-new(.tk-collapsible-sidebar-label):only-child": {
+          "animation": "var(--tk-ui-enter) var(--tk-ui-ease-out) calc(var(--tk-ui-move) * 0.6) both tk-collapsible-sidebar-label-in"
+        },
+        "@keyframes tk-collapsible-sidebar-label-out": {
+          "to": {
+            "opacity": "0",
+            "translate": "-0.5rem 0"
+          }
+        },
+        "@keyframes tk-collapsible-sidebar-label-in": {
+          "from": {
+            "opacity": "0",
+            "translate": "-0.5rem 0"
+          }
+        }
+      },
+      "categories": [
+        "ui"
+      ]
     }
   ],
   "name": "transition-kit"
