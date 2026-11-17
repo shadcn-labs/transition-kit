@@ -42,7 +42,7 @@ export const ItemCard = ({
   <article
     data-slot="item-card"
     className={cn(
-      "bg-card ring-foreground/10 has-[[data-slot=item-card-link]:hover]:ring-foreground/20 flex min-w-0 flex-col overflow-hidden rounded-xl ring-1 transition-shadow duration-150",
+      "bezel has-[[data-slot=item-card-link]:hover]:border-foreground/20 flex min-w-0 flex-col transition-colors duration-150",
       className
     )}
     {...(video && {
@@ -58,7 +58,7 @@ export const ItemCard = ({
         tabIndex={-1}
         aria-hidden
         data-slot="item-card-link"
-        className="bg-muted border-foreground/10 aspect-video overflow-hidden border-b"
+        className="bezel-inner bg-muted aspect-video overflow-hidden"
       >
         <video
           src={`${video}#t=0.1`}
@@ -70,17 +70,21 @@ export const ItemCard = ({
         />
       </Link>
     )}
-    {preview}
+    {preview && (
+      <div className="bezel-inner flex flex-1 flex-col overflow-hidden">
+        {preview}
+      </div>
+    )}
     <div
       className={cn(
-        "has-[[data-slot=item-card-link]:hover]:bg-muted/40 mt-auto transition-colors duration-150",
-        !video && "border-foreground/10 border-t"
+        "mt-auto rounded-[calc(var(--radius-xl)-4px)] transition-colors duration-150 has-[[data-slot=item-card-link]:hover]:bg-background/60",
+        !video && !preview && "bezel-inner"
       )}
     >
       <Link
         {...docsLink(item.name)}
         data-slot="item-card-link"
-        className="group/link focus-visible:ring-ring/50 flex items-center justify-between gap-4 p-4 outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+        className="group/link focus-visible:ring-ring/50 flex items-center justify-between gap-4 rounded-[inherit] px-3 py-3 outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
       >
         <span className="flex min-w-0 flex-col gap-1">
           <span className="text-foreground flex items-center gap-2 text-sm font-medium">
