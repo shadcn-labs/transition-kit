@@ -135,7 +135,6 @@ const DockItem = ({
 }: Omit<React.ComponentProps<"button">, "value" | "children"> & {
   value: string;
   icon: React.ReactNode;
-  /** Shown beside the icon while the item is active, and as its name. */
   label: string;
 }) => {
   const context = useDock();

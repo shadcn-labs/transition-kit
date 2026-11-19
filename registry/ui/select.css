@@ -1,9 +1,3 @@
-/*
- * Select: the trigger's surface grows into the listbox and folds back.
- * The corner radius matches `rounded-lg`; if you change it on the trigger and
- * listbox, set `:root { --tk-ui-select-radius: 0.75rem; }` to match.
- */
-
 ::view-transition-group(.tk-select-surface) {
   border-radius: var(--tk-ui-select-radius, var(--radius));
   background: var(--popover);

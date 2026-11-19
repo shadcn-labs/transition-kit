@@ -34,7 +34,6 @@ const Select = ({
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   placeholder?: string;
-  /** Submits the selected value with this field name in a surrounding form. */
   name?: string;
   form?: string;
   disabled?: boolean;

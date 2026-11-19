@@ -20,7 +20,6 @@ const range = (from: number, to: number) =>
     (_, index) => from + index
   );
 
-/** Keeps the item count constant, so pages slide through a fixed window. */
 const pageItems = (
   page: number,
   total: number,
@@ -71,9 +70,7 @@ const Pagination = ({
   page?: number;
   defaultPage?: number;
   onPageChange?: (page: number) => void;
-  /** Pages shown on each side of the current one. */
   siblings?: number;
-  /** Pages always shown at the start and end. */
   boundaries?: number;
   size?: Size;
   disabled?: boolean;

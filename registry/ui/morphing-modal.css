@@ -1,9 +1,3 @@
-/*
- * Morphing Modal: the panel resizes between views while the views slide.
- * The corner radius matches `rounded-2xl`; if you change it on the panel,
- * set `:root { --tk-ui-morphing-modal-radius: 1rem; }` to match.
- */
-
 ::view-transition-group(.tk-morphing-modal-panel) {
   border-radius: var(--tk-ui-morphing-modal-radius, calc(var(--radius) + 8px));
   background: var(--popover);
@@ -15,7 +9,6 @@
   border-radius: inherit;
 }
 
-/* Snapshots keep their size, pinned to the top, while the box resizes behind them. */
 ::view-transition-old(.tk-morphing-modal-panel),
 ::view-transition-new(.tk-morphing-modal-panel) {
   inline-size: 100%;

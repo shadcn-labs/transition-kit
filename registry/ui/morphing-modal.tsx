@@ -23,7 +23,6 @@ const useMorphingModalContext = () => {
   return context;
 };
 
-/** Reads and animates the open state from inside a `<MorphingModal>`. */
 const useMorphingModal = () => {
   const { open, setOpen } = useMorphingModalContext();
   return { open, setOpen };
@@ -184,11 +183,6 @@ const MorphingModalContent = ({
   );
 };
 
-/**
- * One view of the modal. Give each view its own `id`: changing it inside a
- * transition marked `FORWARD` or `BACK` slides the views that way while the
- * panel resizes to fit.
- */
 const MorphingModalView = ({
   id,
   className,

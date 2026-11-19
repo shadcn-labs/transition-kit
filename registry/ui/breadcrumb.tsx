@@ -34,9 +34,7 @@ const Breadcrumb = ({
   ...props
 }: React.ComponentProps<"nav"> & {
   items: BreadcrumbItem[];
-  /** Called with the crumb's id and index, inside a transition marked `BACK`. */
   onNavigate?: (id: string, index: number) => void;
-  /** Longer paths keep the first crumb and the last `maxItems - 1`. */
   maxItems?: number;
   separator?: React.ReactNode;
 }) => {

@@ -10,7 +10,6 @@ type Size = "sm" | "md" | "lg";
 interface AvatarGroupItem {
   name: string;
   src?: string;
-  /** Shown when there is no `src` or it fails to load. Defaults to initials. */
   fallback?: string;
 }
 
@@ -92,7 +91,6 @@ const AvatarGroup = ({
   ...props
 }: React.ComponentProps<"div"> & {
   items: AvatarGroupItem[];
-  /** Avatars shown while collapsed; the rest sit behind the +N button. */
   max?: number;
   size?: Size;
   expanded?: boolean;
