@@ -21,4 +21,19 @@
   ],
   "preview_urls": true,
   "previews": {},
+  "env": {
+    "preview": {
+      "name": "transitionkit-preview",
+      "routes": [],
+      "workers_dev": true,
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "transitionkit-preview",
+          "database_id": "5a3b0d97-d051-4ac6-b41e-92747d326150",
+          "migrations_dir": "drizzle",
+        },
+      ],
+    },
+  },
 }
