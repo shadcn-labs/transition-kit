@@ -4,6 +4,7 @@ import { LegalPage, LegalSection } from "@/components/legal-page";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { LINK } from "@/constants/links";
 import { ROUTES } from "@/constants/routes";
+import { SITE } from "@/constants/site";
 import { createPageMetadata } from "@/seo/metadata";
 
 const metadata = createPageMetadata({
@@ -22,7 +23,7 @@ const RefundsPage = () => (
     updated="Nov 19, 2026"
     intro={
       <p>
-        transition-kit Pro is sold by Shadcn Labs, with Dodo Payments as
+        transition-kit Pro is sold by {SITE.AUTHOR.NAME}, with Dodo Payments as
         merchant of record. Because Pro gives you source code you keep, refunds
         depend on whether you&apos;ve installed it yet.
       </p>

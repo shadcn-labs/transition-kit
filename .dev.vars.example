@@ -2,7 +2,7 @@ BETTER_AUTH_URL=http://localhost:3000
 BETTER_AUTH_SECRET=
 
 RESEND_API_KEY=
-EMAIL_FROM="transition-kit <hello@shadcn-labs.com>"
+EMAIL_FROM="transition-kit <support@transition-kit.space>"
 
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=

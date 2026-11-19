@@ -19,7 +19,7 @@ const TermsPage = () => (
     updated="Nov 19, 2026"
     intro={
       <p>
-        {SITE.NAME} is operated by Shadcn Labs (&ldquo;we&rdquo;,
+        {SITE.NAME} is operated by {SITE.AUTHOR.NAME} (&ldquo;we&rdquo;,
         &ldquo;us&rdquo;). By using this website, the {SITE.NAME} registry, or
         transition-kit Pro, you agree to these terms. If you don&apos;t agree,
         please don&apos;t use them.

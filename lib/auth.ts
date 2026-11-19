@@ -43,9 +43,9 @@ const sendSignInCode = async (email: string, otp: string) => {
   const response = await fetch("https://api.resend.com/emails", {
     body: JSON.stringify({
       from: process.env.EMAIL_FROM,
-      html: `<div style="background:#f5f4ef;padding:32px;font-family:Arial,sans-serif;color:#18181b"><div style="border:1px solid #18181b;padding:32px;max-width:460px;margin:auto"><p>SHADCN LABS / TRANSITION-KIT</p><h1>Your sign-in code</h1><p style="background:#f06292;padding:20px;font-size:36px;letter-spacing:8px">${otp}</p><p>This code expires in 10 minutes. If you did not request it, you can safely ignore this email.</p></div></div>`,
+      html: `<div style="background:#f5f4ef;padding:32px;font-family:Arial,sans-serif;color:#18181b"><div style="border:1px solid #18181b;padding:32px;max-width:460px;margin:auto"><p>TRANSITION-KIT</p><h1>Your sign-in code</h1><p style="background:#f06292;padding:20px;font-size:36px;letter-spacing:8px">${otp}</p><p>This code expires in 10 minutes. If you did not request it, you can safely ignore this email.</p></div></div>`,
       subject: `${otp} is your transition-kit sign-in code`,
-      text: `Your transition-kit sign-in code is ${otp}. It expires in 10 minutes. If you did not request this code, ignore this email.\n\ntransition-kit by Shadcn Labs`,
+      text: `Your transition-kit sign-in code is ${otp}. It expires in 10 minutes. If you did not request this code, ignore this email.\n\ntransition-kit by Abdullah Mukadam`,
       to: [email],
     }),
     headers: {

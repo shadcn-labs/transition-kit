@@ -12,10 +12,10 @@ const sameName = (a, b) =>
 const SITE_URL = "https://transition-kit.space";
 const BRAND = {
   description:
-    "transition-kit by Shadcn Labs: animated React components built on View Transitions. transition-kit Pro unlocks every Pro component's source.",
+    "transition-kit by Abdullah Mukadam: animated React components built on View Transitions. transition-kit Pro unlocks every Pro component's source.",
   name: "transition-kit",
   statement_descriptor: "TRANSITIONKIT",
-  support_email: "hello@shadcn-labs.com",
+  support_email: "support@transition-kit.space",
   url: SITE_URL,
 };
 const SUMMARY =
@@ -192,8 +192,9 @@ const resolveApiKey = (live, credentialFiles) => {
 
 const ensureBrand = async (dodo) => {
   const { items: brands } = await dodo.brands.list();
+  const sameUrl = (url) => url?.replace(/\/+$/u, "") === SITE_URL;
   const matches = brands.filter(
-    (brand) => sameName(brand.name, BRAND.name) && brand.url === SITE_URL
+    (brand) => sameName(brand.name, BRAND.name) && sameUrl(brand.url)
   );
   if (matches.length > 1) {
     throw new SetupError(
@@ -209,12 +210,6 @@ const ensureBrand = async (dodo) => {
     );
   }
   const brand = matches[0] ?? (await dodo.brands.create(BRAND));
-  if (matches[0] && brand.description !== BRAND.description) {
-    await dodo.brands.update(brand.brand_id, {
-      description: BRAND.description,
-    });
-    log("transition-kit brand description updated.");
-  }
   log(
     `transition-kit brand ${matches.length ? "reused" : "created"}; enabled=${brand.enabled}; verification=${brand.verification_status}.`
   );
