@@ -3,7 +3,7 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { parseEnv } from "node:util";
 
-const REPO = "shadcn-labs/transition-kit-pro";
+const REPO = "AbdullahMukadam/transition-kit-pro";
 const root = path.join(import.meta.dirname, "..");
 const proDir = path.join(root, "registry", "pro");
 const indexFile = path.join(proDir, "__index__.tsx");

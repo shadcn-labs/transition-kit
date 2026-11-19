@@ -64,7 +64,7 @@ export const getProRegistryItem = async (
   const readPrivateFile = async (path: string) => {
     const encodedPath = path.split("/").map(encodeURIComponent).join("/");
     const response = await fetch(
-      `https://api.github.com/repos/shadcn-labs/transition-kit-pro/contents/${encodedPath}?ref=main`,
+      `https://api.github.com/repos/AbdullahMukadam/transition-kit-pro/contents/${encodedPath}?ref=main`,
       {
         headers: {
           Accept: "application/vnd.github.raw+json",
