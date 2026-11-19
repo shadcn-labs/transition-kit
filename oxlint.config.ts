@@ -17,6 +17,7 @@ export default defineConfig({
     "dist/**",
     ".source/**",
     "src/routeTree.gen.ts",
+    "worker-configuration.d.ts",
   ],
   overrides: [
     {

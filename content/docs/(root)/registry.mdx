@@ -84,3 +84,31 @@ npx shadcn@latest view @transition-kit/theme/circle-reveal
 ## MCP
 
 Once the registry is in `components.json`, AI assistants can browse and install transition-kit items through the [shadcn MCP server](https://ui.shadcn.com/docs/mcp).
+
+## transition-kit Pro
+
+Pro components install from the same `@transition-kit` registry. The CLI just sends your API key with each request.
+
+1. Get a plan on the [pricing page](/pricing), then sign in with the email you paid with and create a key on your [account](/account).
+2. Add the key to your project's `.env`:
+
+```bash
+TRANSITION_KIT_API_KEY=tk_your_key
+```
+
+3. Send it from the registry in `components.json`:
+
+```json
+{
+  "registries": {
+    "@transition-kit": {
+      "url": "https://transition-kit.space/r/{name}.json",
+      "headers": {
+        "Authorization": "Bearer ${TRANSITION_KIT_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Free components keep working with or without the header. Without a valid key, or without an active plan, Pro items return `401` or `403` with a message explaining why.

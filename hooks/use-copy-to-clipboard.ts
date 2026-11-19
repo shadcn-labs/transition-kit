@@ -10,7 +10,7 @@ const legacyCopyToClipboard = (value: string) => {
   textArea.style.opacity = "0";
   textArea.style.pointerEvents = "none";
 
-  document.body.append(textArea);
+  (document.body as ParentNode).append(textArea);
   textArea.focus();
   textArea.select();
   textArea.setSelectionRange(0, value.length);

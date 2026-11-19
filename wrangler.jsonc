@@ -11,6 +11,14 @@
       "previews_enabled": true,
     },
   ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "transitionkit",
+      "database_id": "299d9cfd-8c85-4f3f-8299-3032c22eaa4b",
+      "migrations_dir": "drizzle",
+    },
+  ],
   "preview_urls": true,
   "previews": {},
 }
