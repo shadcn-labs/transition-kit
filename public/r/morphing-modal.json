@@ -1,0 +1,40 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "morphing-modal",
+  "title": "Morphing Modal",
+  "description": "A modal that resizes to fit each view while the views slide in the direction you moved.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://transition-kit.space/r/ui-transition.json"
+  ],
+  "files": [
+    {
+      "path": ".registry-build/registry/ui/morphing-modal.tsx",
+      "content": "\"use client\";\n\nimport { X } from \"lucide-react\";\nimport * as React from \"react\";\n\nimport { cn } from \"@/lib/utils\";\nimport { BACK, FORWARD, tk } from \"@/components/transitions/ui-transition\";\n\ninterface MorphingModalContextValue {\n  open: boolean;\n  setOpen: (open: boolean) => void;\n  triggerRef: React.RefObject<HTMLButtonElement | null>;\n}\n\nconst MorphingModalContext =\n  React.createContext<MorphingModalContextValue | null>(null);\n\nconst useMorphingModalContext = () => {\n  const context = React.useContext(MorphingModalContext);\n  if (!context) {\n    throw new Error(\"MorphingModal parts must be used within <MorphingModal>.\");\n  }\n  return context;\n};\n\n/** Reads and animates the open state from inside a `<MorphingModal>`. */\nconst useMorphingModal = () => {\n  const { open, setOpen } = useMorphingModalContext();\n  return { open, setOpen };\n};\n\nconst view = {\n  [BACK]: tk(\"tk-slide\", \"tk-back\"),\n  [FORWARD]: tk(\"tk-slide\", \"tk-forward\"),\n  default: tk(\"tk-blur\"),\n};\n\nconst MorphingModal = ({\n  open: openProp,\n  defaultOpen = false,\n  onOpenChange,\n  children,\n}: {\n  open?: boolean;\n  defaultOpen?: boolean;\n  onOpenChange?: (open: boolean) => void;\n  children?: React.ReactNode;\n}) => {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultOpen);\n  const open = openProp ?? uncontrolled;\n  const triggerRef = React.useRef<HTMLButtonElement>(null);\n  const pending = React.useRef<boolean | null>(null);\n\n  React.useLayoutEffect(() => {\n    pending.current = null;\n  });\n\n  const setOpen = React.useCallback(\n    (next: boolean) => {\n      if ((pending.current ?? open) === next) {\n        return;\n      }\n      pending.current = next;\n      React.startTransition(() => {\n        setUncontrolled(next);\n        onOpenChange?.(next);\n      });\n    },\n    [open, onOpenChange]\n  );\n\n  const previous = React.useRef(open);\n  React.useLayoutEffect(() => {\n    if (previous.current !== open && !open) {\n      triggerRef.current?.focus({ preventScroll: true });\n    }\n    previous.current = open;\n  }, [open]);\n\n  const context = React.useMemo(\n    () => ({ open, setOpen, triggerRef }),\n    [open, setOpen]\n  );\n\n  return (\n    <MorphingModalContext.Provider value={context}>\n      {children}\n    </MorphingModalContext.Provider>\n  );\n};\n\nconst MorphingModalTrigger = ({\n  onClick,\n  ...props\n}: React.ComponentProps<\"button\">) => {\n  const { open, setOpen, triggerRef } = useMorphingModalContext();\n  return (\n    <button\n      ref={triggerRef}\n      type=\"button\"\n      aria-haspopup=\"dialog\"\n      aria-expanded={open}\n      data-slot=\"morphing-modal-trigger\"\n      onClick={(event) => {\n        onClick?.(event);\n        if (!event.defaultPrevented) {\n          setOpen(true);\n        }\n      }}\n      {...props}\n    />\n  );\n};\n\nconst MorphingModalContent = ({\n  className,\n  children,\n  showClose = true,\n  ...props\n}: React.ComponentProps<\"dialog\"> & {\n  showClose?: boolean;\n}) => {\n  const { open, setOpen } = useMorphingModalContext();\n\n  const show = React.useCallback((node: HTMLDialogElement | null) => {\n    if (node && !node.open) {\n      node.showModal();\n    }\n  }, []);\n\n  if (!open) {\n    return null;\n  }\n\n  return (\n    <React.ViewTransition\n      default=\"none\"\n      enter={tk(\"tk-pop\")}\n      exit={tk(\"tk-pop\")}\n      update={tk(\"tk-morph\", \"tk-morphing-modal-panel\")}\n    >\n      <dialog\n        ref={show}\n        data-slot=\"morphing-modal-content\"\n        onCancel={(event) => {\n          event.preventDefault();\n          setOpen(false);\n        }}\n        onPointerDown={(event) => {\n          if (event.target === event.currentTarget) {\n            const box = event.currentTarget.getBoundingClientRect();\n            const inside =\n              event.clientX >= box.left &&\n              event.clientX <= box.right &&\n              event.clientY >= box.top &&\n              event.clientY <= box.bottom;\n            if (!inside) {\n              setOpen(false);\n            }\n          }\n        }}\n        className={cn(\n          \"bg-popover text-popover-foreground m-auto w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-2xl border p-0 shadow-xl backdrop:bg-black/40\",\n          className\n        )}\n        {...props}\n      >\n        <div className=\"relative p-6\">\n          {children}\n          {showClose ? (\n            <button\n              type=\"button\"\n              aria-label=\"Close\"\n              data-slot=\"morphing-modal-close\"\n              onClick={() => setOpen(false)}\n              className=\"text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring/50 absolute end-3 top-3 flex size-8 cursor-pointer items-center justify-center rounded-md outline-none transition-colors focus-visible:ring-[3px] [&_svg]:size-4\"\n            >\n              <X aria-hidden />\n            </button>\n          ) : null}\n        </div>\n      </dialog>\n    </React.ViewTransition>\n  );\n};\n\n/**\n * One view of the modal. Give each view its own `id`: changing it inside a\n * transition marked `FORWARD` or `BACK` slides the views that way while the\n * panel resizes to fit.\n */\nconst MorphingModalView = ({\n  id,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & { id: string }) => (\n  <React.ViewTransition key={id} default=\"none\" enter={view} exit={view}>\n    <div\n      data-slot=\"morphing-modal-view\"\n      data-view={id}\n      className={cn(\"flex flex-col gap-4\", className)}\n      {...props}\n    />\n  </React.ViewTransition>\n);\n\nconst MorphingModalTitle = ({\n  className,\n  ...props\n}: React.ComponentProps<\"h2\">) => (\n  <h2\n    data-slot=\"morphing-modal-title\"\n    className={cn(\"pe-8 text-lg leading-none font-semibold\", className)}\n    {...props}\n  />\n);\n\nconst MorphingModalDescription = ({\n  className,\n  ...props\n}: React.ComponentProps<\"p\">) => (\n  <p\n    data-slot=\"morphing-modal-description\"\n    className={cn(\"text-muted-foreground text-sm\", className)}\n    {...props}\n  />\n);\n\nexport {\n  MorphingModal,\n  MorphingModalContent,\n  MorphingModalDescription,\n  MorphingModalTitle,\n  MorphingModalTrigger,\n  MorphingModalView,\n  useMorphingModal,\n};\n",
+      "type": "registry:component",
+      "target": "components/transitions/morphing-modal.tsx"
+    }
+  ],
+  "css": {
+    "::view-transition-group(.tk-morphing-modal-panel)": {
+      "border-radius": "var(--tk-ui-morphing-modal-radius, calc(var(--radius) + 8px))",
+      "background": "var(--popover)",
+      "box-shadow": "0 0 0 1px var(--border)"
+    },
+    "::view-transition-image-pair(.tk-morphing-modal-panel)": {
+      "overflow": "clip",
+      "border-radius": "inherit"
+    },
+    "::view-transition-old(.tk-morphing-modal-panel), ::view-transition-new(.tk-morphing-modal-panel)": {
+      "inline-size": "100%",
+      "block-size": "auto",
+      "inset-block": "0 auto"
+    }
+  },
+  "categories": [
+    "ui"
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,99 @@
+---
+title: "Avatar Group"
+seoTitle: "Animated Avatar Group Component for React"
+description: "A stack of overlapping avatars that fans out into a row, the hidden ones popping in one after another. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+import { AvatarGroupDemo } from "@/examples/ui/avatar-group-demo";
+
+<ComponentPreview name="avatar-group" src="examples/ui/avatar-group-demo.tsx">
+  <AvatarGroupDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="avatar-group" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/avatar-group.tsx"
+  title="components/transitions/avatar-group.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { AvatarGroup } from "@/components/transitions/avatar-group";
+```
+
+```tsx
+<AvatarGroup
+  aria-label="Reviewers"
+  max={3}
+  items={[
+    { name: "Ada Lovelace", src: "/avatars/ada.jpg" },
+    { name: "Grace Hopper", src: "/avatars/grace.jpg" },
+    { name: "Alan Turing" },
+    { name: "Katherine Johnson" },
+    { name: "Margaret Hamilton" },
+  ]}
+/>
+```
+
+Avatars without a `src`, or whose image fails to load, show their initials. Pass `fallback` to choose the text.
+
+## API Reference
+
+### AvatarGroup
+
+| Prop               | Type                          | Default    | Description                                             |
+| ------------------ | ----------------------------- | ---------- | ------------------------------------------------------- |
+| `items`            | `AvatarGroupItem[]`           | -          | People to show, in order.                               |
+| `max`              | `number`                      | `4`        | Avatars shown while collapsed; the rest sit behind +N.  |
+| `size`             | `"sm" \| "md" \| "lg"`        | `"md"`     | Avatar size.                                            |
+| `expanded`         | `boolean`                     | -          | Controlled expanded state.                              |
+| `defaultExpanded`  | `boolean`                     | `false`    | Initial expanded state when uncontrolled.               |
+| `onExpandedChange` | `(expanded: boolean) => void` | -          | Called when the +N button expands or collapses the row. |
+| `aria-label`       | `string`                      | `"People"` | Accessible name of the group.                           |
+
+### AvatarGroupItem
+
+| Field      | Type     | Description                                        |
+| ---------- | -------- | -------------------------------------------------- |
+| `name`     | `string` | The person's name, used for `alt` and the title.   |
+| `src`      | `string` | Image URL.                                         |
+| `fallback` | `string` | Text shown without an image. Defaults to initials. |
