@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Lock } from "lucide-react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
 
 import { ItemCard } from "@/components/item-grid";
+import { ProBadge } from "@/components/pro-badge";
 import { AccordionDemo } from "@/examples/ui/accordion-demo";
 import { AddToCartDemo } from "@/examples/ui/add-to-cart-demo";
 import { AnimatedListDemo } from "@/examples/ui/animated-list-demo";
@@ -32,6 +34,9 @@ import { ThemeToggleSwitchDemo } from "@/examples/ui/theme-toggle-switch-demo";
 import { ToastStackDemo } from "@/examples/ui/toast-stack-demo";
 import { cn } from "@/lib/utils";
 import { getItem, items } from "@/registry/items";
+import { PRO_CATALOG } from "@/registry/pro-catalog";
+import type { ProCatalogItem } from "@/registry/pro-catalog";
+import { PRO_DEMOS } from "@/registry/pro/__index__";
 
 interface Entry {
   name: string;
@@ -231,6 +236,39 @@ const DemoCard = ({ name, Demo, hint, wide }: Entry) => {
     />
   );
 };
+
+const ProCard = ({ item }: { item: ProCatalogItem }) => {
+  const [ref, seen] = useSeen();
+  const Demo = PRO_DEMOS[item.name];
+  return (
+    <ItemCard
+      item={item}
+      badge={<ProBadge />}
+      preview={
+        <div
+          ref={ref}
+          className="@container flex min-h-64 flex-1 items-center justify-center p-6"
+        >
+          {Demo && seen ? (
+            <Suspense fallback={null}>
+              <Demo />
+            </Suspense>
+          ) : (
+            <Lock className="text-muted-foreground size-5" aria-hidden />
+          )}
+        </div>
+      }
+    />
+  );
+};
+
+export const ProCatalogSection = () => (
+  <div className="not-prose mt-6 grid gap-4 sm:grid-cols-2">
+    {PRO_CATALOG.map((item) => (
+      <ProCard key={item.name} item={item} />
+    ))}
+  </div>
+);
 
 export const CatalogSection = ({ section }: { section: CatalogSectionId }) => (
   <div className="not-prose mt-6 grid gap-4 sm:grid-cols-2">

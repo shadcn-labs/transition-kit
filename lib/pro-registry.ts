@@ -1,35 +1,18 @@
 import { z } from "zod";
 
-const manifestSchema = z.object({
-  items: z.array(
-    z.object({
-      dependencies: z.array(z.string()).optional(),
-      description: z.string().optional(),
-      files: z
-        .array(
-          z.object({
-            path: z
-              .string()
-              .refine(
-                (path) =>
-                  path.startsWith("registry/") &&
-                  path
-                    .split("/")
-                    .every(
-                      (part) => part !== "" && part !== "." && part !== ".."
-                    )
-              ),
-            target: z.string().optional(),
-            type: z.string().default("registry:component"),
-          })
-        )
-        .min(1),
-      name: z.string(),
-      registryDependencies: z.array(z.string()).optional(),
-      title: z.string().optional(),
-      type: z.string().default("registry:component"),
-    })
-  ),
+const itemSchema = z.object({
+  files: z
+    .array(
+      z.object({
+        content: z.string(),
+        path: z.string(),
+        target: z.string().optional(),
+        type: z.string(),
+      })
+    )
+    .min(1),
+  name: z.string(),
+  type: z.string(),
 });
 
 export class ProRegistryError extends Error {
@@ -42,16 +25,10 @@ export class ProRegistryError extends Error {
   }
 }
 
-export interface ProRegistryItem {
-  $schema: "https://ui.shadcn.com/schema/registry-item.json";
-  name: string;
-  type: string;
-  title?: string;
-  description?: string;
-  dependencies?: string[];
-  registryDependencies?: string[];
-  files: { path: string; type: string; target?: string; content: string }[];
-}
+export type ProRegistryItem = z.infer<typeof itemSchema> &
+  Record<string, unknown>;
+
+const NAME = /^[a-z0-9][a-z0-9-]{0,63}$/u;
 
 export const getProRegistryItem = async (
   name: string
@@ -60,64 +37,31 @@ export const getProRegistryItem = async (
   if (!token) {
     throw new ProRegistryError("Pro source is not configured.", 503);
   }
-
-  const readPrivateFile = async (path: string) => {
-    const encodedPath = path.split("/").map(encodeURIComponent).join("/");
-    const response = await fetch(
-      `https://api.github.com/repos/AbdullahMukadam/transition-kit-pro/contents/${encodedPath}?ref=main`,
-      {
-        headers: {
-          Accept: "application/vnd.github.raw+json",
-          Authorization: `Bearer ${token}`,
-          "User-Agent": "transition-kit",
-          "X-GitHub-Api-Version": "2022-11-28",
-        },
-        redirect: "error",
-      }
-    );
-    if (!response.ok) {
-      throw new ProRegistryError("Pro source is temporarily unavailable.", 502);
+  if (!NAME.test(name)) {
+    throw new ProRegistryError("Component not found.", 404);
+  }
+  const response = await fetch(
+    `https://api.github.com/repos/AbdullahMukadam/transition-kit-pro/contents/r/${name}.json?ref=main`,
+    {
+      headers: {
+        Accept: "application/vnd.github.raw+json",
+        Authorization: `Bearer ${token}`,
+        "User-Agent": "transition-kit",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+      redirect: "error",
     }
-    return response.text();
-  };
-
-  try {
-    const manifest = manifestSchema.parse(
-      JSON.parse(await readPrivateFile("registry.json"))
-    );
-    const item = manifest.items.find((entry) => entry.name === name);
-    if (!item) {
-      throw new ProRegistryError("Component source is unavailable.", 404);
-    }
-    const files = await Promise.all(
-      item.files.map(async (file) => ({
-        ...file,
-        content: await readPrivateFile(file.path),
-      }))
-    );
-    const registryDependencies = item.registryDependencies?.map((dependency) =>
-      manifest.items.some((entry) => entry.name === dependency)
-        ? `@transition-kit/${dependency}`
-        : dependency
-    );
-    return {
-      $schema: "https://ui.shadcn.com/schema/registry-item.json",
-      ...item,
-      files,
-      registryDependencies,
-    };
-  } catch (error) {
-    if (error instanceof ProRegistryError) {
-      throw error;
-    }
+  );
+  if (response.status === 404) {
+    throw new ProRegistryError("Component not found.", 404);
+  }
+  if (!response.ok) {
     throw new ProRegistryError("Pro source is temporarily unavailable.", 502);
   }
-};
-
-export const getProComponentSource = async (name: string): Promise<string> => {
-  const { files } = await getProRegistryItem(name);
-  const [onlyFile] = files;
-  return files.length === 1 && onlyFile
-    ? onlyFile.content
-    : files.map((file) => `// ${file.path}\n${file.content}`).join("\n\n");
+  try {
+    const item = (await response.json()) as Record<string, unknown>;
+    return { ...item, ...itemSchema.parse(item) };
+  } catch {
+    throw new ProRegistryError("Pro source is temporarily unavailable.", 502);
+  }
 };

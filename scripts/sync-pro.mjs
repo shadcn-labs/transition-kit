@@ -9,6 +9,10 @@ const proDir = path.join(root, "registry", "pro");
 const indexFile = path.join(proDir, "__index__.tsx");
 const catalogFile = path.join(root, "registry", "pro-catalog.ts");
 const args = new Set(process.argv.slice(2));
+const localArg = process.argv.find((arg) => arg.startsWith("--local="));
+const localDir = localArg
+  ? path.resolve(root, localArg.slice("--local=".length))
+  : undefined;
 
 const log = (message) => console.log(`[sync-pro] ${message}`);
 
@@ -28,7 +32,7 @@ const writeIndex = async (demos) => {
     'import { lazy } from "react";',
     'import type { ComponentType, LazyExoticComponent } from "react";',
     "",
-    "export const PRO_DEMOS: Record<string, LazyExoticComponent<ComponentType>> = {",
+    "export const PRO_DEMOS: Partial<Record<string, LazyExoticComponent<ComponentType>>> = {",
     ...demos.map(
       ({ exportName, file, name }) =>
         `  ${JSON.stringify(name)}: lazy(() => import(${JSON.stringify(`./${file.replace(/\.tsx$/u, "")}`)}).then((module) => ({ default: module.${exportName} }))),`
@@ -68,7 +72,7 @@ if (args.has("--if-missing") && existsSync(indexFile)) {
   process.exit(0);
 }
 
-if (!token) {
+if (!token && !localDir) {
   if (!existsSync(indexFile)) {
     await writeIndex([]);
   }
@@ -77,6 +81,10 @@ if (!token) {
 }
 
 const fetchFile = async (file) => {
+  if (localDir) {
+    const absolute = path.join(localDir, file);
+    return existsSync(absolute) ? readFileSync(absolute, "utf-8") : null;
+  }
   const response = await fetch(
     `https://api.github.com/repos/${REPO}/contents/${file.split("/").map(encodeURIComponent).join("/")}?ref=main`,
     {
@@ -113,12 +121,12 @@ const toLocalImports = (source) =>
 await rm(proDir, { force: true, recursive: true });
 const demos = [];
 for (const item of items) {
-  for (const file of item.files ?? []) {
-    if (!isSafe(file.path)) {
-      throw new Error(`Unsafe path in registry.json: ${file.path}`);
+  for (const file of [...(item.files ?? []), ...(item.css ? [item.css] : [])]) {
+    if (!isSafe(file)) {
+      throw new Error(`Unsafe path in registry.json: ${file}`);
     }
-    const source = await fetchFile(file.path);
-    const target = path.join(proDir, file.path.slice("registry/".length));
+    const source = await fetchFile(file);
+    const target = path.join(proDir, file.slice("registry/".length));
     await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, toLocalImports(source ?? ""));
   }

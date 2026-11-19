@@ -30,9 +30,11 @@ export const ItemCard = ({
   preview,
   video,
   meta,
+  badge,
   className,
 }: {
   item: CardItem;
+  badge?: ReactNode;
   /** Interactive, so it is rendered outside the docs link. */
   preview?: ReactNode;
   video?: string;
@@ -89,6 +91,7 @@ export const ItemCard = ({
         <span className="flex min-w-0 flex-col gap-1">
           <span className="text-foreground flex items-center gap-2 text-sm font-medium">
             {item.title}
+            {badge}
             {item.isNew && (
               <span className="text-muted-foreground text-xs font-normal">
                 New

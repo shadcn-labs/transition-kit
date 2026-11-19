@@ -246,10 +246,10 @@ export const handleProRegistry = async (request: Request, file: string) => {
   }
   const name = file.endsWith(".json") ? file.slice(0, -".json".length) : "";
   try {
-    const item = name ? await getProRegistryItem(name) : undefined;
-    if (!(item && (isProItem(name) || item.type === "registry:lib"))) {
+    if (!isProItem(name)) {
       throw new ProRegistryError("Component not found.", 404);
     }
+    const item = await getProRegistryItem(name);
     return Response.json(item, { headers: registryHeaders });
   } catch (error) {
     if (error instanceof ProRegistryError) {
