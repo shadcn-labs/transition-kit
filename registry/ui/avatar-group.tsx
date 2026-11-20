@@ -50,8 +50,8 @@ const initials = (name: string) =>
     .join("");
 
 const AvatarFace = ({ item, size }: { item: AvatarGroupItem; size: Size }) => {
-  const [failed, setFailed] = React.useState(false);
-  const image = item.src && !failed;
+  const [failedSrc, setFailedSrc] = React.useState<string | null>(null);
+  const image = item.src && item.src !== failedSrc;
   return (
     <span
       data-slot="avatar-group-avatar"
@@ -67,7 +67,7 @@ const AvatarFace = ({ item, size }: { item: AvatarGroupItem; size: Size }) => {
           src={item.src}
           alt={item.name}
           className="size-full object-cover"
-          onError={() => setFailed(true)}
+          onError={() => setFailedSrc(item.src ?? null)}
         />
       ) : (
         <>

@@ -47,6 +47,7 @@ const Select = ({
   const listRef = React.useRef<HTMLDivElement>(null);
   const typed = React.useRef({ at: 0, text: "" });
   const pending = React.useRef<boolean | null>(null);
+  const pendingValue = React.useRef<string | null>(null);
   const names = useTransitionNames();
   const selected = options.find((option) => option.value === value);
   const opening = names("open");
@@ -54,6 +55,7 @@ const Select = ({
 
   React.useLayoutEffect(() => {
     pending.current = null;
+    pendingValue.current = null;
   });
 
   const setActive = (index: number) => {
@@ -68,20 +70,29 @@ const Select = ({
 
   const toggle = React.useCallback(
     (next: boolean, commit?: string) => {
-      if ((pending.current ?? open) === next && commit === undefined) {
+      const accepted =
+        commit !== undefined &&
+        !disabled &&
+        commit !== (pendingValue.current ?? value)
+          ? commit
+          : undefined;
+      if ((pending.current ?? open) === next && accepted === undefined) {
         return;
       }
       pending.current = next;
+      if (accepted !== undefined) {
+        pendingValue.current = accepted;
+      }
       React.startTransition(() => {
         React.addTransitionType(next ? opening : closing);
         setOpen(next);
-        if (commit !== undefined && commit !== value) {
-          setUncontrolled(commit);
-          onValueChange?.(commit);
+        if (accepted !== undefined) {
+          setUncontrolled(accepted);
+          onValueChange?.(accepted);
         }
       });
     },
-    [closing, onValueChange, open, opening, value]
+    [closing, disabled, onValueChange, open, opening, value]
   );
 
   const show = () => {
@@ -92,6 +103,20 @@ const Select = ({
     setActive(index === -1 ? options.findIndex((_, i) => enabled(i)) : index);
     toggle(true);
   };
+
+  React.useLayoutEffect(() => {
+    if (disabled && open) {
+      toggle(false);
+    }
+  }, [disabled, open, toggle]);
+
+  React.useLayoutEffect(() => {
+    if (open) {
+      listRef.current
+        ?.querySelector(`#${CSS.escape(names("option", active))}`)
+        ?.scrollIntoView({ block: "nearest" });
+    }
+  }, [active, names, open]);
 
   const previous = React.useRef(open);
   React.useLayoutEffect(() => {

@@ -32,6 +32,7 @@ const Dock = ({
   className,
   children,
   onKeyDown,
+  ref: callerRef,
   ...props
 }: Omit<React.ComponentProps<"div">, "defaultValue"> & {
   value?: string;
@@ -50,11 +51,30 @@ const Dock = ({
   });
 
   React.useLayoutEffect(() => {
-    const items = [
-      ...(ref.current?.querySelectorAll<HTMLElement>(enabledItem) ?? []),
-    ];
-    const active = items.find((item) => item.dataset.value === value);
-    setTabStop((active ?? items[0])?.dataset.value ?? value);
+    const toolbar = ref.current;
+    if (!toolbar) {
+      return;
+    }
+    const enabledValues = () =>
+      [...toolbar.querySelectorAll<HTMLElement>(enabledItem)].map(
+        (item) => item.dataset.value ?? ""
+      );
+    const fallback = (values: string[]) =>
+      values.includes(value) ? value : (values[0] ?? value);
+    setTabStop(fallback(enabledValues()));
+    const observer = new MutationObserver(() => {
+      const values = enabledValues();
+      setTabStop((current) =>
+        values.includes(current) ? current : fallback(values)
+      );
+    });
+    observer.observe(toolbar, {
+      attributeFilter: ["disabled", "data-value"],
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+    return () => observer.disconnect();
   }, [value]);
 
   const select = React.useCallback(
@@ -108,7 +128,16 @@ const Dock = ({
   return (
     <DockContext.Provider value={context}>
       <div
-        ref={ref}
+        ref={(node) => {
+          ref.current = node;
+          if (typeof callerRef === "function") {
+            const cleanup = callerRef(node);
+            return typeof cleanup === "function" ? cleanup : undefined;
+          }
+          if (callerRef) {
+            callerRef.current = node;
+          }
+        }}
         role="toolbar"
         aria-orientation="horizontal"
         data-slot="dock"

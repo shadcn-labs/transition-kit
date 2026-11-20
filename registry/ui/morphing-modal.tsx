@@ -23,6 +23,18 @@ const useMorphingModalContext = () => {
   return context;
 };
 
+const assignRef = <T,>(ref: React.Ref<T> | undefined, node: T | null) => {
+  if (typeof ref === "function") {
+    return ref(node);
+  }
+  if (ref) {
+    ref.current = node;
+  }
+};
+
+const focusable =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 const useMorphingModal = () => {
   const { open, setOpen } = useMorphingModalContext();
   return { open, setOpen };
@@ -115,17 +127,26 @@ const MorphingModalContent = ({
   className,
   children,
   showClose = true,
+  ref,
+  onCancel,
+  onClose,
+  onPointerDown,
   ...props
 }: React.ComponentProps<"dialog"> & {
   showClose?: boolean;
 }) => {
   const { open, setOpen } = useMorphingModalContext();
 
-  const show = React.useCallback((node: HTMLDialogElement | null) => {
-    if (node && !node.open) {
-      node.showModal();
-    }
-  }, []);
+  const show = React.useCallback(
+    (node: HTMLDialogElement | null) => {
+      if (node && !node.open) {
+        node.showModal();
+      }
+      const cleanup = assignRef(ref, node);
+      return typeof cleanup === "function" ? cleanup : undefined;
+    },
+    [ref]
+  );
 
   if (!open) {
     return null;
@@ -142,20 +163,30 @@ const MorphingModalContent = ({
         ref={show}
         data-slot="morphing-modal-content"
         onCancel={(event) => {
+          onCancel?.(event);
+          const handled = event.defaultPrevented;
           event.preventDefault();
+          if (!handled) {
+            setOpen(false);
+          }
+        }}
+        onClose={(event) => {
+          onClose?.(event);
           setOpen(false);
         }}
         onPointerDown={(event) => {
-          if (event.target === event.currentTarget) {
-            const box = event.currentTarget.getBoundingClientRect();
-            const inside =
-              event.clientX >= box.left &&
-              event.clientX <= box.right &&
-              event.clientY >= box.top &&
-              event.clientY <= box.bottom;
-            if (!inside) {
-              setOpen(false);
-            }
+          onPointerDown?.(event);
+          if (event.defaultPrevented || event.target !== event.currentTarget) {
+            return;
+          }
+          const box = event.currentTarget.getBoundingClientRect();
+          const inside =
+            event.clientX >= box.left &&
+            event.clientX <= box.right &&
+            event.clientY >= box.top &&
+            event.clientY <= box.bottom;
+          if (!inside) {
+            setOpen(false);
           }
         }}
         className={cn(
@@ -186,25 +217,56 @@ const MorphingModalContent = ({
 const MorphingModalView = ({
   id,
   className,
+  ref,
   ...props
-}: React.ComponentProps<"div"> & { id: string }) => (
-  <React.ViewTransition key={id} default="none" enter={view} exit={view}>
-    <div
-      data-slot="morphing-modal-view"
-      data-view={id}
-      className={cn("flex flex-col gap-4", className)}
-      {...props}
-    />
-  </React.ViewTransition>
-);
+}: React.ComponentProps<"div"> & { id: string }) => {
+  const viewRef = React.useRef<HTMLDivElement>(null);
+
+  React.useLayoutEffect(() => {
+    const node = viewRef.current;
+    const dialog = node?.closest("dialog");
+    if (!node || !dialog || dialog.contains(document.activeElement)) {
+      return;
+    }
+    const target =
+      node.querySelector<HTMLElement>('[data-slot="morphing-modal-title"]') ??
+      node.querySelector<HTMLElement>(focusable);
+    if (target) {
+      target.focus({ preventScroll: true });
+      return;
+    }
+    node.tabIndex = -1;
+    node.focus({ preventScroll: true });
+  }, []);
+
+  return (
+    <React.ViewTransition key={id} default="none" enter={view} exit={view}>
+      <div
+        ref={(node) => {
+          viewRef.current = node;
+          const cleanup = assignRef(ref, node);
+          return typeof cleanup === "function" ? cleanup : undefined;
+        }}
+        data-slot="morphing-modal-view"
+        data-view={id}
+        className={cn("flex flex-col gap-4 outline-none", className)}
+        {...props}
+      />
+    </React.ViewTransition>
+  );
+};
 
 const MorphingModalTitle = ({
   className,
   ...props
 }: React.ComponentProps<"h2">) => (
   <h2
+    tabIndex={-1}
     data-slot="morphing-modal-title"
-    className={cn("pe-8 text-lg leading-none font-semibold", className)}
+    className={cn(
+      "pe-8 text-lg leading-none font-semibold outline-none",
+      className
+    )}
     {...props}
   />
 );
