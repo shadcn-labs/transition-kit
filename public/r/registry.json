@@ -2154,6 +2154,166 @@
       ]
     },
     {
+      "name": "pagination",
+      "type": "registry:component",
+      "title": "Pagination",
+      "description": "Page numbers slide through a fixed window while the current-page pill glides to the one you picked.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/pagination.tsx",
+          "target": "components/transitions/pagination.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "avatar-group",
+      "type": "registry:component",
+      "title": "Avatar Group",
+      "description": "A stack of overlapping avatars that fans out into a row, the hidden ones popping in one after another.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/avatar-group.tsx",
+          "target": "components/transitions/avatar-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:component",
+      "title": "Breadcrumb",
+      "description": "New crumbs slide in as you go deeper and the trail retracts when you step back, with long paths folding into an ellipsis.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/breadcrumb.tsx",
+          "target": "components/transitions/breadcrumb.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "dock",
+      "type": "registry:component",
+      "title": "Dock",
+      "description": "A floating toolbar whose active item widens to show its label while the pill glides and stretches to fit.",
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/dock.tsx",
+          "target": "components/transitions/dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:component",
+      "title": "Select",
+      "description": "A select whose trigger grows into the list, the chosen option gliding back into place as it folds shut.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/select.tsx",
+          "target": "components/transitions/select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-select-surface)": {
+          "border-radius": "var(--tk-ui-select-radius, var(--radius))",
+          "background": "var(--popover)",
+          "box-shadow": "0 0 0 1px var(--border)"
+        },
+        "::view-transition-image-pair(.tk-select-surface)": {
+          "overflow": "clip",
+          "border-radius": "inherit"
+        },
+        "::view-transition-old(.tk-select-surface), ::view-transition-new(.tk-select-surface)": {
+          "inline-size": "auto",
+          "block-size": "auto"
+        },
+        "::view-transition-old(.tk-select-surface.tk-down)": {
+          "animation-duration": "var(--tk-ui-exit)"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
+      "name": "morphing-modal",
+      "type": "registry:component",
+      "title": "Morphing Modal",
+      "description": "A modal that resizes to fit each view while the views slide in the direction you moved.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://transition-kit.space/r/ui-transition.json"
+      ],
+      "files": [
+        {
+          "path": ".registry-build/registry/ui/morphing-modal.tsx",
+          "target": "components/transitions/morphing-modal.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "css": {
+        "::view-transition-group(.tk-morphing-modal-panel)": {
+          "border-radius": "var(--tk-ui-morphing-modal-radius, calc(var(--radius) + 8px))",
+          "background": "var(--popover)",
+          "box-shadow": "0 0 0 1px var(--border)"
+        },
+        "::view-transition-image-pair(.tk-morphing-modal-panel)": {
+          "overflow": "clip",
+          "border-radius": "inherit"
+        },
+        "::view-transition-old(.tk-morphing-modal-panel), ::view-transition-new(.tk-morphing-modal-panel)": {
+          "inline-size": "100%",
+          "block-size": "auto",
+          "inset-block": "0 auto"
+        }
+      },
+      "categories": [
+        "ui"
+      ]
+    },
+    {
       "name": "accordion",
       "type": "registry:component",
       "title": "Accordion",

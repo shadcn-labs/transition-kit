@@ -1,0 +1,103 @@
+---
+title: "Breadcrumb"
+seoTitle: "Animated Breadcrumb Component for React"
+description: "New crumbs slide in as you go deeper and the trail retracts when you step back, with long paths folding into an ellipsis. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+import { BreadcrumbDemo } from "@/examples/ui/breadcrumb-demo";
+
+<ComponentPreview name="breadcrumb" src="examples/ui/breadcrumb-demo.tsx">
+  <BreadcrumbDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="breadcrumb" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/breadcrumb.tsx"
+  title="components/transitions/breadcrumb.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Breadcrumb } from "@/components/transitions/breadcrumb";
+```
+
+```tsx
+<Breadcrumb
+  items={[
+    { id: "projects", label: "Projects" },
+    { id: "website", label: "website" },
+    { id: "src", label: "src" },
+  ]}
+  onNavigate={(id, index) => setPath(path.slice(0, index + 1))}
+/>
+```
+
+The last item is the current page. Clicking an earlier crumb calls `onNavigate` inside a transition marked `BACK`, so the crumbs after it slide away. Mark your own forward navigation with `FORWARD` and new crumbs slide in:
+
+```tsx
+import { FORWARD } from "@/components/transitions/ui-transition";
+
+startTransition(() => {
+  addTransitionType(FORWARD);
+  setPath([...path, folder]);
+});
+```
+
+## API Reference
+
+### Breadcrumb
+
+| Prop         | Type                                  | Default        | Description                                                     |
+| ------------ | ------------------------------------- | -------------- | --------------------------------------------------------------- |
+| `items`      | `BreadcrumbItem[]`                    | -              | The trail, from the root to the current page.                   |
+| `onNavigate` | `(id: string, index: number) => void` | -              | Called when an earlier crumb is clicked.                        |
+| `maxItems`   | `number`                              | `4`            | Longer trails keep the first crumb and the last `maxItems - 1`. |
+| `separator`  | `React.ReactNode`                     | Chevron        | Rendered between crumbs.                                        |
+| `aria-label` | `string`                              | `"Breadcrumb"` | Accessible name of the navigation landmark.                     |
+
+### BreadcrumbItem
+
+| Field   | Type              | Description                         |
+| ------- | ----------------- | ----------------------------------- |
+| `id`    | `string`          | Stable id, unique within the trail. |
+| `label` | `React.ReactNode` | Crumb text.                         |
+| `icon`  | `React.ReactNode` | Rendered before the label.          |

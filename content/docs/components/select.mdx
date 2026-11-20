@@ -1,0 +1,104 @@
+---
+title: "Select"
+seoTitle: "Animated Select Component for React"
+description: "A select whose trigger grows into the list, the chosen option gliding back into place as it folds shut. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+import { SelectDemo } from "@/examples/ui/select-demo";
+
+<ComponentPreview name="select" src="examples/ui/select-demo.tsx">
+  <SelectDemo />
+</ComponentPreview>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">Command</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+
+<TabsContent value="cli">
+
+<InstallCommand name="select" />
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  src="registry/ui/ui-transition.ts"
+  title="components/transitions/ui-transition.ts"
+/>
+
+<ComponentSource
+  src="registry/ui/select.tsx"
+  title="components/transitions/select.tsx"
+/>
+
+<ComponentSource
+  src="registry/ui/ui-transition.css"
+  title="styles/globals.css"
+/>
+
+<ComponentSource src="registry/ui/select.css" title="styles/globals.css" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Select } from "@/components/transitions/select";
+```
+
+```tsx
+<Select
+  aria-label="Region"
+  name="region"
+  placeholder="Choose a region"
+  options={[
+    { label: "Frankfurt", value: "fra" },
+    { label: "London", value: "lhr" },
+    { label: "Singapore", value: "sin" },
+  ]}
+/>
+```
+
+The list opens over the trigger. Use the arrow keys, Home, End or type a few letters to move, Enter or Space to choose, and Escape to close.
+
+## API Reference
+
+### Select
+
+| Prop              | Type                      | Default     | Description                                                            |
+| ----------------- | ------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `options`         | `SelectOption[]`          | -           | The choices, in order.                                                 |
+| `value`           | `string`                  | -           | Controlled selected value.                                             |
+| `defaultValue`    | `string`                  | -           | Initial selected value when uncontrolled.                              |
+| `onValueChange`   | `(value: string) => void` | -           | Called with the next value when it is chosen.                          |
+| `placeholder`     | `string`                  | `"Select…"` | Shown while nothing is selected.                                       |
+| `name`            | `string`                  | -           | Submits the selected value with this field name in a surrounding form. |
+| `form`            | `string`                  | -           | Associates the hidden input with a form elsewhere in the document.     |
+| `disabled`        | `boolean`                 | `false`     | Disables the select.                                                   |
+| `aria-label`      | `string`                  | -           | Accessible name, when there is no visible label.                       |
+| `aria-labelledby` | `string`                  | -           | Id of a visible label.                                                 |
+
+### SelectOption
+
+| Field      | Type              | Description                  |
+| ---------- | ----------------- | ---------------------------- |
+| `value`    | `string`          | Value submitted and stored.  |
+| `label`    | `string`          | Text shown and typed to.     |
+| `icon`     | `React.ReactNode` | Rendered before the label.   |
+| `disabled` | `boolean`         | Makes the option unpickable. |
