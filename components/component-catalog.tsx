@@ -7,18 +7,24 @@ import { ItemCard } from "@/components/item-grid";
 import { AccordionDemo } from "@/examples/ui/accordion-demo";
 import { AddToCartDemo } from "@/examples/ui/add-to-cart-demo";
 import { AnimatedListDemo } from "@/examples/ui/animated-list-demo";
+import { AvatarGroupDemo } from "@/examples/ui/avatar-group-demo";
+import { BreadcrumbDemo } from "@/examples/ui/breadcrumb-demo";
 import { CarouselDemo } from "@/examples/ui/carousel-demo";
 import { CollapsibleSidebarDemo } from "@/examples/ui/collapsible-sidebar-demo";
+import { DockDemo } from "@/examples/ui/dock-demo";
 import { DynamicIslandDemo } from "@/examples/ui/dynamic-island-demo";
 import { ExpandableCardDemo } from "@/examples/ui/expandable-card-demo";
 import { ExpandingSearchDemo } from "@/examples/ui/expanding-search-demo";
 import { FilterGridDemo } from "@/examples/ui/filter-grid-demo";
 import { KanbanBoardDemo } from "@/examples/ui/kanban-board-demo";
 import { LayoutSwitcherDemo } from "@/examples/ui/layout-switcher-demo";
+import { MorphingModalDemo } from "@/examples/ui/morphing-modal-demo";
 import { MorphingPopoverDemo } from "@/examples/ui/morphing-popover-demo";
 import { NumberFlipDemo } from "@/examples/ui/number-flip-demo";
+import { PaginationDemo } from "@/examples/ui/pagination-demo";
 import { ProductGalleryDemo } from "@/examples/ui/product-gallery-demo";
 import { SegmentedControlDemo } from "@/examples/ui/segmented-control-demo";
+import { SelectDemo } from "@/examples/ui/select-demo";
 import { SortableTableDemo } from "@/examples/ui/sortable-table-demo";
 import { StackNavigatorDemo } from "@/examples/ui/stack-navigator-demo";
 import { StatusButtonDemo } from "@/examples/ui/status-button-demo";
@@ -93,6 +99,7 @@ const SECTIONS = {
       hint: "Pick an option",
       name: "segmented-control",
     },
+    { Demo: PaginationDemo, hint: "Change the page", name: "pagination" },
     {
       Demo: NumberFlipDemo,
       hint: "Change the number format",
@@ -118,10 +125,21 @@ const SECTIONS = {
       hint: "Open the popover",
       name: "morphing-popover",
     },
+    { Demo: SelectDemo, hint: "Pick an option", name: "select" },
+    {
+      Demo: MorphingModalDemo,
+      hint: "Open it and pick an option",
+      name: "morphing-modal",
+    },
     {
       Demo: ExpandingSearchDemo,
       hint: "Open the search",
       name: "expanding-search",
+    },
+    {
+      Demo: AvatarGroupDemo,
+      hint: "Show everyone",
+      name: "avatar-group",
     },
     {
       Demo: ExpandableCardDemo,
@@ -141,6 +159,12 @@ const SECTIONS = {
       hint: "Step through the setup",
       name: "step-wizard",
     },
+    {
+      Demo: BreadcrumbDemo,
+      hint: "Open a folder, then step back",
+      name: "breadcrumb",
+    },
+    { Demo: DockDemo, hint: "Switch sections", name: "dock" },
     { Demo: AccordionDemo, hint: "Open a section", name: "accordion" },
     { Demo: CarouselDemo, hint: "Use the arrows or dots", name: "carousel" },
     {

@@ -1,0 +1,17 @@
+::view-transition-group(.tk-morphing-modal-panel) {
+  border-radius: var(--tk-ui-morphing-modal-radius, calc(var(--radius) + 8px));
+  background: var(--popover);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+::view-transition-image-pair(.tk-morphing-modal-panel) {
+  overflow: clip;
+  border-radius: inherit;
+}
+
+::view-transition-old(.tk-morphing-modal-panel),
+::view-transition-new(.tk-morphing-modal-panel) {
+  inline-size: 100%;
+  block-size: auto;
+  inset-block: 0 auto;
+}

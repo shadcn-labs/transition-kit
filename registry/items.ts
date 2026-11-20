@@ -388,6 +388,68 @@ export const items: ItemSource[] = [
   },
   {
     description:
+      "Page numbers slide through a fixed window while the current-page pill glides to the one you picked.",
+    files: ["registry/ui/pagination.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "pagination",
+    title: "Pagination",
+  },
+  {
+    description:
+      "A stack of overlapping avatars that fans out into a row, the hidden ones popping in one after another.",
+    files: ["registry/ui/avatar-group.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "avatar-group",
+    title: "Avatar Group",
+  },
+  {
+    description:
+      "New crumbs slide in as you go deeper and the trail retracts when you step back, with long paths folding into an ellipsis.",
+    files: ["registry/ui/breadcrumb.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "breadcrumb",
+    title: "Breadcrumb",
+  },
+  {
+    description:
+      "A floating toolbar whose active item widens to show its label while the pill glides and stretches to fit.",
+    files: ["registry/ui/dock.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "dock",
+    title: "Dock",
+  },
+  {
+    css: "registry/ui/select.css",
+    description:
+      "A select whose trigger grows into the list, the chosen option gliding back into place as it folds shut.",
+    files: ["registry/ui/select.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "select",
+    title: "Select",
+  },
+  {
+    css: "registry/ui/morphing-modal.css",
+    description:
+      "A modal that resizes to fit each view while the views slide in the direction you moved.",
+    files: ["registry/ui/morphing-modal.tsx"],
+    group: "ui",
+    isNew: true,
+    kind: "component",
+    name: "morphing-modal",
+    title: "Morphing Modal",
+  },
+  {
+    description:
       "Opening a panel grows its item and the items below glide down.",
     files: ["registry/ui/accordion.tsx"],
     group: "ui",
