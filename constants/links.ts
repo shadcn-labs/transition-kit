@@ -9,6 +9,7 @@ const githubUrl = `https://github.com/${GITHUB.org}/${GITHUB.repo}`;
 
 export const LINK = {
   DISCORD: "https://discord.gg/N6G36KhYK4",
+  EMAIL: "support@transition-kit.space",
   GITHUB: githubUrl,
   LICENSE: `${githubUrl}/blob/${GITHUB.branch}/LICENSE`,
   PORTFOLIO: `https://github.com/${GITHUB.user}`,

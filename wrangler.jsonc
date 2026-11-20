@@ -11,6 +11,29 @@
       "previews_enabled": true,
     },
   ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "transitionkit",
+      "database_id": "299d9cfd-8c85-4f3f-8299-3032c22eaa4b",
+      "migrations_dir": "drizzle",
+    },
+  ],
   "preview_urls": true,
   "previews": {},
+  "env": {
+    "preview": {
+      "name": "transitionkit-preview",
+      "routes": [],
+      "workers_dev": true,
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "transitionkit-preview",
+          "database_id": "5a3b0d97-d051-4ac6-b41e-92747d326150",
+          "migrations_dir": "drizzle",
+        },
+      ],
+    },
+  },
 }

@@ -19,12 +19,26 @@ import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DotwellKnownApiCatalogRouteImport } from './routes/[.]well-known.api-catalog'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteAccountRouteImport } from './routes/_site.account'
+import { Route as SiteLicenseRouteImport } from './routes/_site.license'
+import { Route as SitePricingRouteImport } from './routes/_site.pricing'
+import { Route as SiteRefundsRouteImport } from './routes/_site.refunds'
+import { Route as SiteSignInRouteImport } from './routes/_site.sign-in'
 import { Route as SiteSponsorRouteImport } from './routes/_site.sponsor'
+import { Route as SiteTermsRouteImport } from './routes/_site.terms'
+import { Route as ApiApiKeyRouteImport } from './routes/api.api-key'
+import { Route as ApiCheckoutRouteImport } from './routes/api.checkout'
+import { Route as ApiMeRouteImport } from './routes/api.me'
+import { Route as ApiPortalRouteImport } from './routes/api.portal'
 import { Route as ApiStatusRouteImport } from './routes/api.status'
 import { Route as LlmsDotmdContentDotmdRouteImport } from './routes/llms[.]md.content[.]md'
+import { Route as RNameRouteImport } from './routes/r.$name'
 import { Route as DotwellKnownAgentSkillsIndexDotjsonRouteImport } from './routes/[.]well-known.agent-skills.index[.]json'
 import { Route as DotwellKnownAgentSkillsSiteSkillDotmdRouteImport } from './routes/[.]well-known.agent-skills.site-skill[.]md'
+import { Route as SiteCheckoutReturnRouteImport } from './routes/_site.checkout.return'
 import { Route as SiteDocsSplatRouteImport } from './routes/_site.docs.$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api.auth.$'
+import { Route as ApiWebhooksDodoRouteImport } from './routes/api.webhooks.dodo'
 import { Route as LlmsDotmdDocsSplatRouteImport } from './routes/llms[.]md.docs.$'
 
 const SiteRoute = SiteRouteImport.update({
@@ -76,10 +90,60 @@ const SiteIndexRoute = SiteIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SiteRoute,
 } as any)
+const SiteAccountRoute = SiteAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteLicenseRoute = SiteLicenseRouteImport.update({
+  id: '/license',
+  path: '/license',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SitePricingRoute = SitePricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteRefundsRoute = SiteRefundsRouteImport.update({
+  id: '/refunds',
+  path: '/refunds',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteSignInRoute = SiteSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SiteSponsorRoute = SiteSponsorRouteImport.update({
   id: '/sponsor',
   path: '/sponsor',
   getParentRoute: () => SiteRoute,
+} as any)
+const SiteTermsRoute = SiteTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => SiteRoute,
+} as any)
+const ApiApiKeyRoute = ApiApiKeyRouteImport.update({
+  id: '/api/api-key',
+  path: '/api/api-key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMeRoute = ApiMeRouteImport.update({
+  id: '/api/me',
+  path: '/api/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPortalRoute = ApiPortalRouteImport.update({
+  id: '/api/portal',
+  path: '/api/portal',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStatusRoute = ApiStatusRouteImport.update({
   id: '/api/status',
@@ -89,6 +153,11 @@ const ApiStatusRoute = ApiStatusRouteImport.update({
 const LlmsDotmdContentDotmdRoute = LlmsDotmdContentDotmdRouteImport.update({
   id: '/llms.md/content.md',
   path: '/llms.md/content.md',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RNameRoute = RNameRouteImport.update({
+  id: '/r/$name',
+  path: '/r/$name',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DotwellKnownAgentSkillsIndexDotjsonRoute =
@@ -103,10 +172,25 @@ const DotwellKnownAgentSkillsSiteSkillDotmdRoute =
     path: '/.well-known/agent-skills/site-skill.md',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SiteCheckoutReturnRoute = SiteCheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SiteDocsSplatRoute = SiteDocsSplatRouteImport.update({
   id: '/docs/$',
   path: '/docs/$',
   getParentRoute: () => SiteRoute,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWebhooksDodoRoute = ApiWebhooksDodoRouteImport.update({
+  id: '/api/webhooks/dodo',
+  path: '/api/webhooks/dodo',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsDotmdDocsSplatRoute = LlmsDotmdDocsSplatRouteImport.update({
   id: '/llms.md/docs/$',
@@ -124,12 +208,26 @@ export interface FileRoutesByFullPath {
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/api-catalog': typeof DotwellKnownApiCatalogRoute
+  '/account': typeof SiteAccountRoute
+  '/license': typeof SiteLicenseRoute
+  '/pricing': typeof SitePricingRoute
+  '/refunds': typeof SiteRefundsRoute
+  '/sign-in': typeof SiteSignInRoute
   '/sponsor': typeof SiteSponsorRoute
+  '/terms': typeof SiteTermsRoute
+  '/api/api-key': typeof ApiApiKeyRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/portal': typeof ApiPortalRoute
   '/api/status': typeof ApiStatusRoute
   '/llms.md/content.md': typeof LlmsDotmdContentDotmdRoute
+  '/r/$name': typeof RNameRoute
   '/.well-known/agent-skills/index.json': typeof DotwellKnownAgentSkillsIndexDotjsonRoute
   '/.well-known/agent-skills/site-skill.md': typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  '/checkout/return': typeof SiteCheckoutReturnRoute
   '/docs/$': typeof SiteDocsSplatRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/webhooks/dodo': typeof ApiWebhooksDodoRoute
   '/llms.md/docs/$': typeof LlmsDotmdDocsSplatRoute
 }
 export interface FileRoutesByTo {
@@ -141,13 +239,27 @@ export interface FileRoutesByTo {
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/api-catalog': typeof DotwellKnownApiCatalogRoute
+  '/account': typeof SiteAccountRoute
+  '/license': typeof SiteLicenseRoute
+  '/pricing': typeof SitePricingRoute
+  '/refunds': typeof SiteRefundsRoute
+  '/sign-in': typeof SiteSignInRoute
   '/sponsor': typeof SiteSponsorRoute
+  '/terms': typeof SiteTermsRoute
+  '/api/api-key': typeof ApiApiKeyRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/portal': typeof ApiPortalRoute
   '/api/status': typeof ApiStatusRoute
   '/llms.md/content.md': typeof LlmsDotmdContentDotmdRoute
+  '/r/$name': typeof RNameRoute
   '/': typeof SiteIndexRoute
   '/.well-known/agent-skills/index.json': typeof DotwellKnownAgentSkillsIndexDotjsonRoute
   '/.well-known/agent-skills/site-skill.md': typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  '/checkout/return': typeof SiteCheckoutReturnRoute
   '/docs/$': typeof SiteDocsSplatRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/webhooks/dodo': typeof ApiWebhooksDodoRoute
   '/llms.md/docs/$': typeof LlmsDotmdDocsSplatRoute
 }
 export interface FileRoutesById {
@@ -161,13 +273,27 @@ export interface FileRoutesById {
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/api-catalog': typeof DotwellKnownApiCatalogRoute
+  '/_site/account': typeof SiteAccountRoute
+  '/_site/license': typeof SiteLicenseRoute
+  '/_site/pricing': typeof SitePricingRoute
+  '/_site/refunds': typeof SiteRefundsRoute
+  '/_site/sign-in': typeof SiteSignInRoute
   '/_site/sponsor': typeof SiteSponsorRoute
+  '/_site/terms': typeof SiteTermsRoute
+  '/api/api-key': typeof ApiApiKeyRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/me': typeof ApiMeRoute
+  '/api/portal': typeof ApiPortalRoute
   '/api/status': typeof ApiStatusRoute
   '/llms.md/content.md': typeof LlmsDotmdContentDotmdRoute
+  '/r/$name': typeof RNameRoute
   '/_site/': typeof SiteIndexRoute
   '/.well-known/agent-skills/index.json': typeof DotwellKnownAgentSkillsIndexDotjsonRoute
   '/.well-known/agent-skills/site-skill.md': typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  '/_site/checkout/return': typeof SiteCheckoutReturnRoute
   '/_site/docs/$': typeof SiteDocsSplatRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/webhooks/dodo': typeof ApiWebhooksDodoRoute
   '/llms.md/docs/$': typeof LlmsDotmdDocsSplatRoute
 }
 export interface FileRouteTypes {
@@ -182,12 +308,26 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/sitemap.xml'
     | '/.well-known/api-catalog'
+    | '/account'
+    | '/license'
+    | '/pricing'
+    | '/refunds'
+    | '/sign-in'
     | '/sponsor'
+    | '/terms'
+    | '/api/api-key'
+    | '/api/checkout'
+    | '/api/me'
+    | '/api/portal'
     | '/api/status'
     | '/llms.md/content.md'
+    | '/r/$name'
     | '/.well-known/agent-skills/index.json'
     | '/.well-known/agent-skills/site-skill.md'
+    | '/checkout/return'
     | '/docs/$'
+    | '/api/auth/$'
+    | '/api/webhooks/dodo'
     | '/llms.md/docs/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -199,13 +339,27 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/sitemap.xml'
     | '/.well-known/api-catalog'
+    | '/account'
+    | '/license'
+    | '/pricing'
+    | '/refunds'
+    | '/sign-in'
     | '/sponsor'
+    | '/terms'
+    | '/api/api-key'
+    | '/api/checkout'
+    | '/api/me'
+    | '/api/portal'
     | '/api/status'
     | '/llms.md/content.md'
+    | '/r/$name'
     | '/'
     | '/.well-known/agent-skills/index.json'
     | '/.well-known/agent-skills/site-skill.md'
+    | '/checkout/return'
     | '/docs/$'
+    | '/api/auth/$'
+    | '/api/webhooks/dodo'
     | '/llms.md/docs/$'
   id:
     | '__root__'
@@ -218,13 +372,27 @@ export interface FileRouteTypes {
     | '/rss.xml'
     | '/sitemap.xml'
     | '/.well-known/api-catalog'
+    | '/_site/account'
+    | '/_site/license'
+    | '/_site/pricing'
+    | '/_site/refunds'
+    | '/_site/sign-in'
     | '/_site/sponsor'
+    | '/_site/terms'
+    | '/api/api-key'
+    | '/api/checkout'
+    | '/api/me'
+    | '/api/portal'
     | '/api/status'
     | '/llms.md/content.md'
+    | '/r/$name'
     | '/_site/'
     | '/.well-known/agent-skills/index.json'
     | '/.well-known/agent-skills/site-skill.md'
+    | '/_site/checkout/return'
     | '/_site/docs/$'
+    | '/api/auth/$'
+    | '/api/webhooks/dodo'
     | '/llms.md/docs/$'
   fileRoutesById: FileRoutesById
 }
@@ -238,10 +406,17 @@ export interface RootRouteChildren {
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownApiCatalogRoute: typeof DotwellKnownApiCatalogRoute
+  ApiApiKeyRoute: typeof ApiApiKeyRoute
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiMeRoute: typeof ApiMeRoute
+  ApiPortalRoute: typeof ApiPortalRoute
   ApiStatusRoute: typeof ApiStatusRoute
   LlmsDotmdContentDotmdRoute: typeof LlmsDotmdContentDotmdRoute
+  RNameRoute: typeof RNameRoute
   DotwellKnownAgentSkillsIndexDotjsonRoute: typeof DotwellKnownAgentSkillsIndexDotjsonRoute
   DotwellKnownAgentSkillsSiteSkillDotmdRoute: typeof DotwellKnownAgentSkillsSiteSkillDotmdRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiWebhooksDodoRoute: typeof ApiWebhooksDodoRoute
   LlmsDotmdDocsSplatRoute: typeof LlmsDotmdDocsSplatRoute
 }
 
@@ -317,12 +492,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteIndexRouteImport
       parentRoute: typeof SiteRoute
     }
+    '/_site/account': {
+      id: '/_site/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof SiteAccountRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/license': {
+      id: '/_site/license'
+      path: '/license'
+      fullPath: '/license'
+      preLoaderRoute: typeof SiteLicenseRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/pricing': {
+      id: '/_site/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof SitePricingRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/refunds': {
+      id: '/_site/refunds'
+      path: '/refunds'
+      fullPath: '/refunds'
+      preLoaderRoute: typeof SiteRefundsRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/sign-in': {
+      id: '/_site/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SiteSignInRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/sponsor': {
       id: '/_site/sponsor'
       path: '/sponsor'
       fullPath: '/sponsor'
       preLoaderRoute: typeof SiteSponsorRouteImport
       parentRoute: typeof SiteRoute
+    }
+    '/_site/terms': {
+      id: '/_site/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof SiteTermsRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/api/api-key': {
+      id: '/api/api-key'
+      path: '/api/api-key'
+      fullPath: '/api/api-key'
+      preLoaderRoute: typeof ApiApiKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/me': {
+      id: '/api/me'
+      path: '/api/me'
+      fullPath: '/api/me'
+      preLoaderRoute: typeof ApiMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/portal': {
+      id: '/api/portal'
+      path: '/api/portal'
+      fullPath: '/api/portal'
+      preLoaderRoute: typeof ApiPortalRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/status': {
       id: '/api/status'
@@ -336,6 +581,13 @@ declare module '@tanstack/react-router' {
       path: '/llms.md/content.md'
       fullPath: '/llms.md/content.md'
       preLoaderRoute: typeof LlmsDotmdContentDotmdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/r/$name': {
+      id: '/r/$name'
+      path: '/r/$name'
+      fullPath: '/r/$name'
+      preLoaderRoute: typeof RNameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/agent-skills/index.json': {
@@ -352,12 +604,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotwellKnownAgentSkillsSiteSkillDotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_site/checkout/return': {
+      id: '/_site/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof SiteCheckoutReturnRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/docs/$': {
       id: '/_site/docs/$'
       path: '/docs/$'
       fullPath: '/docs/$'
       preLoaderRoute: typeof SiteDocsSplatRouteImport
       parentRoute: typeof SiteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/webhooks/dodo': {
+      id: '/api/webhooks/dodo'
+      path: '/api/webhooks/dodo'
+      fullPath: '/api/webhooks/dodo'
+      preLoaderRoute: typeof ApiWebhooksDodoRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/llms.md/docs/$': {
       id: '/llms.md/docs/$'
@@ -370,14 +643,28 @@ declare module '@tanstack/react-router' {
 }
 
 interface SiteRouteChildren {
+  SiteAccountRoute: typeof SiteAccountRoute
+  SiteLicenseRoute: typeof SiteLicenseRoute
+  SitePricingRoute: typeof SitePricingRoute
+  SiteRefundsRoute: typeof SiteRefundsRoute
+  SiteSignInRoute: typeof SiteSignInRoute
   SiteSponsorRoute: typeof SiteSponsorRoute
+  SiteTermsRoute: typeof SiteTermsRoute
   SiteIndexRoute: typeof SiteIndexRoute
+  SiteCheckoutReturnRoute: typeof SiteCheckoutReturnRoute
   SiteDocsSplatRoute: typeof SiteDocsSplatRoute
 }
 
 const SiteRouteChildren: SiteRouteChildren = {
+  SiteAccountRoute: SiteAccountRoute,
+  SiteLicenseRoute: SiteLicenseRoute,
+  SitePricingRoute: SitePricingRoute,
+  SiteRefundsRoute: SiteRefundsRoute,
+  SiteSignInRoute: SiteSignInRoute,
   SiteSponsorRoute: SiteSponsorRoute,
+  SiteTermsRoute: SiteTermsRoute,
   SiteIndexRoute: SiteIndexRoute,
+  SiteCheckoutReturnRoute: SiteCheckoutReturnRoute,
   SiteDocsSplatRoute: SiteDocsSplatRoute,
 }
 
@@ -393,12 +680,19 @@ const rootRouteChildren: RootRouteChildren = {
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DotwellKnownApiCatalogRoute: DotwellKnownApiCatalogRoute,
+  ApiApiKeyRoute: ApiApiKeyRoute,
+  ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiMeRoute: ApiMeRoute,
+  ApiPortalRoute: ApiPortalRoute,
   ApiStatusRoute: ApiStatusRoute,
   LlmsDotmdContentDotmdRoute: LlmsDotmdContentDotmdRoute,
+  RNameRoute: RNameRoute,
   DotwellKnownAgentSkillsIndexDotjsonRoute:
     DotwellKnownAgentSkillsIndexDotjsonRoute,
   DotwellKnownAgentSkillsSiteSkillDotmdRoute:
     DotwellKnownAgentSkillsSiteSkillDotmdRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiWebhooksDodoRoute: ApiWebhooksDodoRoute,
   LlmsDotmdDocsSplatRoute: LlmsDotmdDocsSplatRoute,
 }
 export const routeTree = rootRouteImport

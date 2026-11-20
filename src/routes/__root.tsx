@@ -24,9 +24,10 @@ import { baseMetadata } from "@/seo/metadata";
 import "@/styles/globals.css";
 
 // Every core, component and style stylesheet, so new registry CSS works without edits.
-import.meta.glob(["/registry/*/*.css", "/registry/*/styles/*.css"], {
-  eager: true,
-});
+import.meta.glob(
+  ["/registry/*/*.css", "/registry/*/styles/*.css", "/registry/pro/ui/*.css"],
+  { eager: true }
+);
 
 const THEME_STYLE_PREFIX = `${ROUTES.DOCS_COMPONENTS}/theme-transition/`;
 

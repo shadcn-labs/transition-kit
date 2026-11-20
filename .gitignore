@@ -52,3 +52,10 @@ yarn-error.log*
 
 # wrangler
 .wrangler
+
+# wrangler local secrets
+.dev.vars*
+!.dev.vars.example
+
+# synced Pro sources
+/registry/pro/

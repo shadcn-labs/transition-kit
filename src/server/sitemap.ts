@@ -23,6 +23,30 @@ export const sitemap = (): SitemapEntry[] => {
       priority: 0.5,
       url: `${SITE.URL}${ROUTES.SPONSOR}`,
     },
+    {
+      changeFrequency: "monthly",
+      lastModified: new Date(),
+      priority: 0.7,
+      url: `${SITE.URL}${ROUTES.PRICING}`,
+    },
+    {
+      changeFrequency: "monthly",
+      lastModified: new Date(),
+      priority: 0.3,
+      url: `${SITE.URL}${ROUTES.LICENSE}`,
+    },
+    {
+      changeFrequency: "monthly",
+      lastModified: new Date(),
+      priority: 0.2,
+      url: `${SITE.URL}${ROUTES.TERMS}`,
+    },
+    {
+      changeFrequency: "monthly",
+      lastModified: new Date(),
+      priority: 0.2,
+      url: `${SITE.URL}${ROUTES.REFUNDS}`,
+    },
   ];
 
   const docPages: SitemapEntry[] = source.getPages().map((page) => ({

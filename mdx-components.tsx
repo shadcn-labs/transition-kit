@@ -10,6 +10,8 @@ import { CopyButton } from "@/components/copy-button";
 import { getIconForLanguageExtension } from "@/components/icons";
 import { InstallCommand } from "@/components/install-command";
 import { ItemGrid } from "@/components/item-grid";
+import { ProInstall } from "@/components/pro/pro-install";
+import { ProPreview } from "@/components/pro/pro-preview";
 import {
   Accordion,
   AccordionContent,
@@ -102,6 +104,8 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  ProInstall,
+  ProPreview,
   Step: ({ className, children, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(

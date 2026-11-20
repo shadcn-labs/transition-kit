@@ -2,6 +2,7 @@
 
 import { useLocation } from "@tanstack/react-router";
 
+import { AccountButton } from "@/components/account-button";
 import { BrandContextMenu } from "@/components/brand-context-menu";
 import { CommandMenu } from "@/components/command-menu";
 import { LabsNav } from "@/components/labs-nav";
@@ -20,6 +21,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: ROUTES.DOCS, label: "Docs" },
   { href: ROUTES.DOCS_COMPONENTS, label: "Components" },
+  { href: ROUTES.PRICING, label: "Pricing" },
   { href: ROUTES.SPONSOR, label: "Sponsors" },
 ];
 
@@ -78,6 +80,9 @@ export const SiteHeader = () => {
           </div>
           <div className={cn(CELL, "px-1")}>
             <SiteSettings />
+          </div>
+          <div className={cn(CELL, "px-1")}>
+            <AccountButton />
           </div>
           <div className={cn(CELL, "px-2")}>
             <SponsorLink />
