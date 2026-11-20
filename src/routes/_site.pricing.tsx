@@ -4,6 +4,7 @@ import { Check, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 
 import { BillingButton } from "@/components/billing-button";
+import { Frame } from "@/components/frame";
 import { PageTransition } from "@/components/page-transition";
 import {
   Accordion,
@@ -21,7 +22,6 @@ import {
 } from "@/lib/billing";
 import { formatUsd, PLANS, TEAM, teamPrice } from "@/lib/plans";
 import type { PlanOffer, PlanSlug } from "@/lib/plans";
-import { cn } from "@/lib/utils";
 import { FaqJsonLd } from "@/seo/json-ld";
 import { createPageMetadata } from "@/seo/metadata";
 
@@ -110,22 +110,27 @@ const PlanCard = ({
   regularPrice?: string;
   children: React.ReactNode;
 }) => (
-  <div
-    className={cn(
-      "bg-card flex flex-col gap-6 rounded-xl border p-6",
-      highlight && "ring-brand ring-2"
-    )}
-  >
-    <div className="grid gap-2">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="font-semibold">{name}</h2>
-        {earlyBird ? (
-          <span className="bg-brand/10 text-brand-text rounded-full px-2 py-0.5 text-xs font-medium">
-            {earlyBird} early-bird left
-          </span>
+  <Frame
+    tone={highlight ? "brand" : "default"}
+    label={
+      <>
+        <h2 className="text-foreground text-sm font-semibold">{name}</h2>
+        {highlight ? (
+          <span className="text-brand-text font-medium">Best value</span>
         ) : null}
-      </div>
-      <p className="flex items-baseline gap-1.5">
+      </>
+    }
+    action={
+      earlyBird ? (
+        <span className="bg-brand/15 text-brand-text rounded-full px-2 py-0.5 font-medium tabular-nums">
+          {earlyBird} early-bird left
+        </span>
+      ) : null
+    }
+    innerClassName="gap-6"
+  >
+    <div className="grid gap-1.5">
+      <p className="flex flex-wrap items-baseline gap-x-1.5">
         <span className="text-4xl font-semibold tracking-tight tabular-nums">
           {price}
         </span>
@@ -138,13 +143,13 @@ const PlanCard = ({
       </p>
       <p className="text-muted-foreground text-sm">{note}</p>
     </div>
-    <ul className="grid gap-2.5 text-sm">
+    <ul className="grid gap-2.5 border-t pt-5 text-sm">
       {features.map((feature) => (
         <Feature key={feature}>{feature}</Feature>
       ))}
     </ul>
     <div className="mt-auto">{children}</div>
-  </div>
+  </Frame>
 );
 
 const PRO_FEATURES = [
@@ -360,18 +365,36 @@ const PricingPage = () => {
             >
               FAQs
             </h2>
-            <Accordion type="single" collapsible>
-              {FAQ.map((item) => (
-                <AccordionItem key={item.question} value={item.question}>
-                  <AccordionTrigger>{item.question}</AccordionTrigger>
-                  <AccordionContent>{item.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <Frame innerClassName="px-5 py-1">
+              <Accordion type="single" collapsible>
+                {FAQ.map((item) => (
+                  <AccordionItem key={item.question} value={item.question}>
+                    <AccordionTrigger>{item.question}</AccordionTrigger>
+                    <AccordionContent>{item.answer}</AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </Frame>
             <p className="text-muted-foreground mt-6 text-center text-xs">
-              See the <Link to={ROUTES.LICENSE}>license</Link>,{" "}
-              <Link to={ROUTES.TERMS}>terms</Link> and{" "}
-              <Link to={ROUTES.REFUNDS}>refund policy</Link>.
+              See the{" "}
+              <Link
+                to={ROUTES.LICENSE}
+                className="underline underline-offset-4"
+              >
+                license
+              </Link>
+              ,{" "}
+              <Link to={ROUTES.TERMS} className="underline underline-offset-4">
+                terms
+              </Link>{" "}
+              and{" "}
+              <Link
+                to={ROUTES.REFUNDS}
+                className="underline underline-offset-4"
+              >
+                refund policy
+              </Link>
+              .
             </p>
           </section>
         </div>

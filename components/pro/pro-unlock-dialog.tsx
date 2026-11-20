@@ -3,6 +3,7 @@
 import { Link } from "@tanstack/react-router";
 import { CircleCheck } from "lucide-react";
 
+import { Frame } from "@/components/frame";
 import { ProBadge } from "@/components/pro-badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,14 +45,16 @@ export const ProUnlockDialog = ({
           Pay once or yearly, and the source is yours.
         </DialogDescription>
       </DialogHeader>
-      <ul className="mx-auto grid w-fit gap-2.5 text-left text-sm">
-        {FEATURES.map((feature) => (
-          <li key={feature} className="flex items-center gap-2.5">
-            <CircleCheck className="text-brand size-4 shrink-0" aria-hidden />
-            {feature}
-          </li>
-        ))}
-      </ul>
+      <Frame label="Included" innerClassName="p-4">
+        <ul className="grid gap-2.5 text-left text-sm">
+          {FEATURES.map((feature) => (
+            <li key={feature} className="flex items-center gap-2.5">
+              <CircleCheck className="text-brand size-4 shrink-0" aria-hidden />
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </Frame>
       <div className="grid gap-2">
         <Button asChild>
           <Link to={ROUTES.PRICING}>See plans</Link>
