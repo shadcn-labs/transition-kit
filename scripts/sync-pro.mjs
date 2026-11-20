@@ -9,6 +9,10 @@ const proDir = path.join(root, "registry", "pro");
 const indexFile = path.join(proDir, "__index__.tsx");
 const catalogFile = path.join(root, "registry", "pro-catalog.ts");
 const args = new Set(process.argv.slice(2));
+const localArg = process.argv.find((arg) => arg.startsWith("--local="));
+const localDir = localArg
+  ? path.resolve(root, localArg.slice("--local=".length))
+  : undefined;
 
 const log = (message) => console.log(`[sync-pro] ${message}`);
 
@@ -28,7 +32,7 @@ const writeIndex = async (demos) => {
     'import { lazy } from "react";',
     'import type { ComponentType, LazyExoticComponent } from "react";',
     "",
-    "export const PRO_DEMOS: Record<string, LazyExoticComponent<ComponentType>> = {",
+    "export const PRO_DEMOS: Partial<Record<string, LazyExoticComponent<ComponentType>>> = {",
     ...demos.map(
       ({ exportName, file, name }) =>
         `  ${JSON.stringify(name)}: lazy(() => import(${JSON.stringify(`./${file.replace(/\.tsx$/u, "")}`)}).then((module) => ({ default: module.${exportName} }))),`
@@ -68,7 +72,7 @@ if (args.has("--if-missing") && existsSync(indexFile)) {
   process.exit(0);
 }
 
-if (!token) {
+if (!token && !localDir) {
   if (!existsSync(indexFile)) {
     await writeIndex([]);
   }
@@ -77,6 +81,10 @@ if (!token) {
 }
 
 const fetchFile = async (file) => {
+  if (localDir) {
+    const absolute = path.join(localDir, file);
+    return existsSync(absolute) ? readFileSync(absolute, "utf-8") : null;
+  }
   const response = await fetch(
     `https://api.github.com/repos/${REPO}/contents/${file.split("/").map(encodeURIComponent).join("/")}?ref=main`,
     {
@@ -101,42 +109,64 @@ const isSafe = (file) =>
   file.startsWith("registry/") &&
   file.split("/").every((part) => part && part !== "." && part !== "..");
 
-const manifest = JSON.parse((await fetchFile("registry.json")) ?? "{}");
-const items = manifest.items ?? [];
-const proNames = new Set(items.map((item) => item.name));
+const download = async () => {
+  const manifest = JSON.parse((await fetchFile("registry.json")) ?? "{}");
+  const items = manifest.items ?? [];
+  const proNames = new Set(items.map((item) => item.name));
+  const toLocalImports = (source) =>
+    source.replaceAll(/@\/registry\/ui\/(?<name>[\w-]+)/gu, (match, name) =>
+      proNames.has(name) ? `@/registry/pro/ui/${name}` : match
+    );
+  const files = [];
+  const demos = [];
+  for (const item of items) {
+    for (const file of [
+      ...(item.files ?? []),
+      ...(item.css ? [item.css] : []),
+    ]) {
+      if (!isSafe(file)) {
+        throw new Error(`Unsafe path in registry.json: ${file}`);
+      }
+      files.push({
+        content: toLocalImports((await fetchFile(file)) ?? ""),
+        target: file.slice("registry/".length),
+      });
+    }
+    const demoPath = `examples/${item.name}-demo.tsx`;
+    const demo = await fetchFile(demoPath);
+    if (demo) {
+      files.push({ content: toLocalImports(demo), target: demoPath });
+      const exportName = `${item.name
+        .split("-")
+        .map((part) => part[0].toUpperCase() + part.slice(1))
+        .join("")}Demo`;
+      demos.push({ exportName, file: demoPath, name: item.name });
+    }
+  }
+  return { demos, files, items };
+};
 
-const toLocalImports = (source) =>
-  source.replaceAll(/@\/registry\/ui\/(?<name>[\w-]+)/gu, (match, name) =>
-    proNames.has(name) ? `@/registry/pro/ui/${name}` : match
+let synced;
+try {
+  synced = await download();
+} catch (error) {
+  if (!existsSync(indexFile)) {
+    await writeIndex([]);
+  }
+  log(
+    `could not reach the Pro source (${error.cause?.code ?? error.message}); keeping the last synced copy.`
   );
+  process.exit(0);
+}
 
 await rm(proDir, { force: true, recursive: true });
-const demos = [];
-for (const item of items) {
-  for (const file of item.files ?? []) {
-    if (!isSafe(file.path)) {
-      throw new Error(`Unsafe path in registry.json: ${file.path}`);
-    }
-    const source = await fetchFile(file.path);
-    const target = path.join(proDir, file.path.slice("registry/".length));
-    await mkdir(path.dirname(target), { recursive: true });
-    await writeFile(target, toLocalImports(source ?? ""));
-  }
-  const demoPath = `examples/${item.name}-demo.tsx`;
-  const demo = await fetchFile(demoPath);
-  if (demo) {
-    const target = path.join(proDir, demoPath);
-    await mkdir(path.dirname(target), { recursive: true });
-    await writeFile(target, toLocalImports(demo));
-    const exportName = `${item.name
-      .split("-")
-      .map((part) => part[0].toUpperCase() + part.slice(1))
-      .join("")}Demo`;
-    demos.push({ exportName, file: demoPath, name: item.name });
-  }
+for (const { content, target } of synced.files) {
+  const absolute = path.join(proDir, target);
+  await mkdir(path.dirname(absolute), { recursive: true });
+  await writeFile(absolute, content);
 }
-await writeIndex(demos);
+await writeIndex(synced.demos);
 if (args.has("--catalog")) {
-  await writeCatalog(items);
+  await writeCatalog(synced.items);
 }
-log(`synced ${items.length} Pro items, ${demos.length} demos`);
+log(`synced ${synced.items.length} Pro items, ${synced.demos.length} demos`);

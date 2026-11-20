@@ -190,9 +190,10 @@ const resolveApiKey = (live, credentialFiles) => {
   return { apiKey, apiKeyName, environment };
 };
 
+const sameUrl = (url) => url?.replace(/\/+$/u, "") === SITE_URL;
+
 const ensureBrand = async (dodo) => {
   const { items: brands } = await dodo.brands.list();
-  const sameUrl = (url) => url?.replace(/\/+$/u, "") === SITE_URL;
   const matches = brands.filter(
     (brand) => sameName(brand.name, BRAND.name) && sameUrl(brand.url)
   );
