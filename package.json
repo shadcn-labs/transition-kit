@@ -32,7 +32,8 @@
     "db:migrate:remote": "wrangler d1 migrations apply transitionkit --remote",
     "dodo:setup": "node scripts/setup-dodo.mjs",
     "pro:sync": "node scripts/sync-pro.mjs",
-    "pro:catalog": "node scripts/sync-pro.mjs --catalog"
+    "pro:catalog": "node scripts/sync-pro.mjs --catalog",
+    "pro:build": "node scripts/build-pro.ts"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",

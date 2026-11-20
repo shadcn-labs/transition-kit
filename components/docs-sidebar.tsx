@@ -3,6 +3,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import type { Root as PageTreeRoot } from "fumadocs-core/page-tree";
 
+import { ProBadge } from "@/components/pro-badge";
 import { ScrollFade } from "@/components/scroll-fade";
 import {
   Sidebar,
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { TOP_LEVEL_SECTIONS } from "@/constants/nav";
 import { ROUTES } from "@/constants/routes";
-import { NEW_DOCS_URLS } from "@/lib/docs";
+import { NEW_DOCS_URLS, PRO_DOCS_URLS } from "@/lib/docs";
 import { getTreeGroups } from "@/lib/page-tree";
 
 /** Docs URLs flagged as new, marked with a dot in the sidebar. */
@@ -70,6 +71,7 @@ const SidebarMenuItemLink = ({
             new
           </span>
         )}
+        {PRO_DOCS_URLS.has(href) && <ProBadge />}
       </Link>
     </SidebarMenuButton>
   </SidebarMenuItem>

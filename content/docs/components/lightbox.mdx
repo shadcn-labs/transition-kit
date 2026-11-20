@@ -1,0 +1,64 @@
+---
+title: "Lightbox"
+seoTitle: "Animated Lightbox Gallery Component for React"
+description: "A photo grid or masonry wall whose thumbnail grows into a full-screen view, with a filmstrip, swipe and keyboard navigation that slide in the direction you move. A React component built on View Transitions, installed with the shadcn CLI."
+---
+
+<ProPreview name="lightbox" />
+
+## Installation
+
+<ProInstall name="lightbox" title="Lightbox" />
+
+## Usage
+
+```tsx
+import { Lightbox } from "@/components/transitions/lightbox";
+```
+
+```tsx
+<Lightbox
+  items={[
+    {
+      id: "dunes",
+      src: "/photos/dunes.jpg",
+      alt: "Dusk over the dunes",
+      caption: "Dusk over the dunes",
+    },
+    { id: "harbour", src: "/photos/harbour.jpg", alt: "Harbour lights" },
+    { id: "canyon", src: "/photos/canyon.jpg", alt: "Copper canyon" },
+  ]}
+/>
+```
+
+Click a photo to open it. Move between photos with the filmstrip, the arrow buttons, the arrow keys, Home and End, or a swipe. Escape, the close button or a click outside the photo folds it back into the grid.
+
+Pass `layout="masonry"` and each photo's `width` and `height` to keep their real proportions in the grid:
+
+```tsx
+<Lightbox layout="masonry" items={photos} className="columns-3" />
+```
+
+The next photo is decoded before the transition starts, so it never flashes in blank, and the photos either side of the open one load in the background. Give large photos a smaller `thumbnail` to keep the grid light.
+
+## API Reference
+
+### Lightbox
+
+| Prop        | Type                  | Default  | Description                                                   |
+| ----------- | --------------------- | -------- | ------------------------------------------------------------- |
+| `items`     | `LightboxItem[]`      | -        | The photos, in order.                                         |
+| `layout`    | `"grid" \| "masonry"` | `"grid"` | Square tiles, or columns that keep each photo's aspect ratio. |
+| `className` | `string`              | -        | Classes for the grid, e.g. `grid-cols-3` or `columns-3`.      |
+
+### LightboxItem
+
+| Field       | Type              | Description                               |
+| ----------- | ----------------- | ----------------------------------------- |
+| `id`        | `string`          | Stable id, unique within the gallery.     |
+| `src`       | `string`          | Image URL.                                |
+| `thumbnail` | `string`          | Smaller image for the grid and filmstrip. |
+| `alt`       | `string`          | Alt text, also the dialog's name.         |
+| `caption`   | `React.ReactNode` | Shown under the open photo.               |
+| `width`     | `number`          | Intrinsic width, to avoid layout shift.   |
+| `height`    | `number`          | Intrinsic height, to avoid layout shift.  |

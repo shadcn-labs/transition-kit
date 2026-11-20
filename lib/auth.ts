@@ -36,7 +36,7 @@ export const getAuthConfigurationError = (): string | null => {
 };
 
 const sendSignInCode = async (email: string, otp: string) => {
-  if (!process.env.RESEND_API_KEY && isDev) {
+  if (isDev && (!process.env.RESEND_API_KEY || email.endsWith(".test"))) {
     console.info(`[auth] sign-in code for ${email}: ${otp}`);
     return;
   }

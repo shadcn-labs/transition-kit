@@ -27,13 +27,13 @@ import {
 import path from "node:path";
 
 import { parse } from "postcss";
-import type { ChildNode, Container } from "postcss";
 import type { Registry, RegistryItem } from "shadcn/schema";
 import ts from "typescript";
 
 import { FALLBACK_SITE_ORIGIN } from "../constants/site.ts";
 import { items } from "../registry/items.ts";
 import type { ItemGroup, ItemSource } from "../registry/items.ts";
+import { toCssObject } from "./registry-css.ts";
 
 const root = path.resolve(import.meta.dirname, "..");
 const BUILD_DIR = ".registry-build";
@@ -42,10 +42,6 @@ const TARGET_DIR = "components/transitions";
 /** Provided by the user's React 19.3 app, never installed by the CLI. */
 const PEER_PACKAGES: Record<string, true> = { react: true, "react-dom": true };
 
-interface CssObject {
-  [key: string]: string | CssObject;
-}
-
 const readSource = (file: string) => {
   const absolute = path.join(root, file);
   if (!existsSync(absolute)) {
@@ -53,50 +49,6 @@ const readSource = (file: string) => {
   }
   // LF on every OS, so a build on Windows ships the same files as one on Linux.
   return readFileSync(absolute, "utf-8").replaceAll("\r\n", "\n");
-};
-
-/** Collapses the newlines and indentation postcss keeps in selectors, params and values. */
-const oneLine = (value: string) => value.replaceAll(/\s*\n\s*/g, " ").trim();
-
-const toCssObject = (
-  container: Container<ChildNode>,
-  file: string
-): CssObject => {
-  const result: CssObject = {};
-  // Repeated selectors/at-rules merge like the cascade: later declarations win.
-  const merge = (target: CssObject, key: string, value: CssObject) => {
-    const existing = target[key];
-    if (typeof existing !== "object") {
-      target[key] = value;
-      return;
-    }
-    for (const [innerKey, innerValue] of Object.entries(value)) {
-      if (typeof innerValue === "object") {
-        merge(existing, innerKey, innerValue);
-      } else {
-        existing[innerKey] = innerValue;
-      }
-    }
-  };
-  container.each((node) => {
-    if (node.type === "decl") {
-      if (node.prop in result) {
-        console.warn(
-          `build-registry: ${file}: duplicate "${node.prop}" in one rule; the css object keeps the last value`
-        );
-      }
-      const value = oneLine(node.value);
-      result[node.prop] = node.important ? `${value} !important` : value;
-    } else if (node.type === "rule") {
-      merge(result, oneLine(node.selector), toCssObject(node, file));
-    } else if (node.type === "atrule") {
-      const key = node.params
-        ? `@${node.name} ${oneLine(node.params)}`
-        : `@${node.name}`;
-      merge(result, key, node.nodes ? toCssObject(node, file) : {});
-    }
-  });
-  return result;
 };
 
 /** Every shipped source file → the item shipping it and its install target, e.g. registry/theme/x.tsx → components/transitions/x.tsx. */

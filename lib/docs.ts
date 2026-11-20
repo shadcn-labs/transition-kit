@@ -2,6 +2,7 @@ import type { PageTreeFolder } from "@/lib/page-tree";
 
 import { ROUTES } from "../constants/routes";
 import { items } from "../registry/items";
+import { PRO_CATALOG } from "../registry/pro-catalog";
 import { formatLabelFromSlug } from "./utils";
 
 export const DOCS_DIR = `content${ROUTES.DOCS}`;
@@ -43,6 +44,10 @@ export const docsContentRoute = `${ROUTES.LLMS_MD}${ROUTES.DOCS}`;
  * Docs URLs flagged as new, marked with a dot in navigation: registry items
  * flagged `isNew`, plus new top-level pages.
  */
+export const PRO_DOCS_URLS: ReadonlySet<string> = new Set(
+  PRO_CATALOG.map((item) => `${ROUTES.DOCS_COMPONENTS}/${item.name}`)
+);
+
 export const NEW_DOCS_URLS: ReadonlySet<string> = new Set([
   ...items
     .filter((item) => item.isNew)
