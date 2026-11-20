@@ -7,7 +7,7 @@ export interface ProCatalogItem {
 export const PRO_CATALOG: ProCatalogItem[] = [
   {
     description:
-      "A photo grid whose thumbnail grows into a full-screen view, slides between photos in the direction you swipe and folds back into its place.",
+      "A photo grid or masonry wall whose thumbnail grows into a full-screen view, with a filmstrip, swipe and keyboard navigation that slide in the direction you move, and a fold back into place.",
     name: "lightbox",
     title: "Lightbox",
   },

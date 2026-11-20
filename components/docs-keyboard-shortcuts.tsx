@@ -15,6 +15,12 @@ export const DocsKeyboardShortcuts = ({
   const navigateTo = useNavigate();
   const playClick = useFeedback({ sound: "click" });
 
+  const options = {
+    ignoreEventWhen: (event: KeyboardEvent) =>
+      event.defaultPrevented || Boolean(document.querySelector("dialog:modal")),
+    preventDefault: true,
+  };
+
   const navigate = (
     href: string | null,
     direction: "nav-forward" | "nav-back"
@@ -30,7 +36,7 @@ export const DocsKeyboardShortcuts = ({
     () => {
       navigate(next, "nav-forward");
     },
-    { preventDefault: true }
+    options
   );
 
   useHotkeys(
@@ -38,7 +44,7 @@ export const DocsKeyboardShortcuts = ({
     () => {
       navigate(previous, "nav-back");
     },
-    { preventDefault: true }
+    options
   );
 
   return null;
