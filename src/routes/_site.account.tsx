@@ -3,6 +3,7 @@ import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
 import { BillingButton } from "@/components/billing-button";
+import { Frame } from "@/components/frame";
 import { PageTransition } from "@/components/page-transition";
 import { ProBadge } from "@/components/pro-badge";
 import { Button } from "@/components/ui/button";
@@ -39,9 +40,9 @@ const planSummary = (plan: ActivePlan) => {
 const CopyBlock = ({ label, value }: { label: string; value: string }) => {
   const { copyToClipboard, isCopied } = useCopyToClipboard();
   return (
-    <div className="grid gap-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-medium">{label}</span>
+    <Frame
+      label={label}
+      action={
         <Button
           type="button"
           size="xs"
@@ -52,11 +53,14 @@ const CopyBlock = ({ label, value }: { label: string; value: string }) => {
           {isCopied ? <Check /> : <Copy />}
           {isCopied ? "Copied" : "Copy"}
         </Button>
-      </div>
-      <pre className="bg-muted overflow-x-auto rounded-md p-3 font-mono text-xs leading-5">
+      }
+      className="-mx-1"
+      innerClassName="bg-code text-code-foreground p-0"
+    >
+      <pre className="no-scrollbar overflow-x-auto px-4 py-3.5 font-mono text-xs leading-5">
         {value}
       </pre>
-    </div>
+    </Frame>
   );
 };
 
@@ -67,10 +71,12 @@ const Section = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <section className="bg-card grid gap-4 rounded-xl border p-5">
-    <h2 className="font-semibold">{title}</h2>
+  <Frame
+    label={<h2 className="text-foreground text-sm font-semibold">{title}</h2>}
+    innerClassName="gap-4"
+  >
     {children}
-  </section>
+  </Frame>
 );
 
 const ApiKeySection = () => {

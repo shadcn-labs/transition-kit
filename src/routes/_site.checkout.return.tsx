@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
+import { Frame } from "@/components/frame";
 import { PageTransition } from "@/components/page-transition";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
@@ -88,7 +89,11 @@ const CheckoutReturnPage = () => {
     <PageTransition>
       <section className="container-wrapper flex flex-1">
         <div className="container mx-auto flex flex-1 items-center justify-center py-16">
-          <div className="bg-card grid w-full max-w-sm gap-4 rounded-xl border p-6">
+          <Frame
+            label="Checkout"
+            className="w-full max-w-sm"
+            innerClassName="gap-4 p-6"
+          >
             <h1 className="text-xl font-semibold tracking-tight">
               {message.title}
             </h1>
@@ -120,7 +125,7 @@ const CheckoutReturnPage = () => {
                 </Button>
               ) : null}
             </div>
-          </div>
+          </Frame>
         </div>
       </section>
     </PageTransition>

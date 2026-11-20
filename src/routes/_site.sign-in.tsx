@@ -7,6 +7,7 @@ import {
 import { createServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 
+import { Frame } from "@/components/frame";
 import { PageTransition } from "@/components/page-transition";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -93,7 +94,11 @@ const SignInPage = () => {
     <PageTransition>
       <section className="container-wrapper flex flex-1">
         <div className="container mx-auto flex flex-1 items-center justify-center py-16">
-          <div className="bg-card grid w-full max-w-sm gap-6 rounded-xl border p-6">
+          <Frame
+            label="transition-kit Pro"
+            className="w-full max-w-sm"
+            innerClassName="gap-6 p-6"
+          >
             <div className="grid gap-1.5">
               <h1 className="text-xl font-semibold tracking-tight">Sign in</h1>
               <p className="text-muted-foreground text-sm">
@@ -186,7 +191,7 @@ const SignInPage = () => {
                 {error}
               </p>
             ) : null}
-          </div>
+          </Frame>
         </div>
       </section>
     </PageTransition>

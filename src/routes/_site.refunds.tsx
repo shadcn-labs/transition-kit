@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+import { Frame } from "@/components/frame";
 import { LegalPage, LegalSection } from "@/components/legal-page";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { LINK } from "@/constants/links";
 import { ROUTES } from "@/constants/routes";
 import { SITE } from "@/constants/site";
@@ -29,14 +29,13 @@ const RefundsPage = () => (
       </p>
     }
   >
-    <Alert>
-      <AlertTitle>The short version</AlertTitle>
-      <AlertDescription>
+    <Frame label="The short version" innerClassName="text-foreground">
+      <p>
         Full refund within 14 days of a payment, as long as you haven&apos;t
         installed any Pro source since that payment. Billing mistakes and
         duplicate charges are always refunded.
-      </AlertDescription>
-    </Alert>
+      </p>
+    </Frame>
     <LegalSection title="Pro Annual (subscription)">
       <ul>
         <li>

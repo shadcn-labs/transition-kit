@@ -4,7 +4,9 @@ import { Link } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 import { useState } from "react";
 
+import { Frame } from "@/components/frame";
 import { InstallCommand } from "@/components/install-command";
+import { ProBadge } from "@/components/pro-badge";
 import { ProUnlockDialog } from "@/components/pro/pro-unlock-dialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -44,7 +46,15 @@ export const ProInstall = ({
   }
 
   return (
-    <div className="bg-card mt-6 flex flex-col items-start gap-3 rounded-xl border p-5 sm:flex-row sm:items-center sm:justify-between">
+    <Frame
+      label={
+        <>
+          <ProBadge /> Pro component
+        </>
+      }
+      className="mt-6"
+      innerClassName="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between"
+    >
       <div className="flex items-center gap-3">
         <Lock className="text-muted-foreground size-4 shrink-0" aria-hidden />
         <p className="text-sm">
@@ -55,6 +65,6 @@ export const ProInstall = ({
         Unlock
       </Button>
       <ProUnlockDialog title={title} open={open} onOpenChange={setOpen} />
-    </div>
+    </Frame>
   );
 };
